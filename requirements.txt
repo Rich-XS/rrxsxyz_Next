@@ -1,0 +1,328 @@
+# 百万被动收入之路 - 系统需求文档
+
+## 项目概述
+自媒体创作者转型工具，通过100个深度问题评估商业化潜力，提供AI驱动的个性化建议报告。
+
+## 版本演进历史
+
+### Phase 1: 架构重构需求
+**目标**: 将前端直接调用大模型改为后端代理架构
+- 创建Node.js/Express后端服务
+- 实现AI模型代理接口（Qwen/DeepSeek/OpenAI）
+- 后端邮件发送功能（推荐EmailJS免费方案）
+- 前后端分离架构，支持纯HTML部署
+
+### Phase 2: 用户体验优化需求
+**目标**: 提升用户界面和数据管理体验
+- 移除前端调试信息展示
+- 特殊演示账号处理（13917895758）
+- 用户数据持久化（UserInfo文件夹）
+- 后端数据保存接口实现
+
+### Phase 3: 答题质量控制需求
+**目标**: 确保答题质量和数据有效性
+- 实时答题质量检测
+- 漏答/低质量提示机制
+- 强制质量标准执行
+- 防止恶意或随意作答
+
+### Phase 4: 代码质量优化需求
+**目标**: 解决IDE检测的21个代码质量问题
+- 修复6个Button type属性缺失
+- 解决21个内联CSS样式警告
+- 创建外部CSS文件提升维护性
+- CSS动画性能优化建议
+
+### Phase 5: 界面隐藏和功能修复需求
+**目标**: 隐藏开发者信息，修复界面问题
+- 隐藏部署配置提示信息
+- 修复异步函数语法错误
+- 新老用户界面切换问题
+- 按钮点击响应修复
+
+## 技术架构规格
+
+### 后端技术栈
+```
+Node.js + Express.js
+├── 安全中间件: helmet, cors, rate-limit
+├── 数据验证: express-validator
+├── AI服务代理: 支持Qwen/DeepSeek/OpenAI
+├── 邮件服务: Nodemailer + SendGrid备用
+└── 文件存储: JSON持久化
+```
+
+### 前端技术栈
+```
+纯HTML + JavaScript (ES6+)
+├── 答题质量实时检测
+├── 用户数据本地缓存
+├── 后端API集成
+└── 渐进式增强设计
+```
+
+### API接口规范
+```
+POST /api/ai/analyze          - AI分析代理
+POST /api/email/send-report   - 邮件发送
+POST /api/user/register       - 用户注册
+POST /api/user/assessment     - 测评数据保存
+GET  /api/user/:phone         - 用户数据查询
+GET  /api/stats/summary       - 统计信息
+GET  /api/admin/users         - 用户列表管理
+POST /api/process-assessment  - 一键处理接口
+```
+
+## 功能需求详细说明
+
+### 核心功能模块
+1. **用户认证系统**
+   - 手机号+邮箱验证
+   - 新老用户区分处理
+   - 特殊演示账号逻辑
+
+2. **答题系统**
+   - 100题五大维度评估
+   - 实时质量检测
+   - 自动保存和恢复
+   - 键盘快捷键支持
+
+3. **AI分析系统**
+   - 多模型支持和自动降级
+   - 个性化报告生成
+   - 分析结果持久化
+
+4. **邮件系统**
+   - 多邮件提供商支持
+   - HTML模板渲染
+   - 发送状态跟踪
+
+5. **数据管理系统**
+   - 用户信息持久化
+   - 答题数据统计
+   - 管理后台界面
+
+### 质量控制规范
+```javascript
+答题质量标准:
+├── 最小作答时间: 每题10秒
+├── 答案长度要求: 最少20字符
+├── 相似度检测: 与示例<80%相似
+├── 总体时间要求: 30分钟以上
+└── 连续警告限制: 最多3次
+```
+
+### 部署要求
+1. **纯前端部署**
+   - 单HTML文件上传
+   - 本地存储降级方案
+   - EmailJS客户端发送
+
+2. **完整后端部署**
+   - Node.js服务器环境
+   - 环境变量配置
+   - SSL证书配置
+
+## 安全和性能要求
+
+### 安全规范
+- API速率限制: 15分钟100请求
+- 输入验证: 所有用户输入严格验证
+- CORS配置: 限制允许的源域名
+- 敏感信息: 环境变量管理
+
+### 性能要求
+- 页面加载: <3秒首屏显示
+- API响应: <5秒AI分析完成
+- 并发支持: 100用户同时在线
+- 存储优化: 压缩JSON数据
+
+## 文件结构规范
+```
+rrxsxyz_next/
+├── html/projects/          # 前端文件
+│   ├── media-assessment-v4.html
+│   └── inline-styles.css
+├── server/                 # 后端服务
+│   ├── server.js
+│   ├── package.json
+│   ├── .env.example
+│   └── services/
+├── admin/                  # 管理界面
+│   └── user-data.html
+├── UserInfo/              # 用户数据存储
+└── requirements.txt       # 本文档
+```
+
+## 版本控制规范
+- 每次更新前自动备份
+- 备份文件命名: `原文件名_backup_YYYYMMDD_HHMMSS.html`
+- 更新日志: UPDATE_LOG.md记录所有变更
+- 版本号格式: v4.x (主要功能更新递增)
+
+## 环境配置要求
+
+### 开发环境
+```bash
+Node.js >= 14.0.0
+npm >= 6.0.0
+```
+
+### 生产环境变量
+```env
+PORT=3000
+EMAIL_SERVICE=qq
+EMAIL_USER=rrxs@qq.com
+EMAIL_PASS=nzzczxsmtqzxxbjif
+QWEN_API_KEY=sk-35e5093723a14b25afec85db40822f3d
+DEEPSEEK_API_KEY=sk-758c28f314644cbd868e4a6c7d87b0bd
+ALLOWED_ORIGINS=https://rrxs.xyz
+```
+
+## 测试和验证要求
+
+### 功能测试清单
+- [ ] 用户注册和登录流程
+- [ ] 答题系统完整流程
+- [ ] 质量检测触发机制
+- [ ] AI分析生成和降级
+- [ ] 邮件发送各种场景
+- [ ] 数据持久化验证
+- [ ] 管理后台功能
+
+### 兼容性要求
+- 浏览器: Chrome/Firefox/Safari最新版本
+- 移动端: iOS Safari, Android Chrome
+- 网络环境: 支持离线缓存和在线同步
+
+## 维护和监控要求
+
+### 日志记录
+- 用户操作日志
+- API调用统计
+- 错误和异常跟踪
+- 性能指标监控
+
+### 定期维护
+- 数据备份: 每日自动备份用户数据
+- 性能监控: API响应时间统计
+- 安全审计: 定期检查安全漏洞
+- 功能更新: 根据用户反馈迭代
+
+## 商业化考量
+
+### 成本控制
+- EmailJS免费额度: 200封/月
+- AI API成本: 按实际调用量付费
+- 服务器资源: 基础配置支持1000用户
+
+### 扩展性设计
+- 支持多AI提供商切换
+- 邮件服务商灵活配置
+- 水平扩展架构设计
+- 用户数据分片存储
+
+## 调试和故障排除记录
+
+### 2024-12-XX 紧急修复记录
+
+#### 问题现象
+1. **新老用户界面相同** - 界面切换功能失效
+2. **开始自测按钮无响应** - 点击后无任何反应
+3. **控制台错误**: `handleUserAuth is not defined`
+
+#### 根本原因分析
+- JavaScript函数作用域问题
+- `handleUserAuth`函数定义在第二个`<script>`标签内
+- HTML `onclick`属性在第一个script之前解析
+- 函数定义时机晚于HTML解析，导致未定义错误
+
+#### 解决方案
+```javascript
+// 1. 在第一个script标签中提前声明全局函数包装器
+async function handleUserAuth() {
+    if (window.handleUserAuthImpl) {
+        return window.handleUserAuthImpl();
+    }
+}
+
+// 2. 在第二个script标签中实现具体逻辑
+window.handleUserAuthImpl = async function() {
+    // 实际的处理逻辑
+}
+
+// 3. 所有相关函数都使用这种模式
+window.showUserAuthImpl = function() { ... }
+window.confirmStartAssessmentImpl = function() { ... }
+```
+
+#### 第二轮修复 (2024-12-XX 晚)
+
+**问题反馈**: 用户反馈问题依然存在
+```
+控制台错误:
+1. GET http://localhost:8080/RRXS_Group_QR8cm.jpg 404 (File not found)
+2. Uncaught SyntaxError: Identifier 'textarea' has already been declared (at line 1559)
+3. ChatGLM插件干扰请求
+```
+
+**根本原因发现**: JavaScript语法错误阻断代码执行
+- `textarea`变量在同一函数中被重复声明两次
+- 语法错误导致整个脚本中断，影响后续所有功能
+- 第1559行的重复声明是关键问题
+
+**修复方案**:
+```javascript
+// 错误的代码 (第1541行已声明)
+const textarea = document.getElementById(`answer-${index}`);
+
+// 第1559行重复声明 - 需要移除const关键字
+// 修复为直接使用已声明的变量
+textarea.addEventListener('input', () => { ... });
+```
+
+**额外优化**:
+- 替换缺失的二维码图片为占位符div元素
+- 清理404请求，提升控制台整洁度
+
+**修复状态**: ✅ 语法错误已修复，等待功能验证
+
+#### 预防措施
+- 函数定义统一管理
+- 严格控制script标签加载顺序
+- 关键函数添加调试日志
+- 定期功能回归测试
+
+### 测试步骤
+1. 启动本地服务器: `http://localhost:8080/media-assessment-v4.html`
+2. 检查控制台日志输出
+3. 测试新老用户界面切换
+4. 验证开始自测按钮响应
+5. 确认后续流程正常
+
+---
+
+## 更新记录
+
+### v4.0 基础版本
+- 100题评估系统实现
+- 基础AI分析功能
+- 简单邮件发送
+
+### v4.1 架构重构 (当前)
+- 后端代理架构
+- 用户数据持久化
+- 答题质量控制
+- 代码质量优化
+- 界面隐藏优化
+- **紧急修复: JavaScript函数作用域问题**
+
+### v4.2 计划中
+- 性能优化
+- 更多AI模型支持
+- 高级分析报告
+- 用户反馈系统
+
+---
+*文档最后更新: 2024-12-XX*
+*维护者: AI助手 + RRXS团队*

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百万被动收入之路 - 自媒体百问自测系统</title>
+    <style>
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #e9ecef;
+        }
+        nav a.highlight {
+            background-color: #007bff;
+            color: white;
+        }
+        nav a.highlight:hover {
+            background-color: #0056b3;
+        }
+        .content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .hero-section {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 50px;
+        }
+        .hero-section h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .hero-section p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        .versions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        .version-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 3px solid transparent;
+        }
+        .version-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .version-card.v1 { border-color: #17a2b8; }
+        .version-card.v2 { border-color: #28a745; }
+        .version-card.v3 { border-color: #ffc107; }
+        .version-card.v4 { border-color: #dc3545; }
+        .version-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .version-card .version-label {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .version-card.v1 .version-label { background-color: #17a2b8; color: white; }
+        .version-card.v2 .version-label { background-color: #28a745; color: white; }
+        .version-card.v3 .version-label { background-color: #ffc107; color: #333; }
+        .version-card.v4 .version-label { background-color: #dc3545; color: white; }
+        .version-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .version-card .features {
+            margin-bottom: 25px;
+        }
+        .version-card .features ul {
+            list-style: none;
+            padding: 0;
+        }
+        .version-card .features li {
+            padding: 5px 0;
+            color: #555;
+            position: relative;
+            padding-left: 20px;
+        }
+        .version-card .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+        .start-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .comparison-section {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+        }
+        .comparison-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+        .check { color: #28a745; font-weight: bold; }
+        .cross { color: #dc3545; font-weight: bold; }
+        .recommendation {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            color: #333;
+        }
+        .recommendation h3 {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>RRXS-"AI財经学长" 网站</h1>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="#">关于</a>
+            <a href="shop.html">店铺</a>
+            <a href="Projects.html">项目</a>
+            <a href="baiwen.html" class="highlight">百问</a>
+            <a href="webbot.html">学习</a>
+            <a href="forummsg.html">论坛&留言</a>
+        </nav>
+    </header>
+
+    <div class="content">
+        <div class="hero-section">
+            <h1>🎯 百万被动收入之路</h1>
+            <p>自媒体创作者专业自测系统 - 30分钟理清百万之路</p>
+            <p>基于中国自媒体生态的专业诊断系统，助你找到最适合的商业化路径</p>
+        </div>
+
+        <div class="versions-grid">
+            <div class="version-card v1">
+                <div class="version-label">Version 1.0</div>
+                <h3>深度思考版</h3>
+                <p>原始版本，适合喜欢深入思考的创作者。通过开放式问题，深度挖掘你的商业潜力。</p>
+                <div class="features">
+                    <ul>
+                        <li>100个深度开放式问题</li>
+                        <li>文本输入，自由表达</li>
+                        <li>适合有经验的创作者</li>
+                        <li>深度自我反思</li>
+                    </ul>
+                </div>
+                <a href="projects/media-assessment-v1/index.html" class="start-btn" target="_blank">开始深度自测</a>
+            </div>
+
+            <div class="version-card v2">
+                <div class="version-label">Version 2.0</div>
+                <h3>选项版</h3>
+                <p>优化用户体验，增加选择题形式。快速便捷，适合新手创作者入门使用。</p>
+                <div class="features">
+                    <ul>
+                        <li>混合题型设计</li>
+                        <li>选择题+开放题</li>
+                        <li>适合新手入门</li>
+                        <li>快速完成评估</li>
+                    </ul>
+                </div>
+                <a href="projects/media-assessment-v2/index.html" class="start-btn" target="_blank">开始选项自测</a>
+            </div>
+
+            <div class="version-card v3">
+                <div class="version-label">Version 3.0</div>
+                <h3>优化选项版</h3>
+                <p>在V2基础上优化，增加SEO、PWA支持，更好的用户体验和性能优化。</p>
+                <div class="features">
+                    <ul>
+                        <li>SEO优化支持</li>
+                        <li>PWA离线使用</li>
+                        <li>响应式设计</li>
+                        <li>性能优化</li>
+                    </ul>
+                </div>
+                <a href="projects/media-assessment-v3/index.html" class="start-btn" target="_blank">开始优化自测</a>
+            </div>
+
+            <div class="version-card v4">
+                <div class="version-label">Version 4.0 🔥</div>
+                <h3>深度思考最终版</h3>
+                <p>融合所有版本优势，纯开放式深度问题 + 最佳用户体验。最适合专业创作者的终极版本。</p>
+                <div class="features">
+                    <ul>
+                        <li>纯开放式深度问题</li>
+                        <li>最佳用户体验</li>
+                        <li>专业商业分析</li>
+                        <li>个性化建议</li>
+                    </ul>
+                </div>
+                <a href="projects/media-assessment-v4.html" class="start-btn" target="_blank">开始终极自测</a>
+            </div>
+        </div>
+
+        <div class="comparison-section">
+            <h2>版本对比一览</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>功能特性</th>
+                        <th>V1.0 深度思考版</th>
+                        <th>V2.0 选项版</th>
+                        <th>V3.0 优化选项版</th>
+                        <th>V4.0 深度思考最终版</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>问题类型</strong></td>
+                        <td>纯开放式</td>
+                        <td>混合型</td>
+                        <td>混合型</td>
+                        <td>纯开放式</td>
+                    </tr>
+                    <tr>
+                        <td><strong>完成时间</strong></td>
+                        <td>30-45分钟</td>
+                        <td>15-20分钟</td>
+                        <td>15-20分钟</td>
+                        <td>30-45分钟</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SEO优化</strong></td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PWA支持</strong></td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td><strong>适合人群</strong></td>
+                        <td>有经验创作者</td>
+                        <td>新手创作者</td>
+                        <td>所有创作者</td>
+                        <td>专业创作者</td>
+                    </tr>
+                    <tr>
+                        <td><strong>分析深度</strong></td>
+                        <td>★★★★☆</td>
+                        <td>★★★☆☆</td>
+                        <td>★★★☆☆</td>
+                        <td>★★★★★</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="recommendation">
+            <h3>💡 版本选择建议</h3>
+            <p><strong>新手创作者</strong>：推荐从 V2.0 或 V3.0 开始，快速了解基础概念</p>
+            <p><strong>有经验创作者</strong>：直接使用 V4.0 深度思考最终版，获得最专业的分析</p>
+            <p><strong>追求完美体验</strong>：选择 V3.0 或 V4.0，享受最佳的技术优化</p>
+        </div>
+    </div>
+</body>
+</html>

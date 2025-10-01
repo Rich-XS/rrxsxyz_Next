@@ -1,0 +1,155 @@
+# ==========================================
+# RRXS.XYZ Project - Git Ignore Configuration
+# ==========================================
+
+# ----------------
+# 敏感信息（最高优先级）
+# ----------------
+# 环境变量和密钥
+.env
+.env.local
+.env.*.local
+server/.env
+*.key
+*.pem
+*.secret
+
+# 用户数据
+server/data/
+server/data/*.json
+*.sqlite
+*.db
+
+# 日志文件
+*.log
+.claude/sync-guard.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ----------------
+# 依赖目录
+# ----------------
+node_modules/
+.pnpm-store/
+jspm_packages/
+
+# ----------------
+# 构建输出
+# ----------------
+dist/
+build/
+out/
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.vuepress/dist
+.temp/
+.rax/
+
+# ----------------
+# 备份文件
+# ----------------
+Backup/
+*.backup
+*_backup_*
+*_v*_202*.html
+*_v*_202*.js
+*_202*_*.html
+*_202*_*.js
+*_202*_*.md
+*.bak
+*.old
+
+# ----------------
+# 操作系统文件
+# ----------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ----------------
+# IDE 配置
+# ----------------
+# VSCode
+.vscode/settings.json
+.vscode/launch.json
+.vscode/*.code-snippets
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# ----------------
+# OneDrive 临时文件
+# ----------------
+~$*
+*.tmp
+*.temp
+
+# ----------------
+# 测试覆盖率
+# ----------------
+coverage/
+*.lcov
+.nyc_output/
+
+# ----------------
+# 其他临时文件
+# ----------------
+*.pid
+*.seed
+*.pid.lock
+.npm
+.eslintcache
+.stylelintcache
+.cache
+
+# ----------------
+# 打包文件（可选）
+# ----------------
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# ----------------
+# 特定于项目的排除
+# ----------------
+# 工作总结文档（包含敏感路径）
+多魔汰项目工作总结_*.md
+
+# 私有笔记
+PRIVATE_NOTES.md
+TODO_PRIVATE.md

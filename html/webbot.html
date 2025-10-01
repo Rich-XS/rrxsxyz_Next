@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webbot 对话</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        #chat-log {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #input-container {
+            display: flex;
+            gap: 10px;
+        }
+        #user-input {
+            flex: 1;
+            padding: 8px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-log"></div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="输入你的消息..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">发送</button>
+        </div>
+    </div>
+
+    <script src="coze-api.js"></script>
+    <script>
+        const chatLog = document.getElementById('chat-log');
+        const userInput = document.getElementById('user-input');
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // 添加用户消息到聊天记录
+            addMessage('user', message);
+            userInput.value = '';
+
+            try {
+                // 使用CozeChat API
+                const response = await window.CozeChat.sendMessage(message);
+                addMessage('bot', response.data.message);
+            } catch (error) {
+                addMessage('error', '抱歉，发生错误，请稍后再试。');
+                console.error('Error:', error);
+            }
+        }
+
+        function addMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender);
+            messageElement.textContent = message;
+            chatLog.appendChild(messageElement);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

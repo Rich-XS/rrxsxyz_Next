@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多魔汰风暴辩论系统 v3 - RRXS.XYZ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .slogan {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .header .version-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .roles-section {
+            margin: 30px 0;
+        }
+
+        .roles-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .layer-legend {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9em;
+        }
+
+        .layer-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .layer-legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .role-card {
+            position: relative;
+            border: 3px solid;
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        /* 三层颜色样式 */
+        .role-card.layer-core {
+            border-color: #007BFF;
+        }
+
+        .role-card.layer-external {
+            border-color: #FF4500;
+        }
+
+        .role-card.layer-value {
+            border-color: #28A745;
+        }
+
+        .role-card.layer-system {
+            border-color: #FFD700;
+        }
+
+        /* 必选角色金边高亮 */
+        .role-card.required {
+            border-width: 4px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .role-card.selected {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .role-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .role-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .role-name {
+            font-weight: bold;
+            font-size: 1.05em;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .role-desc {
+            font-size: 0.85em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .role-badges {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .role-badge.required {
+            background: #FFD700;
+            color: #333;
+        }
+
+        .role-badge.layer-core {
+            background: #007BFF;
+        }
+
+        .role-badge.layer-external {
+            background: #FF4500;
+        }
+
+        .role-badge.layer-value {
+            background: #28A745;
+        }
+
+        .role-badge.facilitator {
+            background: #FFD700;
+            color: #333;
+        }
+
+        .rounds-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .round-btn {
+            padding: 12px 24px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .round-btn:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .round-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .action-btn {
+            padding: 16px 48px;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .info-text {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            color: #1976d2;
+            font-size: 0.95em;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        /* 辩论区域样式 */
+        #debateArea {
+            display: none;
+        }
+
+        .phase-indicator {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phase-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .phase-step::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc;
+            font-size: 1.5em;
+        }
+
+        .phase-step:last-child::after {
+            display: none;
+        }
+
+        .phase-step.active {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .phase-step.completed {
+            color: #28A745;
+        }
+
+        .debate-round {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .round-header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .speech-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 5px solid;
+            transition: all 0.3s;
+        }
+
+        .speech-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* 角色发言颜色编码 */
+        .speech-item.layer-core {
+            border-left-color: #007BFF;
+        }
+
+        .speech-item.layer-external {
+            border-left-color: #FF4500;
+        }
+
+        .speech-item.layer-value {
+            border-left-color: #28A745;
+        }
+
+        .speech-item.layer-system {
+            border-left-color: #FFD700;
+        }
+
+        .speech-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .speech-role-icon {
+            font-size: 1.3em;
+        }
+
+        .speech-content {
+            color: #333;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .delegate-prompt {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .delegate-prompt textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .delegate-prompt button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #ffc107;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .delegate-prompt button:hover {
+            background: #ffb300;
+        }
+
+        .report-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .report-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .report-section h3 {
+            color: #333;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .report-section ul {
+            list-style-position: inside;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            padding: 12px 30px;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .export-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .roles-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+
+            .rounds-selector {
+                flex-direction: column;
+            }
+
+            .round-btn {
+                width: 100%;
+            }
+
+            .export-buttons {
+                flex-direction: column;
+            }
+
+            .export-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 多魔汰风暴辩论系统 <span class="version-tag">v3.0</span></h1>
+            <div class="slogan">"十六个角色，一个真相" - AI专家级头脑风暴</div>
+            <div id="userStatus" style="margin-top: 15px; font-size: 0.9em; opacity: 0.9;">
+                <!-- 用户状态将通过JS动态更新 -->
+            </div>
+        </div>
+
+        <!-- 阶段1：准备阶段 (Preparation) -->
+        <div id="setupArea" class="card">
+            <div class="input-group">
+                <label>📝 输入你的问题或决策困境：</label>
+                <textarea id="topicInput" placeholder="例如：我应该从职场转型做自媒体吗？当前45岁，有10年行业经验，但对内容创作不确定..."></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>📚 背景信息（选填，帮助AI更好理解）：</label>
+                <textarea id="backgroundInput" placeholder="例如：目标用户、当前资源、主要顾虑、时间/预算限制等..." style="min-height: 80px;"></textarea>
+            </div>
+
+            <div class="roles-section">
+                <div class="roles-header">
+                    <label>👥 选择辩论角色（必选8个 + 可选角色）：</label>
+                    <div class="layer-legend">
+                        <div class="layer-legend-item">
+                            <div class="layer-legend-color" style="background: #007BFF;"></div>
+                            <span>核心层</span>
+                        </div>
+                        <div class="layer-legend-item">
+                            <div class="layer-legend-color" style="background: #FF4500;"></div>
+                            <span>外部层</span>
+                        </div>
+                        <div class="layer-legend-item">
+                            <div class="layer-legend-color" style="background: #28A745;"></div>
+                            <span>价值层</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-text">
+                    💡 提示：金边为必选8角色（已默认选中），发言按流线顺序：第一性→穿越者→上帝→杠精→用户→竞品→执行→领袖
+                </div>
+                <div class="roles-grid" id="rolesGrid">
+                    <!-- 角色卡片将通过JS动态生成 -->
+                </div>
+                <div class="info-text" id="roleCount" style="margin-top: 15px;">
+                    已选择 <strong>0</strong> 个角色
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>🔄 辩论轮次：</label>
+                <div class="rounds-selector">
+                    <button class="round-btn" data-rounds="3">3轮（快速）</button>
+                    <button class="round-btn active" data-rounds="5">5轮（平衡）</button>
+                    <button class="round-btn" data-rounds="8">8轮（深入）</button>
+                    <button class="round-btn" data-rounds="10">10轮（全面）</button>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="action-btn" id="startDebateBtn">🚀 启动多魔汰辩论</button>
+            </div>
+        </div>
+
+        <!-- 阶段2-5：策划/确认/辩论/交付 -->
+        <div id="debateArea"></div>
+
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+            <a href="../baiwen.html">百问自测</a>
+            <a href="../Projects.html">项目展示</a>
+        </div>
+    </div>
+
+    <script src="src/config/roles.js"></script>
+    <script src="src/modules/userAuth.js"></script>
+    <script src="src/modules/debateEngine.js"></script>
+    <script>
+        // 全局状态
+        const state = {
+            selectedRoles: [],
+            rounds: 5,
+            topic: '',
+            background: '',
+            debateEngine: null,
+            user: null
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUserStatus();
+            renderRoles();
+            setupEventListeners();
+        });
+
+        // 更新用户状态显示
+        function updateUserStatus() {
+            const userStatus = document.getElementById('userStatus');
+
+            if (window.UserAuth && window.UserAuth.isLoggedIn()) {
+                state.user = window.UserAuth.currentUser;
+                userStatus.innerHTML = `
+                    <span>👤 ${state.user.nickname}</span>
+                    ${state.user.isTestMode ? '<span style="background: #f39c12; padding: 2px 8px; border-radius: 5px; margin-left: 10px; font-size: 0.85em;">测试模式</span>' : ''}
+                    <button onclick="showDebateHistory()" style="margin-left: 15px; padding: 5px 15px; background: rgba(255,255,255,0.2); border: 1px solid white; border-radius: 5px; color: white; cursor: pointer;">
+                        📜 历史记录
+                    </button>
+                    <button onclick="logout()" style="margin-left: 10px; padding: 5px 15px; background: rgba(255,255,255,0.2); border: 1px solid white; border-radius: 5px; color: white; cursor: pointer;">
+                        退出
+                    </button>
+                `;
+            } else {
+                userStatus.innerHTML = `
+                    <button onclick="promptLogin()" style="padding: 8px 20px; background: rgba(255,255,255,0.9); border: none; border-radius: 8px; color: #667eea; cursor: pointer; font-weight: bold;">
+                        🔑 登录/注册
+                    </button>
+                    <span style="margin-left: 10px; font-size: 0.85em;">登录后可保存辩论进度</span>
+                `;
+            }
+        }
+
+        // 提示登录
+        function promptLogin() {
+            if (window.UserAuth) {
+                window.UserAuth.showLoginModal({
+                    title: '欢迎来到多魔汰',
+                    message: '登录后可保存辩论进度和历史记录，随时继续未完成的辩论',
+                    onSuccess: (user) => {
+                        updateUserStatus();
+                        alert(`欢迎回来，${user.nickname}！`);
+                    }
+                });
+            } else {
+                alert('用户认证模块未加载');
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            if (confirm('确定退出登录吗？未保存的辩论进度可能丢失。')) {
+                if (window.UserAuth) {
+                    window.UserAuth.logout();
+                    updateUserStatus();
+                }
+            }
+        }
+
+        // 显示辩论历史
+        async function showDebateHistory() {
+            try {
+                if (!window.UserAuth) {
+                    alert('用户认证模块未加载');
+                    return;
+                }
+
+                const history = await window.UserAuth.getDebateHistory();
+
+                if (history.length === 0) {
+                    alert('您还没有辩论历史记录');
+                    return;
+                }
+
+                // TODO: 显示历史记录弹窗
+                console.log('辩论历史:', history);
+                alert(`您有 ${history.length} 条辩论记录`);
+
+            } catch (error) {
+                alert('获取辩论历史失败：' + error.message);
+            }
+        }
+
+        // 渲染角色卡片
+        function renderRoles() {
+            if (typeof DEBATE_ROLES === 'undefined') {
+                console.error('角色配置未加载');
+                return;
+            }
+
+            const grid = document.getElementById('rolesGrid');
+            const layerNames = {
+                'core': '核心层',
+                'external': '外部层',
+                'value': '价值层',
+                'system': '系统'
+            };
+
+            grid.innerHTML = DEBATE_ROLES.map(role => {
+                const requiredClass = role.required ? 'required' : '';
+                const layerClass = `layer-${role.layer}`;
+                const badges = [];
+
+                if (role.required) {
+                    badges.push('<span class="role-badge required">必选</span>');
+                }
+                badges.push(`<span class="role-badge ${layerClass}">${layerNames[role.layer]}</span>`);
+
+                return `
+                    <div class="role-card ${layerClass} ${requiredClass}" data-role-id="${role.id}">
+                        <div class="role-icon">${role.icon}</div>
+                        <div class="role-name">${role.shortName}</div>
+                        <div class="role-desc">${role.description}</div>
+                        <div class="role-badges">${badges.join('')}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // 默认选中必选角色
+            DEBATE_ROLES.filter(r => r.required).forEach(role => {
+                state.selectedRoles.push(role.id);
+                const card = document.querySelector(`[data-role-id="${role.id}"]`);
+                if (card) card.classList.add('selected');
+            });
+
+            updateRoleCount();
+        }
+
+        // 设置事件监听
+        function setupEventListeners() {
+            // 角色选择
+            document.getElementById('rolesGrid').addEventListener('click', (e) => {
+                const card = e.target.closest('.role-card');
+                if (!card) return;
+
+                const roleId = parseInt(card.dataset.roleId);
+                const role = DEBATE_ROLES.find(r => r.id === roleId);
+
+                if (!role) return;
+
+                const index = state.selectedRoles.indexOf(roleId);
+
+                if (index > -1) {
+                    // 取消选择（但必选角色不能取消）
+                    if (!role.required) {
+                        state.selectedRoles.splice(index, 1);
+                        card.classList.remove('selected');
+                    } else {
+                        alert('必选角色不能取消选择');
+                    }
+                } else {
+                    // 添加选择
+                    state.selectedRoles.push(roleId);
+                    card.classList.add('selected');
+                }
+
+                updateRoleCount();
+            });
+
+            // 轮次选择
+            document.querySelectorAll('.round-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.round-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.rounds = parseInt(btn.dataset.rounds);
+                });
+            });
+
+            // 启动辩论
+            document.getElementById('startDebateBtn').addEventListener('click', startDebate);
+        }
+
+        // 更新角色计数
+        function updateRoleCount() {
+            const minRoles = typeof REQUIRED_FLOW !== 'undefined' ? REQUIRED_FLOW.length : 8;
+            const countText = state.selectedRoles.length < minRoles
+                ? `（最少需要${minRoles}个必选角色）`
+                : state.selectedRoles.length === minRoles
+                    ? '（已满足最低要求）'
+                    : '✓';
+
+            document.getElementById('roleCount').innerHTML =
+                `已选择 <strong>${state.selectedRoles.length}</strong> 个角色 ${countText}`;
+
+            document.getElementById('startDebateBtn').disabled = state.selectedRoles.length < minRoles;
+        }
+
+        // 启动辩论
+        async function startDebate() {
+            state.topic = document.getElementById('topicInput').value.trim();
+            state.background = document.getElementById('backgroundInput').value.trim();
+
+            if (!state.topic || state.topic.length < 5) {
+                alert('请输入至少5个字的问题！');
+                return;
+            }
+
+            const minRoles = typeof REQUIRED_FLOW !== 'undefined' ? REQUIRED_FLOW.length : 8;
+            if (state.selectedRoles.length < minRoles) {
+                alert(`请至少选择${minRoles}个辩论角色（必选角色）！`);
+                return;
+            }
+
+            // 隐藏设置区域，显示辩论区域
+            document.getElementById('setupArea').style.display = 'none';
+            document.getElementById('debateArea').style.display = 'block';
+
+            // 显示加载状态
+            document.getElementById('debateArea').innerHTML = `
+                <div class="card loading">
+                    <div class="spinner"></div>
+                    <p><strong>🧠 领袖正在分析问题，制定辩论策略...</strong></p>
+                    <p style="margin-top: 10px; opacity: 0.7;">这可能需要 1-2 分钟，请稍候</p>
+                </div>
+            `;
+
+            try {
+                // 初始化辩论引擎
+                if (typeof DebateEngine === 'undefined') {
+                    throw new Error('辩论引擎未加载');
+                }
+
+                state.debateEngine = new DebateEngine({
+                    apiEndpoint: 'http://localhost:3000/api/ai/debate',
+                    maxRounds: state.rounds,
+                    minRoles: minRoles
+                });
+
+                // 监听事件
+                state.debateEngine.on('phaseChange', handlePhaseChange);
+                state.debateEngine.on('roleSpeak', handleRoleSpeak);
+                state.debateEngine.on('delegatePrompt', handleDelegatePrompt);
+                state.debateEngine.on('error', handleError);
+
+                // 启动准备阶段
+                await state.debateEngine.startPreparation({
+                    topic: state.topic,
+                    background: state.background,
+                    selectedRoles: state.selectedRoles,
+                    rounds: state.rounds
+                });
+
+            } catch (error) {
+                console.error('辩论启动失败:', error);
+                alert('抱歉，启动辩论时出错：' + error.message);
+                document.getElementById('setupArea').style.display = 'block';
+                document.getElementById('debateArea').style.display = 'none';
+            }
+        }
+
+        // 处理阶段变化
+        function handlePhaseChange(data) {
+            console.log('阶段变化:', data.phase);
+            // 更新阶段指示器
+            updatePhaseIndicator(data.phase);
+        }
+
+        // 更新阶段指示器
+        function updatePhaseIndicator(currentPhase) {
+            const phases = ['preparation', 'planning', 'confirmation', 'debate', 'delivery'];
+            const phaseNames = {
+                'preparation': '准备',
+                'planning': '策划',
+                'confirmation': '确认',
+                'debate': '辩论',
+                'delivery': '交付'
+            };
+
+            const indicator = phases.map(phase => {
+                const index = phases.indexOf(phase);
+                const currentIndex = phases.indexOf(currentPhase);
+                const statusClass = index < currentIndex ? 'completed' : index === currentIndex ? 'active' : '';
+
+                return `<div class="phase-step ${statusClass}">${phaseNames[phase]}</div>`;
+            }).join('');
+
+            const debateArea = document.getElementById('debateArea');
+            let phaseIndicatorEl = debateArea.querySelector('.phase-indicator');
+
+            if (!phaseIndicatorEl) {
+                phaseIndicatorEl = document.createElement('div');
+                phaseIndicatorEl.className = 'phase-indicator';
+                debateArea.insertBefore(phaseIndicatorEl, debateArea.firstChild);
+            }
+
+            phaseIndicatorEl.innerHTML = indicator;
+        }
+
+        // 处理角色发言
+        function handleRoleSpeak(data) {
+            const { round, role, content, type } = data;
+            const debateArea = document.getElementById('debateArea');
+
+            // 找到或创建本轮容器
+            let roundContainer = debateArea.querySelector(`[data-round="${round}"]`);
+            if (!roundContainer) {
+                roundContainer = document.createElement('div');
+                roundContainer.className = 'debate-round';
+                roundContainer.dataset.round = round;
+                roundContainer.innerHTML = `
+                    <div class="round-header">🎯 第 ${round} 轮辩论</div>
+                    <div class="speeches-container"></div>
+                `;
+                debateArea.appendChild(roundContainer);
+            }
+
+            const speechesContainer = roundContainer.querySelector('.speeches-container');
+            const layerClass = role.layer ? `layer-${role.layer}` : '';
+            const typeLabel = type === 'summary' ? '【总结】' : '';
+
+            const speechEl = document.createElement('div');
+            speechEl.className = `speech-item ${layerClass}`;
+            speechEl.innerHTML = `
+                <div class="speech-header">
+                    <span class="speech-role-icon">${role.icon || '💬'}</span>
+                    <span>${role.shortName || role.name} ${typeLabel}</span>
+                </div>
+                <div class="speech-content">${content}</div>
+            `;
+
+            speechesContainer.appendChild(speechEl);
+
+            // 滚动到最新发言
+            speechEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+
+        // 处理委托人提示
+        function handleDelegatePrompt(data) {
+            const { type, message, callback, canSkip } = data;
+            const debateArea = document.getElementById('debateArea');
+
+            const promptEl = document.createElement('div');
+            promptEl.className = 'delegate-prompt';
+            promptEl.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 10px;">💬 ${message}</div>
+                <textarea id="delegateInput" placeholder="输入您的补充或建议...${canSkip ? '（可选）' : ''}"></textarea>
+                <div style="margin-top: 10px;">
+                    <button onclick="submitDelegateInput()">提交</button>
+                    ${canSkip ? '<button onclick="skipDelegateInput()" style="margin-left: 10px; background: #ccc;">跳过</button>' : ''}
+                </div>
+            `;
+
+            debateArea.appendChild(promptEl);
+            promptEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // 保存回调
+            window.currentDelegateCallback = callback;
+        }
+
+        // 提交委托人输入
+        function submitDelegateInput() {
+            const input = document.getElementById('delegateInput');
+            if (window.currentDelegateCallback) {
+                window.currentDelegateCallback(input.value);
+                document.querySelector('.delegate-prompt').remove();
+                window.currentDelegateCallback = null;
+            }
+        }
+
+        // 跳过委托人输入
+        function skipDelegateInput() {
+            if (window.currentDelegateCallback) {
+                window.currentDelegateCallback('');
+                document.querySelector('.delegate-prompt').remove();
+                window.currentDelegateCallback = null;
+            }
+        }
+
+        // 处理错误
+        function handleError(data) {
+            console.error('辩论错误:', data);
+            alert(`辩论过程出错：${data.error.message}`);
+        }
+
+        // 导出报告
+        function exportReport(format) {
+            if (!state.debateEngine || !state.debateEngine.state.reportData) {
+                alert('报告尚未生成');
+                return;
+            }
+
+            if (format === 'json') {
+                state.debateEngine.exportReportAsJSON();
+            } else if (format === 'pdf') {
+                state.debateEngine.exportReportAsPDF();
+            }
+        }
+    </script>
+</body>
+</html>

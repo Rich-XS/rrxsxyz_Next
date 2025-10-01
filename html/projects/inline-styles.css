@@ -1,0 +1,161 @@
+/* 部署配置提示样式 */
+.deployment-tip {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #e3f2fd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.deployment-tip h4 {
+    color: #1976d2;
+    margin-bottom: 0.5rem;
+}
+
+.deployment-tip ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.deployment-tip .tip-highlight {
+    background: #fff;
+    padding: 0.8rem;
+    border-radius: 4px;
+    margin-top: 0.8rem;
+}
+
+.deployment-tip .tip-highlight strong {
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+.deployment-tip .tip-highlight ol {
+    margin: 0.3rem 0;
+    padding-left: 1.2rem;
+    font-size: 0.85rem;
+}
+
+/* 完成界面样式 */
+.completion-container {
+    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.completion-container h2 {
+    color: #28a745;
+    margin-bottom: 1rem;
+}
+
+.completion-info {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.completion-info h3 {
+    color: #495057;
+    margin-bottom: 1rem;
+}
+
+.completion-buttons {
+    margin-top: 2rem;
+}
+
+.completion-buttons .btn {
+    margin-right: 1rem;
+}
+
+/* 二维码部分样式 */
+.qr-section {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.qr-section p {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.qr-container {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.qr-container img {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+}
+
+.qr-notice {
+    color: #dc3545;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* 演示提示样式优化 */
+.demo-welcome {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    z-index: 9999;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.demo-welcome .demo-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.demo-welcome .demo-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.demo-welcome .demo-button {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0.8rem;
+}
+
+/* 质量指示器样式 */
+.answer-quality-indicator {
+    display: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin: 0 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.quality-good {
+    background: #28a745;
+    color: white;
+}
+
+.quality-error {
+    background: #dc3545;
+    color: white;
+}
+
+.quality-warning {
+    background: #ffc107;
+    color: #333;
+}

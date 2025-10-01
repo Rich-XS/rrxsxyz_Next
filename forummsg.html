@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>论坛&留言 - rrxs.xyz</title>
+    <style>
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #e9ecef;
+        }
+        .content {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .message-form {
+            margin-top: 20px;
+        }
+        .message-form textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .message-form button {
+            padding: 8px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .message-form button:hover {
+            background-color: #0056b3;
+        }
+        .messages-list {
+            margin-top: 30px;
+        }
+        .message-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .message-author {
+            font-weight: bold;
+            color: #333;
+        }
+        .message-date {
+            color: #666;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .message-content {
+            margin-top: 5px;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>RRXS 论坛&留言</h1>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="#">关于</a>
+            <a href="shop.html">店铺</a>
+            <a href="webbot.html">学习</a>
+            <a href="Projects.html">项目</a>
+        </nav>
+    </header>
+    
+    <div class="content">
+        <h2>留言板</h2>
+        <div class="message-form">
+            <textarea placeholder="请输入您的留言..."></textarea>
+            <button>提交留言</button>
+        </div>
+        
+        <div class="messages-list">
+            <div class="message-item">
+                <div class="message-header">
+                    <span class="message-author">用户1</span>
+                    <span class="message-date">2025-01-25</span>
+                </div>
+                <div class="message-content">
+                    这是一个示例留言内容。
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

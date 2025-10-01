@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户数据管理 - RRXS.xyz</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .user-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .table-header {
+            background: #667eea;
+            color: white;
+            padding: 1rem;
+            font-weight: bold;
+        }
+
+        .table-body {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .user-row {
+            display: grid;
+            grid-template-columns: 120px 120px 150px 100px 100px 120px 120px;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .user-row:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-registered {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-completed {
+            background: #007bff;
+            color: white;
+        }
+
+        .status-partial {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .refresh-btn:hover {
+            background: #5a6fd8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 用户数据管理</h1>
+        <p>百万被动收入之路 - 用户注册和测评数据统计</p>
+    </div>
+
+    <div class="container">
+        <button class="refresh-btn" onclick="loadData()">🔄 刷新数据</button>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsers">-</div>
+                <div class="stat-label">总用户数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRegistrations">-</div>
+                <div class="stat-label">注册用户</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalAssessments">-</div>
+                <div class="stat-label">完成测评</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completionRate">-</div>
+                <div class="stat-label">完成率</div>
+            </div>
+        </div>
+
+        <div class="user-table">
+            <div class="table-header">
+                <div class="user-row" style="font-weight: bold;">
+                    <div>手机号</div>
+                    <div>姓名</div>
+                    <div>邮箱</div>
+                    <div>年龄段</div>
+                    <div>性别</div>
+                    <div>注册状态</div>
+                    <div>测评状态</div>
+                </div>
+            </div>
+            <div class="table-body" id="userTableBody">
+                <div class="loading">正在加载用户数据...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = 'http://localhost:3000';
+
+        async function loadData() {
+            try {
+                // 加载统计数据
+                const statsResponse = await fetch(`${BACKEND_URL}/api/stats/summary`);
+                if (statsResponse.ok) {
+                    const statsData = await statsResponse.json();
+                    updateStats(statsData);
+                }
+
+                // 加载用户列表
+                const usersResponse = await fetch(`${BACKEND_URL}/api/admin/users`);
+                if (usersResponse.ok) {
+                    const usersData = await usersResponse.json();
+                    updateUserTable(usersData);
+                }
+
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                document.getElementById('userTableBody').innerHTML =
+                    '<div class="loading" style="color: #dc3545;">⚠️ 无法连接到后端服务，请确保服务器正在运行</div>';
+            }
+        }
+
+        function updateStats(data) {
+            if (data.success) {
+                const stats = data.data;
+                document.getElementById('totalUsers').textContent = data.userCount || 0;
+                document.getElementById('totalRegistrations').textContent = stats.totalRegistrations || 0;
+                document.getElementById('totalAssessments').textContent = stats.totalAssessments || 0;
+
+                const completionRate = stats.totalRegistrations > 0 ?
+                    Math.round((stats.totalAssessments / stats.totalRegistrations) * 100) : 0;
+                document.getElementById('completionRate').textContent = completionRate + '%';
+            }
+        }
+
+        function updateUserTable(data) {
+            const tbody = document.getElementById('userTableBody');
+
+            if (!data.success || data.users.length === 0) {
+                tbody.innerHTML = '<div class="loading">暂无用户数据</div>';
+                return;
+            }
+
+            tbody.innerHTML = data.users.map(user => {
+                const registrationStatus = user.hasRegistered ?
+                    '<span class="status-badge status-registered">已注册</span>' :
+                    '<span class="status-badge status-partial">未注册</span>';
+
+                const assessmentStatus = user.hasCompletedAssessment ?
+                    '<span class="status-badge status-completed">已完成</span>' :
+                    '<span class="status-badge status-partial">未完成</span>';
+
+                return `
+                    <div class="user-row">
+                        <div>${user.phone}</div>
+                        <div>${user.name}</div>
+                        <div title="${user.email}">${user.email.length > 20 ? user.email.substring(0, 20) + '...' : user.email}</div>
+                        <div>${user.age || '-'}</div>
+                        <div>${user.gender || '-'}</div>
+                        <div>${registrationStatus}</div>
+                        <div>${assessmentStatus}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 页面加载时自动加载数据
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+
+            // 每30秒自动刷新一次
+            setInterval(loadData, 30000);
+        });
+    </script>
+</body>
+</html>
