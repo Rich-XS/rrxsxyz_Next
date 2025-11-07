@@ -1,0 +1,70 @@
+=== Night-Auth 项目备份清单 ===
+
+备份时间: 2025-10-19 02:04:45
+备份文件: rrxsxyz_next-20251019_0203-NightAuth-PreWork.zip
+备份路径: D:\_100W\rrxsxyz_next\.claude\backups\rrxsxyz_next-20251019_0203-NightAuth-PreWork.zip
+文件大小: 1.51 MB (1579583 bytes)
+
+备份原因: Night-Auth FULL ON 模式启动前的安全备份
+
+包含目录:
+  - duomotai (多魔汰系统核心代码)
+  - server (后端API服务)
+  - scripts (自动化脚本)
+  - .claude (Agent配置文件)
+  - html (百问自测等前端页面)
+  - docs (项目文档)
+
+包含文件:
+  - CLAUDE.md (项目配置主文件)
+  - progress.md (项目进度记录)
+  - ideas.md (想法和任务列表)
+  - index.html (项目首页)
+  - baiwen.html (百问自测页面)
+  - Projects.html (项目展示页)
+  - package.json (依赖配置)
+
+排除目录:
+  - node_modules (依赖包)
+  - .git (版本控制)
+  - test_reports (测试报告)
+  - test-screenshots (测试截图)
+  - screenshots (截图文件)
+  - .venv (Python虚拟环境)
+  - .obsidian (Obsidian配置)
+  - dist (构建输出)
+  - logs (日志文件)
+  - chatlogs (对话记录)
+  - temp (临时文件)
+  - .backups (旧备份)
+  - backups (备份目录)
+  - Backup (备份目录)
+  - ZIP_BACKUP_OLD (旧压缩包)
+  - server/UserInfo (敏感用户数据)
+  - duomotai/screenshots (截图)
+
+排除文件模式:
+  - *.log
+  - *.tmp
+  - *_backup_*
+  - package-lock.json
+
+备份完整性检查:
+  [✓] 源代码文件 (duomotai/, server/, scripts/)
+  [✓] 配置文件 (CLAUDE.md, progress.md, .claude/)
+  [✓] 核心HTML文件 (index.html, baiwen.html, duomotai/index.html)
+  [✓] 排除敏感数据 (server/UserInfo)
+  [✓] 排除依赖包 (node_modules)
+  [✓] 文件大小合理 (1.51 MB)
+
+验证状态: ✅ 备份成功
+
+Night-Auth 启动准备:
+  [✓] 项目备份已完成
+  [✓] 备份文件已验证
+  [✓] 可以安全启动 Night-Auth FULL ON 模式
+
+---
+生成时间: 2025-10-19 02:04:45
+脚本版本: Simple Backup v1.0
+执行方式: PowerShell Compress-Archive

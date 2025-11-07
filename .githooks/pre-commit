@@ -1,0 +1,57 @@
+#!/bin/sh
+# .githooks/pre-commit
+# Git pre-commit hook to ensure progress.md and CLAUDE.md are in sync
+# This script runs BEFORE the commit is created.
+
+set -e
+
+echo "--- Running CLAUDE.md / progress.md Sync Check (L3: Git Enforce Layer) ---"
+
+# 1. Check if the files exist (should exist based on CLAUDE.md)
+if [ ! -f "CLAUDE.md" ] || [ ! -f "progress.md" ]; then
+  echo "WARNING: CLAUDE.md or progress.md not found. Skipping sync check."
+  exit 0
+fi
+
+# 2. Determine the age of the last update timestamp added by progress_recorder agent
+# We look for the specific timestamp format in CLAUDE.md
+CLAUDE_TS=$(grep -E '\*\*Last Updated\*\*: [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}' CLAUDE.md | tail -1 | awk '{print $3 " " $4}')
+PROGRESS_TS=$(grep -E '\*\*Last Updated\*\*: [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}' progress.md | tail -1 | awk '{print $3 " " $4}')
+
+if [ -z "$CLAUDE_TS" ] || [ -z "$PROGRESS_TS" ]; then
+  echo "WARNING: Could not parse timestamps in CLAUDE.md or progress.md. Assuming system is not fully initialized. Skipping check."
+  exit 0
+fi
+
+# Convert timestamps to seconds since epoch for comparison (using bash date command)
+# Note: This conversion needs to be robust across environments. Assuming GNU date or compatible (like Git Bash environment)
+TS_CLAUDE_EPOCH=$(date -d "$CLAUDE_TS" +%s)
+TS_PROGRESS_EPOCH=$(date -d "$PROGRESS_TS" +%s)
+
+# Check if the difference is greater than a short threshold (e.g., 5 minutes = 300 seconds)
+# If progress.md is older than CLAUDE.md by more than 300 seconds -> Failure
+TIME_DIFF=$((TS_CLAUDE_EPOCH - TS_PROGRESS_EPOCH))
+
+if [ $TIME_DIFF -gt 300 ]; then
+  echo "❌ COMMIT FAILED: Synchronization Error Detected!"
+  echo "CLAUDE.md was updated MORE RECENTLY than progress.md."
+  echo "CLAUDE.md TS: $CLAUDE_TS ($TS_CLAUDE_EPOCH s)"
+  echo "progress.md TS: $PROGRESS_TS ($TS_PROGRESS_EPOCH s)"
+  echo "Difference: $TIME_DIFF seconds (>$300s threshold)."
+  echo "ACTION REQUIRED: Run '>>record' or use the progress-recorder agent to update progress.md before committing."
+  echo "--------------------------------------------------------------------"
+  exit 1
+fi
+
+# Check for reverse difference (progress.md updated without CLAUDE.md being updated, e.g., via non-agent means)
+if [ $TIME_DIFF -lt -300 ]; then
+  echo "⚠️ WARNING: progress.md is significantly newer than CLAUDE.md."
+  echo "progress.md TS: $PROGRESS_TS ($TS_PROGRESS_EPOCH s)"
+  echo "CLAUDE.md TS: $CLAUDE_TS ($TS_CLAUDE_EPOCH s)"
+  echo "Difference: $TIME_DIFF seconds (>$300s threshold)."
+  echo "ACTION RECOMMENDED: Please review changes and consider calling '>>record' or '>>recap' to update CLAUDE.md if necessary."
+  echo "--------------------------------------------------------------------"
+fi
+
+echo "✅ Sync check passed or warning issued."
+exit 0

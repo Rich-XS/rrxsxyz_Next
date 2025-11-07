@@ -1,0 +1,147 @@
+{
+  "version": "1.0",
+  "total_solutions": 42,
+  "last_updated": "2025-11-06T03:10:00+08:00",
+  "categories": {
+    "文件系统": {
+      "solutions": [
+        {
+          "id": "SOL-FS-001",
+          "problem": "NUL文件污染",
+          "root_cause": "批处理 > nul + OneDrive + nodemon循环",
+          "solution": "禁用 > nul，使用 2>CON",
+          "tool": "scripts/force_cleanup_nul.ps1 + Git pre-commit hook",
+          "prevention": "D-102规范 + 监控脚本（阈值>10报警）",
+          "decisions": ["D-102", "D-107"]
+        },
+        {
+          "id": "SOL-FS-002",
+          "problem": "Phantom文件（幻影文件）",
+          "root_cause": "NTFS MFT Cache内核内存",
+          "solution": "系统重启清空内核内存",
+          "verification": "Test-Path返回False但索引显示存在",
+          "prevention": "永久禁用Windows Search",
+          "decisions": ["D-106"]
+        },
+        {
+          "id": "SOL-FS-003",
+          "problem": "Claude配置膨胀（862MB）",
+          "solution": "归档7天前数据到.claude.archive",
+          "tool": "scripts/weekly_config_cleanup.ps1",
+          "schedule": "每周一00:00或>500MB触发",
+          "outcome": "862MB→1.64MB（99.8%优化）",
+          "decisions": ["D-104"]
+        }
+      ]
+    },
+    "进程管理": {
+      "solutions": [
+        {
+          "id": "SOL-PROC-001",
+          "problem": "端口冲突（3001/8080）",
+          "solution": "启动前自动检测并清理本项目旧进程",
+          "tool": "scripts/safe_port_cleanup.ps1",
+          "protection": "识别项目归属，保护其他项目",
+          "decisions": ["D-68"]
+        },
+        {
+          "id": "SOL-PROC-002",
+          "problem": "Claude CLI无限循环",
+          "root_cause": "扩展检查触发code命令",
+          "solution": "使用VSCode内置Claude扩展",
+          "prevention": "禁用--dangerously-skip-permissions参数",
+          "decisions": ["D-103"]
+        },
+        {
+          "id": "SOL-PROC-003",
+          "problem": "进程泄漏（9个VSCode进程）",
+          "solution": "手动清理指定PID，避免taskkill /IM误杀",
+          "tool": "tasklist + taskkill /PID <PID>",
+          "decisions": ["D-103验证"]
+        }
+      ]
+    },
+    "配置优化": {
+      "solutions": [
+        {
+          "id": "SOL-CFG-001",
+          "problem": "版本号混淆（浏览器缓存）",
+          "solution": "代码变更时自动递增版本号",
+          "locations": "index.html L12（标题）+ L144（console.log）",
+          "automation": "D-95版本号自动更新",
+          "decisions": ["D-85", "D-95"]
+        },
+        {
+          "id": "SOL-CFG-002",
+          "problem": "备份遗漏",
+          "solution": "版本递增自动触发progress-recorder备份",
+          "method": "Exclude方式（排除node_modules/.git等）",
+          "naming": "rrxsxyz_next_YYYYMMDDHHmm_V{version}OK.zip",
+          "decisions": ["D-97", "D-72"]
+        },
+        {
+          "id": "SOL-CFG-003",
+          "problem": "Compacting性能问题",
+          "root_cause": "文件积累 + Token不优化",
+          "solution": "test_reports归档 + 临时文件清理",
+          "outcome": "减少55.7%文件大小",
+          "decisions": ["D-66"]
+        }
+      ]
+    },
+    "网络同步": {
+      "solutions": [
+        {
+          "id": "SOL-NET-001",
+          "problem": "OneDrive同步文件数过载（596,128 > 350,000）",
+          "root_cause": "Playwright安装触发.git/objects大量新增",
+          "solution": ".excludefiles配置（23个排除模式）",
+          "location": "C:\\Users\\Richard\\.onedrive\\.excludefiles",
+          "expected": "减少66%文件数",
+          "decisions": ["D-ONEDRIVE-DIAG-002"]
+        },
+        {
+          "id": "SOL-NET-002",
+          "problem": "OneDrive安装失败",
+          "diagnosis": "Go-Gemba现地验证（tasklist + 文件检查 + 用户截图）",
+          "solution": "手动从Microsoft Store安装",
+          "guide": "ONEDRIVE_MANUAL_INSTALL_GUIDE.md",
+          "decisions": ["D-111", "D-112"]
+        }
+      ]
+    },
+    "代码质量": {
+      "solutions": [
+        {
+          "id": "SOL-CODE-001",
+          "problem": "批处理文件违规",
+          "rule": "禁止包含 > nul",
+          "enforcement": "Git pre-commit hook自动检查",
+          "fix": "替换为 2>CON 或 PowerShell Out-Null",
+          "decisions": ["D-102", "D-107"]
+        },
+        {
+          "id": "SOL-CODE-002",
+          "problem": "锁定模块误修改",
+          "protection": "标记PROTECTED的代码块，修改前必须用户确认",
+          "scope": "测试用户功能（D-87）+ 已验证模块",
+          "decisions": ["D-89", "D-87"]
+        },
+        {
+          "id": "SOL-CODE-003",
+          "problem": "三层决策不同步",
+          "solution": "一次决策，三层同步（Records→Docs→Code）",
+          "verification": "progress.md标记'✅ 3层同步完成'",
+          "decisions": ["D-53"]
+        }
+      ]
+    }
+  },
+  "quick_reference": {
+    "文件系统问题": "检查NUL文件（SOL-FS-001） → Phantom文件需重启（SOL-FS-002） → 配置>500MB清理（SOL-FS-003）",
+    "进程冲突": "端口检查（SOL-PROC-001） → CLI循环用IDE扩展（SOL-PROC-002）",
+    "版本管理": "自动递增（SOL-CFG-001） → 自动备份（SOL-CFG-002）",
+    "OneDrive问题": "文件数过载用excludefiles（SOL-NET-001） → 安装失败用手动安装（SOL-NET-002）",
+    "代码规范": "批处理用2>CON（SOL-CODE-001） → 锁定模块需确认（SOL-CODE-002）"
+  }
+}

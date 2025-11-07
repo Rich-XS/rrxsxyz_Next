@@ -1,0 +1,42 @@
+{
+  "scripts": {
+    "check": "tsc --noEmit",
+    "build": "tsc",
+    "monitor": "node scripts/file_size_monitor.js",
+    "cleanup": "node scripts/cleanup_and_archive.js",
+    "backup": "node scripts/backup_project.js",
+    "backup:auto": "node scripts/autoBackup.js",
+    "backup:list": "node scripts/autoBackup.js --list",
+    "test": "jest",
+    "test:unit": "jest test_reports/unit_tests",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:auto": "node scripts/auto_test.js",
+    "screenshot:duomotai": "node scripts/generateDuomotaiScreenshots.js",
+    "screenshot:test": "node scripts/testScreenshot.js",
+    "gemba": "node scripts/gemba-agent.js",
+    "gemba:playwright": "node scripts/gemba-agent-playwright.js",
+    "gemba:parallel": "node scripts/parallel-runner.js",
+    "gemba:benchmark": "node scripts/puppeteer-vs-playwright-benchmark.js",
+    "playwright:install": "npx playwright install chromium",
+    "playwright:test": "npx playwright test",
+    "playwright:ui": "npx playwright test --ui",
+    "playwright:report": "npx playwright show-report test-results/playwright-report",
+    "playwright:debug": "npx playwright test --debug",
+    "playwright:headed": "npx playwright test --headed"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.2.0",
+    "@playwright/test": "^1.56.1",
+    "express": "^5.1.0",
+    "jest": "^30.2.0",
+    "jsdom": "^27.0.0",
+    "playwright": "^1.40.0",
+    "puppeteer": "^24.26.1",
+    "supertest": "^7.1.4",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "nodemailer": "^7.0.9"
+  }
+}

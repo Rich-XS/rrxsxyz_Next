@@ -1,0 +1,9 @@
+﻿C:\Users\rrxs\AppData\Roaming\npm
+鈹溾攢鈹€ @anthropic-ai/claude-code@2.0.28
+鈹溾攢鈹€ @google/gemini-cli@0.9.0
+鈹溾攢鈹€ @musistudio/claude-code-router@1.0.55
+鈹溾攢鈹€ @openai/codex@0.47.0
+鈹溾攢鈹€ codebuff@1.0.502
+鈹溾攢鈹€ http-server@14.1.1
+鈹斺攢鈹€ npm@11.5.2
+

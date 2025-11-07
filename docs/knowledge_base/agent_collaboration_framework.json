@@ -1,0 +1,312 @@
+{
+  "version": "1.0",
+  "title": "Agent协作框架 - 完整架构设计",
+  "timestamp": "2025-11-06T06:10:00+08:00",
+  "core_concept": "progress-recorder + retrieval + reasoning三个Agent的无缝协作",
+
+  "architecture_layers": {
+    "layer1_communication": {
+      "name": "通信层",
+      "current_state": "同步函数调用（耦合度高）",
+      "target_state": "异步消息队列（解耦）",
+      "implementation": {
+        "short_term": {
+          "method": "PowerShell工作流 + JSON文件队列",
+          "files": [
+            "queue/agent_messages.json",
+            "queue/task_queue.json",
+            "queue/execution_results.json"
+          ],
+          "workflow": "Agent A → 写入队列 → Agent B轮询 → 执行 → 返回结果"
+        },
+        "medium_term": {
+          "method": "Redis消息队列（或本地ZeroMQ）",
+          "advantages": [
+            "原子性消息传递",
+            "自动重试机制",
+            "消息持久化"
+          ]
+        }
+      }
+    },
+
+    "layer2_orchestration": {
+      "name": "编排层",
+      "purpose": "协调多个Agent的执行顺序和依赖关系",
+      "components": {
+        "workflow_engine": {
+          "description": "定义Agent执行流程（DAG - 有向无环图）",
+          "example_workflow": {
+            "trigger": "用户输入问题",
+            "step1": "progress-recorder记录问题",
+            "step2": "retrieval_agent查询知识库（依赖step1）",
+            "step3": "reasoning_agent推理方案（依赖step2）",
+            "step4": "progress-recorder记录结果（依赖step3）"
+          },
+          "implementation": "workflow.json配置文件"
+        },
+        "task_scheduler": {
+          "description": "调度长期运行的Agent任务",
+          "schedule_example": {
+            "every_hour": "灾难预防Agent检查",
+            "every_day": "端口冲突检查",
+            "every_week_monday": "知识库提取与优化",
+            "every_month": "进化报告生成"
+          }
+        }
+      }
+    },
+
+    "layer3_service_registry": {
+      "name": "服务注册层",
+      "purpose": "动态管理Agent注册和发现",
+      "components": {
+        "agent_registry": {
+          "format": "registry.json",
+          "structure": {
+            "agent_id": "unique_identifier",
+            "name": "progress-recorder",
+            "type": "record_keeping",
+            "version": "1.0.0",
+            "endpoints": [">>record", ">>archive", ">>wrap-up"],
+            "capabilities": ["create_records", "update_progress", "backup"],
+            "dependencies": [],
+            "status": "active"
+          }
+        },
+        "service_discovery": {
+          "method": "Agent启动时自注册",
+          "heartbeat": "每5分钟检测一次Agent健康状态"
+        }
+      }
+    },
+
+    "layer4_error_handling": {
+      "name": "错误处理层",
+      "mechanisms": {
+        "circuit_breaker": {
+          "description": "Agent故障自动隔离",
+          "example": {
+            "scenario": "retrieval_agent连续3次失败",
+            "action": "标记为'failure_mode'，自动尝试备选方案",
+            "fallback": "reasoning_agent使用缓存知识库"
+          }
+        },
+        "retry_logic": {
+          "exponential_backoff": "1s → 2s → 4s → 8s（最多3次重试）",
+          "idempotency": "确保重试不会产生副作用"
+        },
+        "logging_and_monitoring": {
+          "structured_logs": "JSON格式日志便于分析",
+          "metrics": "成功率/失败率/平均响应时间"
+        }
+      }
+    }
+  },
+
+  "agent_contracts": {
+    "progress_recorder_agent": {
+      "interface": {
+        "input": {
+          "type": "object",
+          "properties": {
+            "command": {"type": "string", "enum": [">>record", ">>archive", ">>wrap-up"]},
+            "data": {"type": "object"},
+            "metadata": {"type": "object"}
+          }
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "status": {"type": "string", "enum": ["success", "failure"]},
+            "record_id": {"type": "string"},
+            "timestamp": {"type": "string"},
+            "message": {"type": "string"}
+          }
+        }
+      },
+      "responsibilities": [
+        "记录决策到progress.md",
+        "管理备份版本",
+        "同步CLAUDE.md（三层同步）",
+        "生成对话日志"
+      ],
+      "expected_response_time": "<5s"
+    },
+
+    "retrieval_agent": {
+      "interface": {
+        "input": {
+          "properties": {
+            "query": {"type": "string"},
+            "mode": {"type": "string", "enum": ["keyword", "pattern", "similarity", "all"]},
+            "filters": {"type": "object"}
+          }
+        },
+        "output": {
+          "properties": {
+            "results": {"type": "array"},
+            "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+            "search_time_ms": {"type": "number"}
+          }
+        }
+      },
+      "responsibilities": [
+        "从知识库检索相关知识",
+        "支持多种搜索模式",
+        "返回带置信度的结果",
+        "记录搜索统计（用于优化）"
+      ],
+      "expected_response_time": "<1s",
+      "accuracy_target": "95%+"
+    },
+
+    "reasoning_agent": {
+      "interface": {
+        "input": {
+          "properties": {
+            "problem": {"type": "string"},
+            "context": {"type": "object"},
+            "severity": {"type": "string", "enum": ["P0", "P1", "P2"]},
+            "known_solutions": {"type": "array"}
+          }
+        },
+        "output": {
+          "properties": {
+            "recommendation": {"type": "string"},
+            "task_class": {"type": "string", "enum": ["A", "B", "C"]},
+            "reasoning_steps": {"type": "array"},
+            "confidence": {"type": "number"}
+          }
+        }
+      },
+      "responsibilities": [
+        "基于知识库推理解决方案",
+        "进行RCCM深度分析",
+        "分类A/B/C任务",
+        "解释推理过程"
+      ],
+      "expected_response_time": "<3s"
+    }
+  },
+
+  "collaboration_examples": {
+    "example1_problem_solving": {
+      "trigger": "用户输入问题：'如何防止NUL文件增长'",
+      "workflow": [
+        {
+          "step": 1,
+          "agent": "progress-recorder",
+          "action": "记录问题到progress.md TODO区块",
+          "output": "task_id: TASK-001"
+        },
+        {
+          "step": 2,
+          "agent": "retrieval",
+          "action": "搜索'NUL文件'关键词",
+          "output": [
+            "D-102: NUL文件灾难",
+            "D-107: 批处理规范",
+            "SOL-FS-001: 解决方案"
+          ]
+        },
+        {
+          "step": 3,
+          "agent": "reasoning",
+          "action": "基于检索结果推理",
+          "output": {
+            "solution": "禁用 > nul，使用 2>CON",
+            "task_class": "A类（可自主执行）"
+          }
+        },
+        {
+          "step": 4,
+          "agent": "progress-recorder",
+          "action": "记录解决方案到Decisions区块",
+          "output": "decision_id: D-XXX"
+        }
+      ]
+    },
+
+    "example2_system_maintenance": {
+      "trigger": "每周一00:00 (定时任务)",
+      "workflow": [
+        {
+          "parallel_tasks": [
+            {
+              "agent": "extraction",
+              "action": "从progress.md提取新决策"
+            },
+            {
+              "agent": "disaster_prevention",
+              "action": "检查NUL文件、配置大小"
+            }
+          ]
+        },
+        {
+          "agent": "optimization",
+          "action": "基于执行结果优化知识库",
+          "depends_on": "extraction完成"
+        },
+        {
+          "agent": "progress-recorder",
+          "action": "生成evolution_report",
+          "depends_on": "optimization完成"
+        }
+      ]
+    }
+  },
+
+  "implementation_roadmap": {
+    "phase1_foundation": {
+      "timeline": "1-2周",
+      "tasks": [
+        "定义Agent接口契约（JSON Schema）",
+        "实现基础消息队列（JSON文件版）",
+        "为每个Agent添加契约验证"
+      ]
+    },
+    "phase2_orchestration": {
+      "timeline": "2-3周",
+      "tasks": [
+        "实现工作流引擎（DAG支持）",
+        "实现任务调度器",
+        "实现Agent注册中心"
+      ]
+    },
+    "phase3_resilience": {
+      "timeline": "3-4周",
+      "tasks": [
+        "实现断路器模式",
+        "实现重试和超时机制",
+        "建立监控和告警"
+      ]
+    },
+    "phase4_optimization": {
+      "timeline": "持续进行",
+      "tasks": [
+        "从执行历史学习（强化学习）",
+        "动态调整Agent权重",
+        "性能基准测试"
+      ]
+    }
+  },
+
+  "benefits": {
+    "immediate": [
+      "✅ Agent间松耦合（便于独立测试和部署）",
+      "✅ 清晰的责任边界（每个Agent一个职责）",
+      "✅ 易于新增Agent（只需实现接口契约）"
+    ],
+    "medium_term": [
+      "🚀 完整的工作流编排（复杂业务流自动化）",
+      "🚀 自动容错和恢复（提升系统可靠性）",
+      "🚀 性能优化空间（并行执行、缓存）"
+    ],
+    "long_term": [
+      "🌟 智能化自我进化（基于数据驱动决策）",
+      "🌟 可扩展性（从7个Agent扩展到70个）",
+      "🌟 可视化管理（图形化工作流编辑器）"
+    ]
+  }
+}

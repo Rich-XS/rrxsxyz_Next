@@ -1,0 +1,11 @@
+﻿
+
+ProcessId       : 14292
+ParentProcessId : 4048
+Name            : powershell.exe
+CommandLine     : "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -No
+                  Profile -File D:\_100W\rrxsxyz_next\INCIDENT\scan_claude_proces
+                  ses.ps1
+
+
+

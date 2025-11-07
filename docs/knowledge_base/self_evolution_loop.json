@@ -1,0 +1,300 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-11-06T03:50:00+08:00",
+  "description": "Agent自我进化循环 - 从经验中持续学习和优化",
+  "core_principle": "每次解决问题都是学习机会，系统化提取知识→识别模式→诊断优化→迭代改进",
+  "evolution_loop": {
+    "phase_1_extract": {
+      "name": "提取（Extract）",
+      "description": "从每次任务执行中提取结构化知识",
+      "triggers": [
+        "任务完成时（A类任务自动，B/C类用户确认后）",
+        "问题解决后（RCCM分析完成）",
+        "决策记录时（progress.md Decisions更新）"
+      ],
+      "extraction_targets": {
+        "问题特征": [
+          "问题描述（用户原话）",
+          "严重级别（P0/P1/P2）",
+          "影响范围（文件系统/进程/配置/网络/代码）",
+          "触发条件（何时发生/频率/环境）"
+        ],
+        "解决方案": [
+          "短期对策（工具/脚本/命令）",
+          "长期对策（规则/自动化/架构）",
+          "执行时间（预计vs实际）",
+          "成功率（首次成功/需迭代）"
+        ],
+        "根本原因": [
+          "技术层面（OS/工具/代码）",
+          "流程层面（缺少检查/监控/验证）",
+          "认知层面（假设驱动/表面症状）"
+        ],
+        "模式匹配": [
+          "是否命中已知模式（8个核心模式）",
+          "是否发现新模式（重复发生3次+）",
+          "模式组合（如RCCM+三层同步）"
+        ]
+      },
+      "automation": {
+        "script": "scripts/extract_knowledge.ps1",
+        "input": "progress.md最新30条记录",
+        "output": "docs/knowledge_base/extraction_queue.json",
+        "frequency": "每次>>record或>>wrap-up时自动触发"
+      }
+    },
+    "phase_2_recognize": {
+      "name": "识别（Recognize）",
+      "description": "识别当前问题是否属于已知模式或新模式",
+      "recognition_engine": {
+        "keyword_matching": "从问题描述提取关键词，匹配decisions/patterns库",
+        "pattern_scoring": "计算与8个核心模式的匹配度（0-100分）",
+        "novelty_detection": "识别是否为全新问题（所有模式匹配度<20分）",
+        "similarity_clustering": "聚类相似问题，发现潜在新模式"
+      },
+      "decision_tree": {
+        "已知模式（匹配度>60）": "直接应用历史解决方案 → Phase 3诊断验证",
+        "部分匹配（匹配度30-60）": "参考历史案例 + 调整方案 → Phase 3诊断",
+        "全新问题（匹配度<30）": "RCCM框架深度分析 → 创建新决策记录"
+      },
+      "new_pattern_threshold": {
+        "condition": "同类问题重复发生3次+ 且 解决方案一致",
+        "action": "提升为新模式 → 更新patterns/index.json",
+        "examples": [
+          "D-102/D-106/D-107（NUL文件灾难系列）→ 提升为SOL-FS-001",
+          "D-85/D-95/D-97（版本管理系列）→ 提升为PATTERN-7版本自动化"
+        ]
+      },
+      "automation": {
+        "script": "scripts/retrieval_agent.ps1",
+        "input": "当前问题描述",
+        "output": "匹配模式ID + 相似案例列表",
+        "integration": "集成到reasoning_agent.ps1 Phase 2"
+      }
+    },
+    "phase_3_diagnose": {
+      "name": "诊断（Diagnose）",
+      "description": "基于知识库诊断根因，生成解决方案",
+      "diagnostic_framework": "RCCM（Root-Cause & Counter-Measure）",
+      "diagnostic_steps": [
+        "步骤1: 检索知识库（retrieval_agent.ps1）",
+        "步骤2: 识别模式（pattern matching）",
+        "步骤3: 推断根因（基于历史相似案例）",
+        "步骤4: 生成对策（短期+长期）",
+        "步骤5: 任务分类（A/B/C类）"
+      ],
+      "evidence_driven": {
+        "principle": "不要应该，要实证！（用户核心反馈）",
+        "methods": [
+          "tasklist验证进程存在",
+          "Test-Path验证文件存在",
+          "日志分析（Console/系统日志）",
+          "用户截图验证",
+          "实际测试验证"
+        ],
+        "anti_pattern": "基于假设诊断（容易误判）"
+      },
+      "iteration_protocol": {
+        "V1.0": "初始假设（基于有限信息）",
+        "V1.1": "证据收集（tasklist/文件检查/日志）",
+        "V1.2": "根因锁定（基于实证数据）",
+        "V1.3": "解决方案部署（验证有效性）"
+      },
+      "automation": {
+        "script": "scripts/reasoning_agent.ps1",
+        "input": "问题描述 + 严重级别",
+        "output": "根因分析 + 对策推荐 + A/B/C分类",
+        "integration": "Night-Auth期间自动执行（P1及以下）"
+      }
+    },
+    "phase_4_optimize": {
+      "name": "优化（Optimize）",
+      "description": "基于执行结果优化解决方案和知识库",
+      "optimization_targets": {
+        "解决方案效果": {
+          "metrics": [
+            "首次成功率（目标>80%）",
+            "执行时间（预计vs实际）",
+            "问题复发率（目标<5%）",
+            "用户满意度（手动验证通过率）"
+          ],
+          "actions": [
+            "成功率<80% → 更新solution详细步骤",
+            "时间偏差>50% → 调整预估公式",
+            "复发率>5% → 短期对策不足，强化长期对策",
+            "满意度低 → 用户反馈分析，调整方案"
+          ]
+        },
+        "模式识别准确率": {
+          "metrics": [
+            "模式匹配准确率（目标>90%）",
+            "新模式识别召回率（目标>70%）",
+            "误判率（目标<10%）"
+          ],
+          "actions": [
+            "准确率<90% → 调整关键词权重",
+            "召回率<70% → 降低新模式阈值",
+            "误判率>10% → 增加人工确认环节"
+          ]
+        },
+        "知识库质量": {
+          "metrics": [
+            "检索结果相关性（Top-3准确率>85%）",
+            "知识库覆盖率（新问题<20%）",
+            "更新频率（每周新增/更新>5条）"
+          ],
+          "actions": [
+            "相关性<85% → 优化retrieval_agent.ps1算法",
+            "覆盖率<80% → 加速知识提取频率",
+            "更新频率低 → 自动化extract流程"
+          ]
+        }
+      },
+      "feedback_loop": {
+        "用户反馈": "手动验证/Bug报告/满意度调查",
+        "系统反馈": "Gemba-Agent测试结果/监控报警/日志分析",
+        "自动优化": "基于feedback自动调整knowledge_base",
+        "人工审核": "每周review extraction_queue.json，确认新模式"
+      },
+      "automation": {
+        "script": "scripts/optimize_knowledge_base.ps1",
+        "input": "execution_results.json（任务执行结果）",
+        "output": "更新decisions/patterns/solutions库 + 优化报告",
+        "frequency": "每周一或新决策>10条时触发"
+      }
+    },
+    "phase_5_iterate": {
+      "name": "迭代（Iterate）",
+      "description": "持续循环，每次任务都是学习机会",
+      "iteration_cycle": {
+        "daily": [
+          "每次任务完成 → Extract知识",
+          "每次问题出现 → Recognize模式",
+          "每次诊断 → Diagnose优化",
+          "每次执行 → Optimize反馈"
+        ],
+        "weekly": [
+          "周一: 汇总本周新增决策（>>archive触发）",
+          "周一: 识别新模式（重复问题3次+）",
+          "周一: 优化知识库（optimize_knowledge_base.ps1）",
+          "周一: 生成进化报告（evolution_report.md）"
+        ],
+        "monthly": [
+          "月初: 全面评估知识库质量",
+          "月初: 检索准确率测试（抽样100个问题）",
+          "月初: 用户满意度调查",
+          "月初: 制定下月优化目标"
+        ]
+      },
+      "evolution_metrics": {
+        "知识库增长": {
+          "baseline": "46 decisions, 8 patterns, 42 solutions（2025-11-06）",
+          "target": "+10 decisions/月, +1 pattern/季度, +15 solutions/月",
+          "current": "实时更新（docs/knowledge_base/schema.json）"
+        },
+        "问题解决效率": {
+          "baseline": "首次成功率70%（历史数据）",
+          "target": "首次成功率>85%（2025-12-31）",
+          "current": "实时跟踪（execution_results.json）"
+        },
+        "自主能力提升": {
+          "baseline": "A类任务70%自主（2025-11-06）",
+          "target": "A类任务>90%自主（2025-12-31）",
+          "current": "每周统计（agent_performance.json）"
+        }
+      },
+      "self_assessment": {
+        "questions": [
+          "❓ 本周遇到的新问题中，有多少%属于已知模式？",
+          "❓ 首次推荐的解决方案成功率是多少？",
+          "❓ 有哪些问题重复发生3次+（需提升为新模式）？",
+          "❓ 用户手动干预次数是否减少？",
+          "❓ Night-Auth期间完成任务的质量如何？"
+        ],
+        "reporting": "每周>>wrap-up时自动生成self_assessment.md"
+      }
+    }
+  },
+  "integration_with_existing_workflows": {
+    "progress-recorder_agent": {
+      "trigger": ">>record / >>archive / >>wrap-up",
+      "action": "自动触发Phase 1 Extract → 更新extraction_queue.json"
+    },
+    "RCCM_framework": {
+      "trigger": " !RCCM",
+      "action": "执行Phase 2-3 Recognize+Diagnose → 生成解决方案 → Phase 4 Optimize"
+    },
+    "Night-Auth_protocol": {
+      "trigger": "Night-Auth期间遇到问题",
+      "action": "自动执行Phase 1-4 → 记录学习结果 → Phase 5 Iterate（周一汇总）"
+    },
+    "Gemba-Agent": {
+      "trigger": "测试检测到Bug",
+      "action": "Phase 2 Recognize相似Bug → Phase 3 Diagnose修复 → Phase 4 Optimize（更新test_patterns）"
+    }
+  },
+  "tools_and_scripts": {
+    "scripts/extract_knowledge.ps1": {
+      "purpose": "从progress.md提取新知识",
+      "input": "progress.md最新记录",
+      "output": "extraction_queue.json"
+    },
+    "scripts/retrieval_agent.ps1": {
+      "purpose": "检索知识库（Phase 2 Recognize）",
+      "input": "问题描述",
+      "output": "匹配模式 + 相似案例"
+    },
+    "scripts/reasoning_agent.ps1": {
+      "purpose": "推理解决方案（Phase 3 Diagnose）",
+      "input": "问题 + 严重级别",
+      "output": "根因 + 对策 + A/B/C分类"
+    },
+    "scripts/optimize_knowledge_base.ps1": {
+      "purpose": "优化知识库（Phase 4 Optimize）",
+      "input": "execution_results.json",
+      "output": "更新knowledge_base + 优化报告"
+    },
+    "scripts/evolution_report.ps1": {
+      "purpose": "生成进化报告（Phase 5 Iterate）",
+      "input": "本周所有任务记录",
+      "output": "evolution_report.md"
+    }
+  },
+  "success_cases": {
+    "case_1": {
+      "problem": "D-102 NUL文件灾难（2,619个文件）",
+      "phase_1": "提取：批处理 > nul + OneDrive + nodemon恶性循环",
+      "phase_2": "识别：RCCM框架 + 灾难→标准模式",
+      "phase_3": "诊断：20WHY分析 → 禁用 > nul，使用 2>CON",
+      "phase_4": "优化：提升为CLAUDE.md Rule 12 + Git pre-commit hook",
+      "phase_5": "迭代：后续类似问题（D-106 Phantom文件）直接应用知识库",
+      "outcome": "问题复发率0%，知识库新增3条（D-102/D-106/D-107），SOL-FS-001/002"
+    },
+    "case_2": {
+      "problem": "D-98 工具链优化（Playwright迁移）",
+      "phase_1": "提取：Puppeteer性能瓶颈 → Playwright性能提升20-30%",
+      "phase_2": "识别：工具链进化模式（评估→迁移→优化）",
+      "phase_3": "诊断：性能测试 + 成本分析 → 推荐Playwright",
+      "phase_4": "优化：保留Puppeteer向后兼容 + 生成迁移文档",
+      "phase_5": "迭代：建立工具评估标准 → 未来工具选型参考",
+      "outcome": "性能提升验证通过，知识库新增PATTERN-8工具链进化"
+    }
+  },
+  "next_steps": {
+    "immediate": [
+      "创建scripts/extract_knowledge.ps1（Phase 1自动化）",
+      "创建scripts/optimize_knowledge_base.ps1（Phase 4自动化）",
+      "创建scripts/evolution_report.ps1（Phase 5自动化）"
+    ],
+    "short_term": [
+      "集成Extract到progress-recorder agent",
+      "建立execution_results.json数据收集机制",
+      "每周一自动生成进化报告"
+    ],
+    "long_term": [
+      "机器学习模型训练（基于历史决策）",
+      "自然语言理解（更智能的问题识别）",
+      "预测性维护（问题发生前预警）"
+    ]
+  }
+}

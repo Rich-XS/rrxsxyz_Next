@@ -1,0 +1,62 @@
+=================================================
+项目备份清单 - NextLiteTesterversion
+=================================================
+备份时间: 2025-10-19 21:01:59
+备份原因: D-66 重大决策完成后的版本备份（文字流优化）
+备份文件: rrxsxyz_next-NextLiteTesterversion-20251019_210159.zip
+=================================================
+
+[关键决策]
+- D-66: 文字流优化 - 启用 textRateController v2.2（基于角色切换的智能流速控制）
+
+[核心修改文件]
+1. duomotai/src/modules/textRateController.js - v2.2 完整实现
+2. duomotai/index.html - 集成 textRateController v2.2
+
+[备份包含内容]
+✅ 核心配置文件:
+   - .claude/*.md（agent 配置、架构指南、工作流规则等）
+   - CLAUDE.md, progress.md
+   - package.json, package-lock.json
+
+✅ 前端代码:
+   - duomotai/*.html, *.js, *.css
+   - duomotai/src/modules/*.js（所有核心模块）
+   - html/projects/media-assessment-*.html
+
+✅ 后端代码:
+   - server/*.js
+   - server/services/*.js
+   - server/routes/*.js
+
+✅ 脚本工具:
+   - scripts/*.js, scripts/*.ps1
+
+✅ 文档:
+   - docs/*.md
+   - README*.md
+   - 各类测试指南和计划文档
+
+❌ 已排除内容:
+   - node_modules/（依赖包）
+   - .git/（版本控制）
+   - test_reports/（测试报告）
+   - server/UserInfo/（用户数据）
+   - server/data/（运行时数据）
+   - ZIP_BACKUP_OLD/（旧备份）
+   - Backup/（备份目录）
+   - 其他临时文件和日志
+
+[备份验证]
+- 备份类型: 完整项目备份（排除规则）
+- 预估大小: 约 5-15 MB（排除 node_modules 后）
+- 恢复方式: 解压到新目录，运行 npm install 恢复依赖
+
+[下一步操作]
+1. 验证备份文件完整性（检查文件大小）
+2. 在 progress.md 中记录备份信息
+3. 开始 D-66 功能测试
+
+=================================================
+备份清单生成完成
+=================================================

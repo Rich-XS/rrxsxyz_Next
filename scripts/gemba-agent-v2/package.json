@@ -1,0 +1,39 @@
+{
+  "name": "gemba-agent-v2",
+  "version": "2.0.0",
+  "description": "Gemba Agent 2.0 - Self-learning and self-evolving test automation system",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "npm run test:perception && npm run test:decision && npm run test:execution",
+    "test:perception": "node test-perception.js",
+    "test:decision": "node test-decision.js",
+    "test:execution": "node test-execution.js",
+    "gemba": "node index.js",
+    "gemba:dry": "node index.js --dry-run",
+    "gemba:manual": "node index.js --mode=manual",
+    "gemba:report": "node generate-report.js",
+    "install:deps": "npm install"
+  },
+  "keywords": [
+    "automation",
+    "testing",
+    "ai",
+    "self-learning",
+    "gemba",
+    "playwright"
+  ],
+  "author": "RRXSXYZ Team",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "chokidar": "^3.5.3",
+    "lighthouse": "^11.0.0",
+    "express": "^4.18.2",
+    "chai": "^4.3.10"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

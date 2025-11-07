@@ -1,0 +1,30 @@
+{
+  "configs": {
+    "default": {
+      "name": "Default Configuration",
+      "base_url": "https://api.anthropic.com",
+      "auth_token": "your-anthropic-api-key-here"
+    },
+    "proxy": {
+      "name": "AnyRouter.Top",
+      "base_url": "https://anyrouter.top",
+      "auth_token": "sk-UYtYTnT9niLlGk8jVaNomM92dcLzvGERjEI1oVOL6f5zzxQl"
+    },
+    "anyrouter_cdn": {
+      "name": "AnyRouter大陆优化CDN",
+      "base_url": "https://pmpjfbhq.cn-nb1.rainapp.top",
+      "auth_token": "sk-UYtYTnT9niLlGk8jVaNomM92dcLzvGERjEI1oVOL6f5zzxQl"
+    },
+    "anyrouter3": {
+      "name": "AnyRouterNew",
+      "base_url": "https://7a61fbe1b5f3.d93a09b6.top/",
+      "auth_token": "sk-UYtYTnT9niLlGk8jVaNomM92dcLzvGERjEI1oVOL6f5zzxQl"
+    },
+    "local": {
+      "name": "Local Testing",
+      "base_url": "http://localhost:8080",
+      "auth_token": "test-token"
+    }
+  },
+  "current_config": "default"
+}

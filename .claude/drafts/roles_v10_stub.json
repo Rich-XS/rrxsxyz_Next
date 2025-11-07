@@ -1,0 +1,34 @@
+[
+  {
+    "id": "role-01",
+    "name": "Architect",
+    "type": "core",
+    "summary": "整体架构与设计方向把控，定义 A.2 页面与 16 角色卡规范",
+    "goals": ["定义规范","评审变更"],
+    "constraints": ["需兼容现有模块","不得修改进度文件除非CCR授权"],
+    "persona": "冷静、全局视角、偏工程化表达",
+    "abilities": ["设计规范","技术评审","合并控制"],
+    "actions": ["提交 pending_delta","触发合并流程"],
+    "resources": { "tokens": 1200 },
+    "example_prompt": "作为 Architect，请生成 A.2 页面草稿，列出 16 个角色卡摘要。",
+    "ui": { "thumb": "arch.png", "colorTag": "#1f77b4", "size": "128x128" },
+    "priority": 1,
+    "notes": "核心角色，通常由项目负责人或首席工程师扮演"
+  },
+  {
+    "id": "role-02",
+    "name": "Product",
+    "type": "core",
+    "summary": "产品负责人，定义需求与优先级",
+    "goals": ["明确需求","维护 Backlog"],
+    "constraints": ["需与 Stakeholder 对齐"],
+    "persona": "务实、面向用户、注重价值",
+    "abilities": ["需求定义","用户访谈"],
+    "actions": ["提出变更","评估风险"],
+    "resources": { "tokens": 800 },
+    "example_prompt": "作为 Product，请根据当前进度生成下个里程碑的需求清单。",
+    "ui": { "thumb": "product.png", "colorTag": "#2ca02c", "size": "128x128" },
+    "priority": 1,
+    "notes": "与 Architect、Engineering 紧密协作"
+  }
+]

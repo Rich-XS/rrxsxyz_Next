@@ -1,0 +1,206 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-11-06T03:40:00+08:00",
+  "description": "用户支持触发矩阵 - 所有需要用户行动的场景",
+  "authorization": "Queen授权P1及以下自主，P0和C类任务需用户确认",
+  "trigger_categories": {
+    "系统级操作": {
+      "description": "需要管理员权限或系统重启的操作",
+      "triggers": [
+        {
+          "id": "TRIGGER-SYS-001",
+          "scenario": "系统重启需求",
+          "when": "检测到Phantom文件/内核内存问题/系统级顽固故障",
+          "agent_action": "记录到progress.md C类待办，标记BLOCKED，停止相关任务链",
+          "user_prompt": "🔴 检测到系统级问题，需要重启清空内核内存。是否立即重启？\n  - 问题: {problem_description}\n  - 影响: {affected_components}\n  - 预计停机时间: {estimated_downtime}\n  - 建议时间: {recommended_time}",
+          "required_info": ["问题描述", "影响范围", "预计停机时间"],
+          "related_decisions": ["D-106"],
+          "priority": "P0-CRITICAL"
+        },
+        {
+          "id": "TRIGGER-SYS-002",
+          "scenario": "管理员权限操作",
+          "when": "注册表修改/系统服务配置/防火墙规则/永久禁用Windows服务",
+          "agent_action": "生成PowerShell脚本（需管理员运行），记录到progress.md",
+          "user_prompt": "⚠️ 需要管理员权限执行以下操作：\n  - 操作类型: {operation_type}\n  - 脚本路径: {script_path}\n  - 风险评估: {risk_level}\n  - 回滚方案: {rollback_plan}\n\n请在管理员模式PowerShell中执行:\npowershell -ExecutionPolicy Bypass -File \"{script_path}\"",
+          "required_info": ["操作类型", "脚本路径", "风险评估", "回滚方案"],
+          "related_decisions": ["D-106", "D-108"],
+          "priority": "P0-CRITICAL"
+        },
+        {
+          "id": "TRIGGER-SYS-003",
+          "scenario": "系统级修复工具运行",
+          "when": "DISM修复/sfc /scannow/chkdsk/OneDrive完全重装",
+          "agent_action": "生成详细操作指南，记录预期时间和风险",
+          "user_prompt": "🔧 建议运行系统修复工具：\n  - 工具: {tool_name}\n  - 预计时间: {estimated_time}\n  - 风险: {risk_description}\n  - 操作步骤:\n{step_by_step_guide}",
+          "required_info": ["工具名称", "预计时间", "操作步骤"],
+          "related_decisions": ["D-112", "D-113"],
+          "priority": "P0-CRITICAL"
+        }
+      ]
+    },
+    "代码与配置": {
+      "description": "涉及锁定模块或重大架构调整",
+      "triggers": [
+        {
+          "id": "TRIGGER-CODE-001",
+          "scenario": "锁定模块修改请求",
+          "when": "代码包含PROTECTED/LOCKED/D-XX已锁定注释",
+          "agent_action": "明确告知模块名称、关联决策、变更内容，等待用户确认",
+          "user_prompt": "⚠️ 检测到将要修改已锁定模块：\n  - 文件: {file_path}\n  - 模块: {module_name}\n  - 关联决策: {related_decision}\n  - 变更内容: {change_description}\n\n是否确认修改？(yes/no)",
+          "required_info": ["文件路径", "模块名称", "关联决策", "变更描述"],
+          "related_decisions": ["D-89", "D-87"],
+          "priority": "P1-HIGH"
+        },
+        {
+          "id": "TRIGGER-CODE-002",
+          "scenario": "重大架构调整建议",
+          "when": "涉及三层架构/模块解耦/数据库迁移/前后端分离",
+          "agent_action": "记录到progress.md Recommendations（B类任务），继续其他工作",
+          "user_prompt": "💡 建议进行架构调整（B类任务）：\n  - 调整类型: {architecture_change}\n  - 影响范围: {impact_scope}\n  - 预期收益: {expected_benefits}\n  - 预计工作量: {estimated_effort}\n\n已记录到progress.md Recommendations区块，有空时请确认。",
+          "required_info": ["调整类型", "影响范围", "预期收益", "工作量"],
+          "related_decisions": ["D-GEMBA-2.0"],
+          "priority": "P1-HIGH"
+        },
+        {
+          "id": "TRIGGER-CODE-003",
+          "scenario": "Git破坏性操作",
+          "when": "git push/git reset --hard/git push --force/删除分支",
+          "agent_action": "立即停止，记录意图，等待用户明确指令",
+          "user_prompt": "🚨 检测到Git破坏性操作：\n  - 命令: {git_command}\n  - 影响: {impact_description}\n  - 不可逆: {is_irreversible}\n\n请手动执行或明确授权。",
+          "required_info": ["Git命令", "影响描述", "是否可逆"],
+          "related_decisions": ["Night-Auth协议"],
+          "priority": "P0-CRITICAL"
+        }
+      ]
+    },
+    "跨项目影响": {
+      "description": "可能影响其他项目运行的操作",
+      "triggers": [
+        {
+          "id": "TRIGGER-CROSS-001",
+          "scenario": "清理非本项目进程",
+          "when": "检测到端口被其他项目占用（6000-6999/7000-7999）",
+          "agent_action": "报告进程信息，严禁清理，建议用户手动处理",
+          "user_prompt": "⚠️ 检测到其他项目进程占用端口：\n  - 项目: {project_name}\n  - 端口: {port_number}\n  - PID: {process_id}\n  - 命令行: {command_line}\n\n已保护该进程，请确认是否需要手动清理。",
+          "required_info": ["项目名称", "端口号", "进程ID", "命令行"],
+          "related_decisions": ["D-68", "D-65"],
+          "priority": "P1-HIGH"
+        },
+        {
+          "id": "TRIGGER-CROSS-002",
+          "scenario": "全局配置变更",
+          "when": "修改端口分配规则/OneDrive排除规则/全局环境变量",
+          "agent_action": "生成影响评估报告，等待用户确认",
+          "user_prompt": "🌐 全局配置变更影响多个项目：\n  - 配置类型: {config_type}\n  - 当前值: {current_value}\n  - 建议值: {proposed_value}\n  - 影响项目: {affected_projects}\n\n是否确认变更？",
+          "required_info": ["配置类型", "当前值", "建议值", "影响项目"],
+          "related_decisions": ["D-65", "D-ONEDRIVE-DIAG-002"],
+          "priority": "P1-HIGH"
+        }
+      ]
+    },
+    "成本与工具": {
+      "description": "涉及预算或工具选型的决策",
+      "triggers": [
+        {
+          "id": "TRIGGER-COST-001",
+          "scenario": "预算超支警告",
+          "when": "AI API成本>$50/天或接近月度预算上限",
+          "agent_action": "立即暂停非关键任务，生成成本报告，等待用户确认",
+          "user_prompt": "💰 预算超支警告：\n  - 当前成本: {current_cost}/天\n  - 预算目标: {budget_target}/天\n  - 超支幅度: {overspend_percentage}%\n  - 主要来源: {cost_breakdown}\n\n建议操作:\n1. 暂停非关键任务\n2. 切换到免费模型（通义灵码）\n3. 减少测试频率\n\n是否确认？",
+          "required_info": ["当前成本", "预算目标", "超支幅度", "成本分解"],
+          "related_decisions": ["Cost Optimization Guide"],
+          "priority": "P0-CRITICAL"
+        },
+        {
+          "id": "TRIGGER-COST-002",
+          "scenario": "工具选型建议",
+          "when": "发现性能更优/成本更低的工具（如Playwright vs Puppeteer）",
+          "agent_action": "记录到progress.md Recommendations（B类任务），生成对比报告",
+          "user_prompt": "🔧 工具选型建议（B类任务）：\n  - 当前工具: {current_tool}\n  - 推荐工具: {recommended_tool}\n  - 性能对比: {performance_comparison}\n  - 成本对比: {cost_comparison}\n  - 迁移工作量: {migration_effort}\n\n已记录到progress.md Recommendations，有空时请确认。",
+          "required_info": ["当前工具", "推荐工具", "性能对比", "成本对比", "迁移工作量"],
+          "related_decisions": ["D-98", "D-114"],
+          "priority": "P1-HIGH"
+        }
+      ]
+    },
+    "数据与安全": {
+      "description": "涉及数据删除或安全策略的操作",
+      "triggers": [
+        {
+          "id": "TRIGGER-DATA-001",
+          "scenario": "大量文件删除",
+          "when": "删除>1000个文件或>500MB数据",
+          "agent_action": "生成删除清单，等待用户确认",
+          "user_prompt": "🗑️ 大量文件删除确认：\n  - 文件数量: {file_count}\n  - 总大小: {total_size}\n  - 位置: {location}\n  - 类型: {file_types}\n\n删除清单: {file_list_preview}...\n\n是否确认删除？(yes/no)",
+          "required_info": ["文件数量", "总大小", "位置", "文件类型"],
+          "related_decisions": ["D-104"],
+          "priority": "P1-HIGH"
+        },
+        {
+          "id": "TRIGGER-DATA-002",
+          "scenario": "敏感数据操作",
+          "when": "访问/修改/删除 .env/credentials.json/用户数据",
+          "agent_action": "立即停止，记录操作意图，等待用户明确授权",
+          "user_prompt": "🔐 敏感数据操作需要授权：\n  - 操作类型: {operation_type}\n  - 文件: {file_path}\n  - 原因: {reason}\n\n请确认是否授权。",
+          "required_info": ["操作类型", "文件路径", "操作原因"],
+          "related_decisions": ["Deployment & Security Guide"],
+          "priority": "P0-CRITICAL"
+        }
+      ]
+    },
+    "测试与验证": {
+      "description": "需要用户手动验证的场景",
+      "triggers": [
+        {
+          "id": "TRIGGER-TEST-001",
+          "scenario": "用户手动验证请求",
+          "when": "涉及UI/交互/用户体验/测试账号功能",
+          "agent_action": "生成测试清单，等待用户验证反馈",
+          "user_prompt": "✅ 请手动验证以下功能：\n\n测试清单:\n{test_checklist}\n\n测试账号: {test_account}\n测试URL: {test_url}\n\n预期结果: {expected_results}\n\n验证完成后请反馈。",
+          "required_info": ["测试清单", "测试账号", "测试URL", "预期结果"],
+          "related_decisions": ["D-87", "D-76", "D-84"],
+          "priority": "P1-HIGH"
+        },
+        {
+          "id": "TRIGGER-TEST-002",
+          "scenario": "Gemba测试失败（P0 Bug）",
+          "when": "Gemba-Agent检测到P0级别Bug",
+          "agent_action": "自动修复（如属A类），否则生成修复建议等待确认",
+          "user_prompt": "🐛 Gemba测试检测到P0 Bug：\n  - 问题: {bug_description}\n  - 位置: {file_path}:{line_number}\n  - 截图: {screenshot_path}\n  - Console日志: {console_errors}\n\n推荐修复方案:\n{recommended_fix}\n\n是否立即修复？",
+          "required_info": ["Bug描述", "文件位置", "截图", "修复方案"],
+          "related_decisions": ["D-77", "D-GEMBA-2.0"],
+          "priority": "P0-CRITICAL"
+        }
+      ]
+    }
+  },
+  "trigger_workflow": {
+    "detection": "Agent检测到C类任务触发条件",
+    "classification": "根据触发矩阵识别场景ID",
+    "information_gathering": "收集required_info中的所有字段",
+    "prompt_generation": "使用user_prompt模板生成提示",
+    "user_notification": "通过progress.md C类待办 + 控制台输出通知用户",
+    "blocking": "标记任务为BLOCKED，停止相关任务链",
+    "waiting": "等待用户明确指令（yes/no/具体操作）",
+    "execution": "用户确认后执行，记录到progress.md Decisions"
+  },
+  "quick_reference": {
+    "系统操作": "重启/管理员权限/系统修复工具 → TRIGGER-SYS-001/002/003",
+    "代码修改": "锁定模块/架构调整/Git操作 → TRIGGER-CODE-001/002/003",
+    "跨项目": "进程清理/全局配置 → TRIGGER-CROSS-001/002",
+    "成本工具": "预算超支/工具选型 → TRIGGER-COST-001/002",
+    "数据安全": "大量删除/敏感数据 → TRIGGER-DATA-001/002",
+    "测试验证": "手动验证/Bug修复 → TRIGGER-TEST-001/002"
+  },
+  "night_auth_exceptions": {
+    "description": "Night-Auth期间遇到C类任务的处理方式",
+    "behavior": [
+      "记录到progress.md C类待办区块",
+      "生成详细操作指南（用户有空时可直接执行）",
+      "继续执行其他A类任务",
+      "在会话结束时汇总所有C类待办项"
+    ],
+    "example": "D-106 Phantom文件需系统重启 → 记录+继续其他任务 → >>wrap-up时汇总"
+  }
+}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目 - rrxs.xyz</title>
+    <style>
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #e9ecef;
+        }
+        .content {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .project-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .project-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 25px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s;
+        }
+        .project-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .project-item h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .project-item p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .version-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .version-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: center;
+            border: 2px solid;
+        }
+        .version-btn.v1 {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .version-btn.v1:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .version-btn.v2 {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        .version-btn.v2:hover {
+            background-color: #1e7e34;
+            border-color: #1e7e34;
+        }
+        .project-features h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .project-features ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .project-features li {
+            padding: 5px 0;
+            color: #666;
+        }
+        .project-features li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>RRXS 项目</h1>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="#">关于</a>
+            <a href="shop.html">店铺</a>
+            <a href="webbot.html">学习</a>
+            <a href="forummsg.html">论坛&留言</a>
+        </nav>
+    </header>
+    
+    <div class="content">
+        <h2>我们的项目</h2>
+
+        <div class="project-list">
+            <div class="project-item">
+                <h3>百万被动收入之路 - 自媒体创作者专业自测系统</h3>
+                <p>专业自媒体创作者转型工具，系统自测理清百万被动收入之路，基于中国自媒体生态的专业诊断系统</p>
+
+                <div class="version-links">
+                    <a href="projects/media-assessment-v1/index.html" target="_blank" class="version-btn v1">
+                        V1.0 基础版本
+                    </a>
+                    <a href="projects/media-assessment-v2/index.html" target="_blank" class="version-btn v2">
+                        V2.0 优化版本
+                    </a>
+                </div>
+
+                <div class="project-features">
+                    <h4>功能特点：</h4>
+                    <ul>
+                        <li>30分钟深度自测评估</li>
+                        <li>专业商业化建议</li>
+                        <li>个性化转型路径</li>
+                        <li>基于中国自媒体生态</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

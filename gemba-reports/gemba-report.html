@@ -1,0 +1,120 @@
+
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Gemba-Agent 测试报告</title>
+        <meta charset="UTF-8">
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          h1 { color: #333; }
+          .summary { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; }
+          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+          th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+          th { background: #007AFF; color: white; }
+          tr:nth-child(even) { background: #f9f9f9; }
+          .screenshot { margin: 20px 0; }
+          .screenshot img { max-width: 100%; border: 1px solid #ddd; }
+        </style>
+      </head>
+      <body>
+        <h1>🤖 Gemba-Agent 自动化测试报告</h1>
+        <p>生成时间: 2025-10-28T10:58:55.717Z</p>
+
+        <div class="summary">
+          <h2>📊 汇总</h2>
+          <p>✅ 通过: 4 / 4</p>
+          <p>❌ 失败: 0 / 4</p>
+          <p><strong style="font-size: 1.2em; color: green">
+            总体评分: 100%
+          </strong></p>
+        </div>
+
+        <h2>🧪 测试结果</h2>
+        <table>
+          <tr>
+            <th>测试项</th>
+            <th>场景</th>
+            <th>预期</th>
+            <th>实际</th>
+            <th>结果</th>
+            <th>备注</th>
+          </tr>
+          
+        <tr>
+          <td>默认角色数检查</td>
+          <td>test-user-2-roles</td>
+          <td>2</td>
+          <td>2</td>
+          <td style="color: green">✅ PASS</td>
+          <td></td>
+        </tr>
+      
+
+        <tr>
+          <td>启动按钮状态检查</td>
+          <td>start-button-enabled</td>
+          <td>enabled</td>
+          <td>enabled</td>
+          <td style="color: green">✅ PASS</td>
+          <td></td>
+        </tr>
+      
+
+        <tr>
+          <td>字数减半配置检查</td>
+          <td>word-count-limit-config</td>
+          <td>包含 wordLimits 配置</td>
+          <td>找到配置</td>
+          <td style="color: green">✅ PASS</td>
+          <td>📊 [DebateEngine] 字数限制配置（已应用0.5x倍数）: JSHandle@object</td>
+        </tr>
+      
+
+        <tr>
+          <td>策划内容字数</td>
+          <td>planning-content-length</td>
+          <td>< 400字（测试用户）</td>
+          <td>0</td>
+          <td style="color: green">✅ PASS</td>
+          <td></td>
+        </tr>
+      
+        </table>
+
+        <h2>📸 截图</h2>
+        <div class="screenshot"><h4>step-01-home</h4><img src="screenshots\step-01-home-1761649089970.png" style="max-width: 100%; border: 1px solid #ddd;"></div>
+<div class="screenshot"><h4>step-02-after-login</h4><img src="screenshots\step-02-after-login-1761649090703.png" style="max-width: 100%; border: 1px solid #ddd;"></div>
+<div class="screenshot"><h4>step-03-duomotai-home</h4><img src="screenshots\step-03-duomotai-home-1761649094640.png" style="max-width: 100%; border: 1px solid #ddd;"></div>
+<div class="screenshot"><h4>step-04-before-start</h4><img src="screenshots\step-04-before-start-1761649095501.png" style="max-width: 100%; border: 1px solid #ddd;"></div>
+<div class="screenshot"><h4>step-05-debate-started</h4><img src="screenshots\step-05-debate-started-1761649100449.png" style="max-width: 100%; border: 1px solid #ddd;"></div>
+
+        <h2>⚠️ 错误日志</h2>
+        <ul>
+          <li>无错误</li>
+        </ul>
+
+        <h2>📝 Console 日志摘要</h2>
+        <ul>
+          <li>[log]   - 内容前200字: "您好！很高兴作为您的委托代理为您服务。我已深入分析您的转型需求，现为您量身定制5轮风暴辩论规划方案。  
+核心议题  
+我应该如何从职场转型做自媒体吗?结合30年营销经验与AI兴趣，目标百日内千粉并打通IP变现流程，聚焦40+男性转型群体。  
+领袖(委托代理)的核心策略声明  
+本次风暴辩论聚焦"经验价值AI化转型"，通过5轮递进论证，形成短期可验证、长期可复制的自媒体启动方法论，平衡试错成本与..."</li>
+<li>[log] ✅ [Streaming] 流式完成：Victoria, tokens: 399</li>
+<li>[log] ✅ [Streaming] 流式读取完成：Victoria</li>
+<li>[log] ✅ [Task #13] Token显示已更新 JSHandle@object</li>
+<li>[log] ✅ [Task #13] Token 统计已更新 JSHandle@object</li>
+<li>[log] ✅ [#009] 解析策划主题完成：5/5轮 第1轮: 核心定位验证：经验IP化与AI赋能结合点; 第2轮: 资源风险评估：时间分配与内容生产瓶颈; 第3轮: 最小化产品设计：百问自测与风暴辩论系统落地; 第4轮: 变现路径规划：私域转化与课程产品组合; 第5轮: 百日执行计划：敏捷试错与数据迭代机制</li>
+<li>[log] ✅ [BUG-009] startPlanning 准备发送 delegatePrompt 事件 JSHandle@object</li>
+<li>[log] ✅ [BUG-009] handleDelegatePrompt 接收到有效的 callback JSHandle@object</li>
+<li>[log] ✅ [FIX T-318] 回调函数已成功保存 JSHandle@object</li>
+<li>[log] ✅ [BUG-009] delegatePrompt 事件已发送，等待用户响应...</li>
+        </ul>
+
+        <hr>
+        <p style="color: #666; font-size: 0.9em;">
+          本报告由 Gemba-Agent 自动生成 | 决策: D-77
+        </p>
+      </body>
+      </html>
+    

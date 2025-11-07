@@ -1,0 +1,264 @@
+{
+  "version": "1.0",
+  "total_patterns": 8,
+  "last_updated": "2025-11-06T03:05:00+08:00",
+  "patterns": [
+    {
+      "id": "PATTERN-1",
+      "name": "RCCM框架（Root-Cause & Counter-Measure）",
+      "description": "系统化问题解决方法论：根因分析 + 短期对策 + 长期对策",
+      "trigger": "` !RCCM` 或遇到P0/P1问题时",
+      "workflow": [
+        "问题识别：用户描述问题",
+        "根因分析：5-WHY/10-WHY/20-WHY深度分析",
+        "短期对策：快速缓解方案（P0，数分钟~数小时）",
+        "长期对策：根本性解决方案（P1-P2，数天~数周）",
+        "方案选择：Agent给出多个可选方案，用户确认后执行"
+      ],
+      "cases": [
+        {
+          "decision": "D-102",
+          "problem": "NUL文件系统级灾难（2,619个文件）",
+          "root_cause": "批处理 > nul + OneDrive + nodemon恶性循环（20WHY分析）",
+          "short_term": "删除所有nul文件 + 修复批处理文件",
+          "long_term": "全局规范（D-102 Rule 12）+ 监控脚本 + Git pre-commit hook",
+          "outcome": "完美根治，0个nul文件，建立全局标准"
+        },
+        {
+          "decision": "D-66",
+          "problem": "Compacting性能问题（500/502错误）",
+          "root_cause": "文件积累 + Token不优化 + 备份工具不可靠",
+          "short_term": "清理历史文件（节省200KB）+ 创建监控脚本",
+          "long_term": "改进备份工具（backup_project.js）+ 集成到package.json",
+          "outcome": "test_reports减少55.7%，Compacting频率降低"
+        }
+      ],
+      "benefits": "结构化解决问题，避免头痛医头",
+      "anti_patterns": "仅处理表面症状，不分析根因"
+    },
+    {
+      "id": "PATTERN-2",
+      "name": "迭代诊断（V1.0→V1.3证据驱动）",
+      "description": "基于实证的迭代诊断方法，拒绝假设，只依赖证据",
+      "principle": "不要应该，要实证！（用户核心反馈）",
+      "workflow": [
+        "V1.0：初始假设（基于有限信息）",
+        "V1.1：证据收集（tasklist/文件检查/日志分析）",
+        "V1.2：根因锁定（基于实证数据）",
+        "V1.3：解决方案部署（验证有效性）"
+      ],
+      "cases": [
+        {
+          "decision": "D-ONEDRIVE-DIAG-002",
+          "V1.0": "怀疑文件系统腐败（基于D-102历史经验）",
+          "V1.1": "NUL文件扫描（0个）+ OneDrive日志分析（SYNC_VERIFICATION_ABORT）",
+          "V1.2": "文件数596,128 > 临界值350,000 → sync verification超时",
+          "V1.3": ".excludefiles配置（23个排除模式）→ 预期减少66%",
+          "outcome": "准确定位非文件系统问题，避免误诊"
+        },
+        {
+          "decision": "D-111",
+          "V1.0": "假设OneDrive已安装但未运行",
+          "V1.1": "tasklist验证：无OneDrive进程 + 文件检查：OneDrive.exe不存在 + 用户截图：系统托盘无图标",
+          "V1.2": "winget假阳性确认：显示已安装但文件缺失",
+          "V1.3": "手动安装指南生成（ONEDRIVE_MANUAL_INSTALL_GUIDE.md）",
+          "outcome": "通过实证发现真实问题，拒绝包管理器假阳性"
+        }
+      ],
+      "benefits": "避免基于假设的错误修复，提升诊断准确性",
+      "key_tools": ["tasklist", "文件检查（Test-Path）", "日志分析", "用户截图验证"]
+    },
+    {
+      "id": "PATTERN-3",
+      "name": "三层同步（Records→Docs→Code）",
+      "description": "一次决策，三层同步落实机制",
+      "layers": {
+        "Layer 1": "progress.md决策记录（完整项目记忆）",
+        "Layer 2": "CLAUDE.md和agent_config.md全局规则",
+        "Layer 3": "代码实现和自动化脚本"
+      },
+      "workflow": [
+        "决策确认：说明内容、影响范围、需要更新的层级（1/2/3），等待用户确认",
+        "Layer 1：立即调用progress-recorder agent，记录到progress.md Decisions",
+        "Layer 2：更新相关文档（CLAUDE.md等）",
+        "Layer 3：更新agent配置（如适用，仅P0决策）",
+        "验证：在progress.md中标记'✅ 3层同步完成'，列出更新的文件和行号"
+      ],
+      "cases": [
+        {
+          "decision": "D-102",
+          "layer_1": "progress.md Decisions区块（完整RCCM记录）",
+          "layer_2": "CLAUDE.md Rule 12（批处理规范全局部署）",
+          "layer_3": "Git pre-commit hook（自动检查违规）",
+          "verification": "✅ 3层同步完成"
+        },
+        {
+          "decision": "D-53",
+          "layer_1": "progress.md Decisions区块（三层机制定义）",
+          "layer_2": "CLAUDE.md（触发关键词清单）",
+          "layer_3": "progress-recorder agent（自动化更新）",
+          "verification": "✅ 3层同步完成"
+        }
+      ],
+      "benefits": "确保决策一致性，避免文档与代码脱节",
+      "anti_patterns": "只更新文档不改代码，导致规则不生效"
+    },
+    {
+      "id": "PATTERN-4",
+      "name": "Night-Auth自主执行",
+      "description": "无间断工作模式，Agent自主处理P0/P1任务",
+      "authorization": "Queen授权P1及以下任务完全自主（2025-11-06）",
+      "task_classification": {
+        "A类-完全自主": "文档更新、监控脚本、日志分析、测试执行、备份创建",
+        "B类-记录并继续": "重大架构调整建议、工具选型建议、成本优化建议",
+        "C类-等待用户": "系统重启、管理员权限操作、锁定模块修改"
+      },
+      "commitments": [
+        "仅使用已授权工具和命令",
+        "优先使用文件操作工具（Read/Write/Edit/Glob/Grep/Task）",
+        "时间戳统一使用Get-Date PowerShell命令",
+        "禁止所有Unix风格命令（date/ls/cat/cp/mv/rm/grep）",
+        "遇到未授权操作时跳过任务，记录日志，等待用户处理"
+      ],
+      "cases": [
+        {
+          "decision": "D-104",
+          "work_duration": "4.5小时（Night-Auth模式，零人工干预）",
+          "tasks_completed": "Claude配置清理（862MB→1.64MB） + NUL文件诊断 + 验证脚本创建",
+          "outcome": "完全自主完成P0任务"
+        },
+        {
+          "decision": "D-GEMBA-2.0",
+          "work_duration": "4.5小时（Night-Auth模式）",
+          "tasks_completed": "三层架构实现（11文件，120KB代码）+ 文档创建",
+          "outcome": "零人工干预完成P1架构设计"
+        }
+      ],
+      "benefits": "用户睡觉时Agent继续工作，显著提升效率",
+      "constraints": "遇到C类任务时必须等待用户"
+    },
+    {
+      "id": "PATTERN-5",
+      "name": "灾难→标准（提升为全局规则）",
+      "description": "重大灾难后提升为全局强制标准，防止重复",
+      "workflow": [
+        "灾难发生：P0-CRITICAL级别问题",
+        "RCCM分析：深度根因分析",
+        "解决验证：完美根治",
+        "提升标准：CLAUDE.md Rule系列全局部署",
+        "自动执行：Git hooks/监控脚本/Agent自动检查"
+      ],
+      "cases": [
+        {
+          "disaster": "D-102（NUL文件灾难，2,619个文件）",
+          "root_cause": "批处理 > nul在复杂环境下失效",
+          "solution": "禁用 > nul，强制使用 2>CON",
+          "standard": "CLAUDE.md Rule 12 + Git pre-commit hook",
+          "enforcement": "自动检查，违规阻止提交",
+          "outcome": "全局强制执行，0复发"
+        },
+        {
+          "disaster": "D-103（Claude CLI循环）",
+          "root_cause": "CLI扩展检查触发code命令",
+          "solution": "使用VSCode内置扩展",
+          "standard": "CLAUDE.md Rule 13",
+          "enforcement": "监控脚本检测异常循环",
+          "outcome": "避免类似问题"
+        }
+      ],
+      "benefits": "将灾难教训转化为长期预防机制",
+      "key_principle": "NO COLLATERAL DAMAGE - 解决问题时不造成新问题"
+    },
+    {
+      "id": "PATTERN-6",
+      "name": "Kernel约束识别（OS级限制）",
+      "description": "识别操作系统级约束，避免无效尝试",
+      "principle": "用户态程序无法访问内核内存，需系统级解决方案",
+      "cases": [
+        {
+          "decision": "D-106",
+          "problem": "Phantom NUL Files（2,620个幻影文件）",
+          "constraint": "NTFS MFT Cache存在于内核内存空间",
+          "user_mode_limit": "PowerShell/CMD无法删除（Test-Path验证文件不存在）",
+          "kernel_solution": "唯一解决方案：系统重启清空内核内存",
+          "outcome": "重启后验证：0个phantom文件"
+        },
+        {
+          "decision": "D-113",
+          "problem": "OneDrive系统级安装失败",
+          "constraint": "注册表残留 + 系统文件损坏",
+          "user_mode_limit": "8种修复方案均失败（标准安装/注册表清理/DISM修复）",
+          "system_solution": "最终系统重装（LTP系统级修复）",
+          "outcome": "认识到问题超出常规诊断范围"
+        }
+      ],
+      "identification_signals": [
+        "标准工具显示文件存在，但Test-Path返回False",
+        "多种修复方案均失败",
+        "涉及系统核心组件（Windows Search/OneDrive/NTFS）"
+      ],
+      "benefits": "避免在用户态层面无限尝试，快速识别需要系统级解决方案",
+      "lesson": "某些问题只能通过系统重启/重装解决"
+    },
+    {
+      "id": "PATTERN-7",
+      "name": "版本自动化（递增+备份联动）",
+      "description": "代码变更自动触发版本递增和备份创建",
+      "workflow": [
+        "检测代码变更（duomotai/核心文件）",
+        "自动递增版本号（V56.1→V56.2→V56.9→V56.a，D-95）",
+        "触发progress-recorder备份（D-97）",
+        "使用Exclude方式备份（排除node_modules等）",
+        "记录到progress.md Backups区块"
+      ],
+      "cases": [
+        {
+          "version": "V57.22",
+          "trigger": "Night-Auth深夜工作完成（导航条+语音+UI修复）",
+          "auto_actions": [
+            "版本号更新：index.html L12 + L144（两处同步）",
+            "调用progress-recorder创建备份",
+            "备份命名：rrxsxyz_next_202511040330_V5722_NightAuth.zip",
+            "记录到progress.md Backups区块"
+          ],
+          "outcome": "100%可追溯，0遗漏备份"
+        }
+      ],
+      "benefits": "避免D-85版本混淆问题（浏览器缓存导致测试无效）",
+      "integration": "D-95（版本递增） + D-97（备份触发） + D-72（Exclude方式）"
+    },
+    {
+      "id": "PATTERN-8",
+      "name": "工具链进化（评估→迁移→优化）",
+      "description": "持续评估和升级工具链，提升开发效率",
+      "workflow": [
+        "评估阶段：性能测试 + 成本分析 + 易用性评分",
+        "决策阶段：用户确认工具选型",
+        "迁移阶段：开发新版本 + 保留旧版本（向后兼容）",
+        "优化阶段：性能验证 + 生成对比报告",
+        "标准化：创建小白教程 + 更新CLAUDE.md"
+      ],
+      "cases": [
+        {
+          "decision": "D-98",
+          "from": "Puppeteer",
+          "to": "Playwright",
+          "migration_scale": "11文件，1,960行代码",
+          "benefits": "性能提升20-30% + 多浏览器支持（Chromium/Firefox/WebKit）",
+          "backward_compatibility": "保留Puppeteer版本（scripts/gemba-agent.js）",
+          "outcome": "推荐使用Playwright，但可根据需要回退"
+        },
+        {
+          "decision": "D-114",
+          "tools": "Cursor + Playwright + 通义灵码",
+          "benefits": "Cursor响应速度快3倍 + Playwright性能提升20-30% + 通义灵码免费",
+          "cost": "完全免费（¥0）",
+          "tutorial": "QUICK_START_GUIDE.md（10分钟上手）",
+          "outcome": "最优免费工具组合确立"
+        }
+      ],
+      "benefits": "持续优化开发体验，降低成本，提升效率",
+      "principle": "向后兼容 + 用户可选（推荐新工具，但不强制）"
+    }
+  ]
+}

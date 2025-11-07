@@ -1,0 +1,739 @@
+/* 多魔汰系统 - 完整样式模块 (从index.html抽取) */
+/* 抽取自 duomotai/index.html Lines 7-723 (约716行) */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Text', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    padding-bottom: 100px; /* ✅ [FIX P0-ScrollBar] 为固定nav-links预留空间 */
+    font-size: 16px; /* ✅ [Task #085] v8.1 UI 优化 - 基础字体16px提升可读性 */
+    overflow-y: auto; /* ✅ [FIX P0-ScrollBar] 确保body本身可以滚动 */
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top: 200px; /* ✅ [UX优化] 从165px增加至200px，解决"窗口太挤"问题 */
+    padding-bottom: 80px; /* ✅ [Task #123] 为固定底部预留空间 */
+}
+
+.header {
+    position: fixed; /* ✅ [Task #123] 固定顶部 */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 15px 20px 8px 20px; /* ✅ [T-324] 从20px优化至15px，紧凑布局 */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    margin-bottom: 0;
+}
+
+.header h1 {
+    font-size: 2em; /* ✅ [T-324] 从2.5em优化至2em，减少标题高度 */
+    margin-bottom: 8px; /* ✅ [T-324] 从10px优化至8px */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header .slogan {
+    font-size: 1.1em; /* ✅ [T-324] 从1.2em优化至1.1em，更紧凑 */
+    opacity: 0.9;
+}
+
+.header .version-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    margin-left: 10px;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 45px; /* ✅ [UX优化] 从30px增加至45px，增加输入框组之间的间距 */
+}
+
+.input-group label {
+    display: block;
+    font-size: 1.3em;  /* 增大字体：1.1em → 1.3em */
+    font-weight: 600;  /* 加粗：bold → 600 */
+    color: #667eea;    /* 醒目颜色：#333 → 主题蓝色 */
+    margin-bottom: 16px;  /* ✅ [UX优化] 从12px增加至16px，增加标签和输入框间距 */
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #f5f7ff 0%, #ffffff 100%);
+    border-left: 4px solid #667eea;
+    border-radius: 8px;
+}
+
+.input-group textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px; /* ✅ [Task #5] 苹果风格圆角一致性优化：10px → 12px */
+    font-size: 1em;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    transition: border-color 0.3s;
+}
+
+.input-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.roles-section {
+    margin: 30px 0;
+}
+
+.roles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.layer-legend {
+    display: flex;
+    gap: 20px;
+    font-size: 0.9em;
+}
+
+.layer-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.layer-legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+.roles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.role-card {
+    position: relative;
+    border: 3px solid;
+    border-radius: 12px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: white;
+}
+
+/* v5 三層顏色樣式（基於 group） */
+.role-card.group-core {
+    border-color: #007AFF;
+}
+
+.role-card.group-external {
+    border-color: #AF52DE;  /* ✅ [V57.5 ROLLBACK] 紫色（iOS风格） */
+}
+
+.role-card.group-value {
+    border-color: #34C759;
+}
+
+.role-card.group-system {
+    border-color: #FFD700;
+}
+
+/* 保留舊的 layer 樣式以向下兼容 */
+.role-card.layer-core {
+    border-color: #007AFF;
+}
+
+.role-card.layer-external {
+    border-color: #FF3B30;
+}
+
+.role-card.layer-value {
+    border-color: #34C759;
+}
+
+.role-card.layer-system {
+    border-color: #FFD700;
+}
+
+/* 必选角色金边高亮 */
+.role-card.required {
+    border-width: 4px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.role-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* ✅ [Task #065] Hover 时 intro 字段增强显示 */
+.role-card:hover .role-intro {
+    font-size: 0.95em;
+    color: #333;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.role-card.selected {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+.role-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background: #667eea;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.role-icon {
+    font-size: 2em;
+    margin-bottom: 8px;
+}
+
+.role-name {
+    font-weight: bold;
+    font-size: 1.05em;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.role-intro {
+    font-size: 0.85em;
+    color: #666;
+    line-height: 1.4;
+    min-height: 40px;
+}
+
+/* 保留舊的 role-desc 樣式以向下兼容 */
+.role-desc {
+    font-size: 0.85em;
+    color: #666;
+    line-height: 1.4;
+}
+
+.role-badges {
+    display: flex;
+    gap: 5px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.7em;
+    font-weight: bold;
+    color: white;
+}
+
+.role-badge.required {
+    background: #FFD700;
+    color: #333;
+}
+
+/* v5 group badge 樣式 */
+.role-badge.group-core {
+    background: #007AFF;
+}
+
+.role-badge.group-external {
+    background: #AF52DE;  /* ✅ [V57.5 ROLLBACK] 紫色（iOS风格） */
+}
+
+.role-badge.group-value {
+    background: #34C759;
+}
+
+.role-badge.group-system {
+    background: #FFD700;
+    color: #333;
+}
+
+/* 保留舊的 layer badge 樣式以向下兼容 */
+.role-badge.layer-core {
+    background: #007AFF;
+}
+
+.role-badge.layer-external {
+    background: #FF3B30;
+}
+
+.role-badge.layer-value {
+    background: #34C759;
+}
+
+.role-badge.facilitator {
+    background: #FFD700;
+    color: #333;
+}
+
+.rounds-selector {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.round-btn {
+    padding: 12px 24px;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.round-btn:hover {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.round-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #667eea;
+}
+
+.action-btn {
+    padding: 16px 48px;
+    font-size: 1.2em;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.action-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.info-text {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    color: #1976d2;
+    font-size: 0.95em;
+}
+
+.nav-links {
+    position: fixed !important; /* ✅ [Task #123] 固定底部 */
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 10000 !important; /* ✅ [FIX P0-NavBar] 提高z-index到10000，确保不被其他元素覆盖 */
+    text-align: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 15px 20px !important;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    display: none; /* ✅ [Task #128] 初始隐藏，领袖开场发言时显示 */
+    min-height: 50px !important; /* ✅ [FIX P0-NavBar] 显式设置最小高度，避免display:block后仍不可见 */
+    height: auto !important; /* ✅ [FIX P0-NavBar] 确保高度自适应内容 */
+    width: 100% !important; /* ✅ [FIX P0-NavBar] 确保宽度100% */
+    visibility: visible !important; /* ✅ [FIX P0-NavBar] 强制可见性 */
+    opacity: 1 !important; /* ✅ [FIX P0-NavBar] 确保不透明 */
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1.1em;
+    transition: opacity 0.3s;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+/* ✅ [FIX P0-NavBar] 导航条可见状态类 */
+.nav-links.visible {
+    display: block !important;
+}
+
+/* ✅ [Task #123] Apple 风格滚动条 */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ✅ [Screenshot Fix] 移除max-height和overflow，让内容自然流动，只依赖body的滚动 */
+#debateArea {
+    display: none;
+}
+
+.phase-indicator {
+    /* ✅ [Screenshot Fix] 集成到header内部，而不是sticky定位 */
+    background: rgba(255,255,255,0.15); /* 半透明白色，融入banner */
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin: 15px auto 0 auto; /* 顶部留出间距，底部不留 */
+    max-width: 1200px; /* 限制最大宽度 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: none; /* 移除阴影，与banner融为一体 */
+}
+
+.phase-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    color: rgba(255,255,255,0.7); /* 半透明白色文字 */
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.phase-step::after {
+    content: '→';
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.5);
+    font-size: 1.5em;
+}
+
+.phase-step:last-child::after {
+    display: none;
+}
+
+.phase-step.active {
+    color: #FFD700; /* 金色高亮当前阶段 */
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.phase-step.completed {
+    color: rgba(255,255,255,1); /* 完全不透明白色 */
+}
+
+.debate-round {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 40px 0 20px 0;  /* ✅ [FIX UI间距] 增加顶部间距40px，与Banner保持舒适距离 */
+}
+
+.round-header {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: left; /* ✅ [P1-RoundHeader] 左对齐 */
+}
+
+.speech-item {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border-left: 5px solid;
+    transition: all 0.3s;
+}
+
+.speech-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* 角色发言颜色编码 */
+.speech-item.layer-core {
+    border-left-color: #007BFF;
+}
+
+.speech-item.layer-external {
+    border-left-color: #FF4500;
+}
+
+.speech-item.layer-value {
+    border-left-color: #28A745;
+}
+
+.speech-item.layer-system {
+    border-left-color: #FFD700;
+}
+
+.speech-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.speech-role-icon {
+    font-size: 1.3em;
+}
+
+.speech-content {
+    color: #2C3E50; /* Darker grey for better contrast */
+    line-height: 1.7; /* Increased height */
+    white-space: pre-wrap;
+}
+
+.delegate-prompt {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 40px 0 20px 0;  /* ✅ [FIX UI间距] 增加顶部间距从20px到40px，避免与Banner太挤 */
+    /* ✅ [FIX P1-ScrollBug] 移除max-height/overflow-y，让页面能正常滚动，用户无需缩小屏幕即可点击确认按钮 */
+}
+
+.delegate-prompt textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+.delegate-prompt button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: #ffc107;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.delegate-prompt button:hover {
+    background: #ffb300;
+}
+
+.report-section {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 30px;
+}
+
+.report-section h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #667eea;
+}
+
+.report-section h3 {
+    color: #333;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.report-section ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    color: #555;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.export-btn {
+    padding: 12px 30px;
+    border: 2px solid #667eea;
+    border-radius: 25px;
+    background: white;
+    color: #667eea;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.export-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #667eea;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.9; }
+}
+
+/* Token统计显示 */
+.token-stats {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 4px solid #667eea;
+    display: none; /* Initially hidden */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.token-stats.visible {
+    display: block;
+}
+
+.token-stats-header {
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1em;
+}
+
+.token-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.token-stat-item {
+    padding: 12px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+
+.token-stat-item:hover {
+    transform: translateY(-2px);
+}
+
+.token-stat-label {
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.token-stat-value {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .header h1 {
+        font-size: 1.8em;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    .roles-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+
+    .rounds-selector {
+        flex-direction: column;
+    }
+
+    .round-btn {
+        width: 100%;
+    }
+
+    .export-buttons {
+        flex-direction: column;
+    }
+
+    .export-btn {
+        width: 100%;
+    }
+
+    .token-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新浪财经数据连接器</title>
+    <script src="https://connectors.tableau.com/libs/tableauwdc-2.3.latest.js"></script>
+    <script>
+        (function() {
+            // 创建连接器对象
+            var myConnector = tableau.makeConnector();
+
+            // 定义Schema（表结构）
+            myConnector.getSchema = function(schemaCallback) {
+                var cols = [
+                    { id: "name", alias: "股票名称", dataType: tableau.dataTypeEnum.string },
+                    { id: "price", alias: "当前价格", dataType: tableau.dataTypeEnum.float },
+                    { id: "open", alias: "开盘价", dataType: tableau.dataTypeEnum.float },
+                    { id: "high", alias: "最高价", dataType: tableau.dataTypeEnum.float },
+                    { id: "low", alias: "最低价", dataType: tableau.dataTypeEnum.float }
+                ];
+
+                var tableSchema = {
+                    id: "sinajsData",
+                    alias: "新浪财经股票数据",
+                    columns: cols
+                };
+
+                schemaCallback([tableSchema]);
+            };
+
+            // 获取数据
+            myConnector.getData = function(table, doneCallback) {
+                var stockCode = "sh600519"; // 股票代码
+                var apiUrl = "http://hq.sinajs.cn/list=" + stockCode;
+
+                fetch(apiUrl)
+                    .then(response => response.text())
+                    .then(data => {
+                        // 解析新浪财经返回的数据
+                        var dataArray = data.split(",");
+                        var tableData = [{
+                            "name": dataArray[0].split('"')[1],
+                            "price": parseFloat(dataArray[3]),
+                            "open": parseFloat(dataArray[1]),
+                            "high": parseFloat(dataArray[4]),
+                            "low": parseFloat(dataArray[5])
+                        }];
+
+                        // 将数据添加到Tableau
+                        table.appendRows(tableData);
+                        doneCallback();
+                    })
+                    .catch(error => console.error("Error fetching data: ", error));
+            };
+
+            // 注册连接器
+            tableau.registerConnector(myConnector);
+        })();
+
+        // 加载数据
+        function loadData() {
+            tableau.connectionName = "新浪财经股票数据";
+            tableau.submit();
+        }
+    </script>
+</head>
+<body>
+    <button onclick="loadData()">加载数据</button>
+</body>
+</html>

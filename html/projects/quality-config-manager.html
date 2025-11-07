@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V4.0 质量检测配置管理</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .config-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .config-section.active {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .config-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .config-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .config-params {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .param-item {
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .param-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .param-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .current-config {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 V4.0 质量检测配置管理</h1>
+            <p>快速切换答题质量检测参数，方便开发测试</p>
+        </div>
+
+        <div class="current-config">
+            <h3>📊 当前配置状态</h3>
+            <p id="currentStatus">正在加载...</p>
+        </div>
+
+        <div class="instructions">
+            <h4>📝 使用说明</h4>
+            <p><strong>调试模式 (DEBUG)</strong>: 用于开发测试，所有检测都很宽松</p>
+            <p><strong>中等模式 (MODERATE)</strong>: 适中的检测标准，用于内部测试</p>
+            <p><strong>生产模式 (PRODUCTION)</strong>: 严格的检测标准，用于正式上线</p>
+        </div>
+
+        <!-- 调试模式 -->
+        <div class="config-section" id="debug-section">
+            <div class="config-title">🔧 调试模式 (DEBUG)</div>
+            <div class="config-description">开发测试专用 - 极宽松的检测标准，方便快速测试报告生成</div>
+
+            <div class="config-params">
+                <div class="param-item">
+                    <div class="param-label">总时长要求</div>
+                    <div class="param-value">0 分钟</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">单题时长</div>
+                    <div class="param-value">0 秒</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">允许相同答案</div>
+                    <div class="param-value">100 题</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">相似度阈值</div>
+                    <div class="param-value">100%</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="switchMode('DEBUG')">切换到调试模式</button>
+        </div>
+
+        <!-- 中等模式 -->
+        <div class="config-section" id="moderate-section">
+            <div class="config-title">⚖️ 中等模式 (MODERATE)</div>
+            <div class="config-description">平衡的检测标准，用于内部测试和演示</div>
+
+            <div class="config-params">
+                <div class="param-item">
+                    <div class="param-label">总时长要求</div>
+                    <div class="param-value">10 分钟</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">单题时长</div>
+                    <div class="param-value">3 秒</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">允许相同答案</div>
+                    <div class="param-value">10 题</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">相似度阈值</div>
+                    <div class="param-value">90%</div>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" onclick="switchMode('MODERATE')">切换到中等模式</button>
+        </div>
+
+        <!-- 生产模式 -->
+        <div class="config-section" id="production-section">
+            <div class="config-title">🚀 生产模式 (PRODUCTION)</div>
+            <div class="config-description">严格的检测标准，确保用户认真完成自测</div>
+
+            <div class="config-params">
+                <div class="param-item">
+                    <div class="param-label">总时长要求</div>
+                    <div class="param-value">30 分钟</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">单题时长</div>
+                    <div class="param-value">10 秒</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">允许相同答案</div>
+                    <div class="param-value">0 题</div>
+                </div>
+                <div class="param-item">
+                    <div class="param-label">相似度阈值</div>
+                    <div class="param-value">80%</div>
+                </div>
+            </div>
+
+            <button class="btn btn-success" onclick="switchMode('PRODUCTION')">切换到生产模式</button>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="media-assessment-v4.html" class="btn btn-primary">前往 V4.0 测试页面</a>
+        </div>
+    </div>
+
+    <script src="quality-config.js"></script>
+    <script>
+        // 更新当前状态显示
+        function updateCurrentStatus() {
+            const config = window.QUALITY_CONFIG;
+            const statusEl = document.getElementById('currentStatus');
+
+            if (config) {
+                statusEl.innerHTML = `
+                    <strong>当前模式:</strong> ${config.name} (${config.mode})<br>
+                    <strong>切换时间:</strong> ${new Date(config.switchedAt).toLocaleString('zh-CN')}<br>
+                    <strong>参数:</strong> 总时长${config.minTotalTimeMinutes}分钟, 单题${config.minTimePerQuestionSeconds}秒, 相同答案${config.maxIdenticalAnswers}题
+                `;
+
+                // 高亮当前模式
+                document.querySelectorAll('.config-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                const currentSection = document.getElementById(`${config.mode.toLowerCase()}-section`);
+                if (currentSection) {
+                    currentSection.classList.add('active');
+                }
+            } else {
+                statusEl.textContent = '配置文件加载失败';
+            }
+        }
+
+        // 切换配置模式
+        function switchMode(mode) {
+            // 这里需要修改配置文件
+            alert(`
+要切换到 ${mode} 模式，请：
+
+1. 打开 quality-config.js 文件
+2. 修改第57行: const CURRENT_MODE = '${mode}';
+3. 保存文件并刷新页面
+
+当前这是演示版本，实际项目中可以通过后端API来动态切换配置。
+            `);
+
+            // 模拟切换效果（实际需要修改文件）
+            if (confirm(`确定要切换到 ${mode} 模式吗？\n\n注意：这需要手动修改配置文件才能真正生效。`)) {
+                console.log(`准备切换到: ${mode}`);
+            }
+        }
+
+        // 页面加载时更新状态
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentStatus();
+        });
+    </script>
+</body>
+</html>

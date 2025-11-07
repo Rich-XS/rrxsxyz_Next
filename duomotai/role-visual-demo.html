@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Role Visual Demo — 方形头像 + 蓝框昵称</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 20px; background:#f7f9fc; }
+    .demo-row { display:flex; gap:16px; flex-wrap:wrap; }
+
+    .role-card { width: 220px; background: #fff; border-radius:12px; padding:14px; box-shadow:0 6px 18px rgba(20,30,40,0.06); box-sizing:border-box; }
+    .role-title { font-size:13px; color:#666; margin-bottom:8px; }
+
+    /* 可复用容器 */
+    .role-visual { display:flex; align-items:center; gap:12px; }
+
+    /* 红框的 avatar 容器（方形） */
+    .avatar-frame {
+      display:inline-flex; align-items:center; justify-content:center;
+      width: var(--avatar-size,64px); height:var(--avatar-size,64px);
+      border: 3px solid #ff4d4f; border-radius:8px; overflow:hidden; background:#fff;
+      box-sizing:border-box;
+    }
+    .avatar-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    /* 蓝框昵称 */
+    .name-frame {
+      padding:6px 10px; background:#007aff; color:white; border-radius:6px; max-width:120px; box-sizing:border-box;
+      font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    @media (max-width:420px){
+      .role-card{ width:150px; padding:10px }
+      .avatar-frame{ --avatar-size:48px }
+      .name-frame{ max-width:90px; font-size:13px }
+    }
+
+    /* demo helper */
+    .meta { margin-top:8px; font-size:12px; color:#888 }
+    .controls{ margin-bottom:16px }
+    button{ padding:6px 10px; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer }
+  </style>
+</head>
+<body>
+  <h2>多模态角色视觉 Demo（方形头像）</h2>
+  <p>红框显示虚拟头像，蓝框显示昵称（末 12 字截断）。示例使用 <code>data-avatar</code> 与 <code>data-name</code> 自动绑定。</p>
+
+  <div class="controls">
+    <button id="toggleDemo">切换示例数据</button>
+  </div>
+
+  <div class="demo-row" id="demoRow">
+    <!-- 示例卡片 1 -->
+    <div class="role-card">
+      <div class="role-title">第一性（示例）</div>
+      <div class="role-visual" data-role-id="r1" data-avatar="https://picsum.photos/seed/r1/200" data-name="张三-产品策略与商业模式专家-长名字示例">
+        <div class="avatar-frame"><img alt="头像" src="" /></div>
+        <div class="name-frame" role="text" aria-label="完整昵称"></div>
+      </div>
+      <div class="meta">备注：方形红框头像，蓝色昵称</div>
+    </div>
+
+    <!-- 示例卡片 2（无 avatar，回退占位） -->
+    <div class="role-card">
+      <div class="role-title">专家（无 avatar）</div>
+      <div class="role-visual" data-role-id="r2" data-name="李四-运营专家短名">
+        <div class="avatar-frame"><img alt="头像" src="" /></div>
+        <div class="name-frame" role="text" aria-label="完整昵称"></div>
+      </div>
+      <div class="meta">头像回退到 SVG 占位图</div>
+    </div>
+
+    <!-- 示例卡片 3（中文长名，展示末 12 字） -->
+    <div class="role-card">
+      <div class="role-title">用户（长名）</div>
+      <div class="role-visual" data-role-id="r3" data-avatar="https://picsum.photos/seed/r3/200" data-name="王五-高级市场策略与品牌建设专家-国际化长期合作">
+        <div class="avatar-frame"><img alt="头像" src="" /></div>
+        <div class="name-frame" role="text" aria-label="完整昵称"></div>
+      </div>
+      <div class="meta">手机 / 桌面均自适应</div>
+    </div>
+
+  </div>
+
+  <script>
+    const NICK_TAIL = 12;
+    const DEFAULT_NAME = '匿名用户';
+
+    function tailName(name){
+      if(!name) return DEFAULT_NAME;
+      if(name.length <= NICK_TAIL) return name;
+      return '…' + name.slice(-NICK_TAIL);
+    }
+
+    // small inline SVG placeholder (data URI)
+    const PLACEHOLDER_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect width='100%' height='100%' fill='%23f0f0f0'/><text x='50%' y='54%' font-size='12' text-anchor='middle' fill='%23999'>头像</text></svg>";
+
+    function fillRoleVisual(el){
+      const avatar = el.dataset.avatar || '';
+      const name = el.dataset.name || '';
+      const img = el.querySelector('img');
+      const nameEl = el.querySelector('.name-frame');
+
+      if(img){
+        if(avatar) img.src = avatar;
+        else img.src = PLACEHOLDER_SVG;
+        img.alt = `头像 - ${name || DEFAULT_NAME}`;
+        // onerror 回退
+        img.onerror = function(){ this.onerror=null; this.src = PLACEHOLDER_SVG };
+      }
+
+      if(nameEl){
+        nameEl.textContent = tailName(name);
+        nameEl.title = name || DEFAULT_NAME;
+        nameEl.setAttribute('aria-label', `完整昵称: ${name || DEFAULT_NAME}`);
+      }
+    }
+
+    function autoBind(){
+      document.querySelectorAll('.role-visual').forEach(el=> fillRoleVisual(el));
+    }
+
+    document.addEventListener('DOMContentLoaded', autoBind);
+
+    // demo 控制：切换数据
+    document.getElementById('toggleDemo').addEventListener('click', ()=>{
+      // 动态改变 r2 的 avatar，r1 改名示例
+      const r2 = document.querySelector('[data-role-id="r2"]');
+      r2.dataset.avatar = 'https://picsum.photos/seed/r2b/200';
+      r2.dataset.name = '李四-已更新昵称-带后缀示例';
+
+      const r1 = document.querySelector('[data-role-id="r1"]');
+      r1.dataset.name = '张三-已更新-更长的名字用于测试截断逻辑12345';
+
+      autoBind();
+    });
+  </script>
+</body>
+</html>

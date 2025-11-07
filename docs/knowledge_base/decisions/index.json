@@ -1,0 +1,455 @@
+{
+  "version": "1.0",
+  "total_decisions": 46,
+  "last_updated": "2025-11-06T02:58:00+08:00",
+  "categories": {
+    "灾难恢复": {
+      "count": 8,
+      "decisions": [
+        {
+          "id": "D-113",
+          "date": "2025-10-31",
+          "title": "OneDrive安装失败与LTP系统重装",
+          "severity": "P0-CRITICAL",
+          "root_cause": "系统级顽固问题，安装残留导致重装失败",
+          "solution": "最终系统重装",
+          "status": "已解决",
+          "lessons": ["系统级问题超出常规诊断范围", "需专业工具支持"]
+        },
+        {
+          "id": "D-112",
+          "date": "2025-10-31",
+          "title": "OneDrive安装系统级故障",
+          "severity": "P0-CRITICAL",
+          "root_cause": "注册表残留 + 系统文件损坏",
+          "solution": "多方案尝试（修复工具/注册表清理/DISM）",
+          "status": "已解决",
+          "lessons": ["实证诊断优于假设", "多方案并行尝试"]
+        },
+        {
+          "id": "D-106",
+          "date": "2025-10-30",
+          "title": "Phantom NUL Files根因分析",
+          "severity": "P0-CRITICAL",
+          "root_cause": "NTFS MFT Cache（内核内存）存储幻影元数据",
+          "solution": "系统重启清空内核内存 + 永久禁用Windows Search",
+          "status": "已验证",
+          "pattern": "Kernel约束识别",
+          "lessons": ["用户态程序无法访问内核内存", "唯一解决方案：系统重启"]
+        },
+        {
+          "id": "D-104",
+          "date": "2025-10-29",
+          "title": "笔记本系统完整解决方案（三合一）",
+          "severity": "P0-CRITICAL",
+          "root_cause": "NUL幻影文件 + Claude配置膨胀862MB + CLI循环",
+          "solution": "Claude配置862MB→1.64MB（99.8%优化）",
+          "status": "已解决",
+          "pattern": "配置管理优化",
+          "lessons": ["配置需定期清理", "备份+清理+验证流程"]
+        },
+        {
+          "id": "D-103",
+          "date": "2025-10-29",
+          "title": "Claude CLI无限循环灾难",
+          "severity": "P0-CRITICAL",
+          "root_cause": "扩展检查触发code命令，3分钟周期循环",
+          "solution": "使用VSCode内置扩展 + 安全启动脚本",
+          "status": "已解决",
+          "pattern": "工具使用规范",
+          "lessons": ["CLI参数--dangerously-skip-permissions危险", "优先使用IDE内置扩展"]
+        },
+        {
+          "id": "D-102",
+          "date": "2025-10-29",
+          "title": "NUL文件系统级灾难",
+          "severity": "P0-CRITICAL",
+          "root_cause": "批处理 > nul + OneDrive + nodemon恶性循环",
+          "solution": "20WHY分析 + 全局规范（禁用 > nul，使用 2>CON）",
+          "status": "已完美根治",
+          "pattern": "RCCM框架 + 灾难→标准",
+          "impact": "2,619个文件 + progress.md损坏",
+          "lessons": ["Windows标准做法在复杂环境下可能失效", "早期征兆必须深入调查"]
+        },
+        {
+          "id": "D-105",
+          "date": "2025-10-29",
+          "title": "VSCode空白页面自动弹出",
+          "severity": "P1",
+          "root_cause": "与D-103同根因（扩展检查触发code命令）",
+          "solution": "使用VSCode内置Claude扩展",
+          "status": "已解决"
+        },
+        {
+          "id": "D-ONEDRIVE-DIAG-002",
+          "date": "2025-11-02",
+          "title": "OneDrive同步文件数过载",
+          "severity": "P0-CRITICAL",
+          "root_cause": "文件数596,128 > 350,000临界值（Playwright安装触发）",
+          "solution": ".excludefiles配置（23个排除模式）减少66%",
+          "status": "已部署",
+          "pattern": "迭代诊断（V1.0→V1.3）",
+          "lessons": ["包管理器可能触发大量文件变更", "OneDrive有同步文件数限制"]
+        }
+      ]
+    },
+    "系统优化": {
+      "count": 8,
+      "decisions": [
+        {
+          "id": "D-97",
+          "date": "2025-10-26",
+          "title": "版本自动备份机制",
+          "severity": "P1",
+          "trigger": "D-95版本号更新时自动触发",
+          "solution": "调用progress-recorder创建Exclude备份",
+          "status": "已确立",
+          "pattern": "版本自动化"
+        },
+        {
+          "id": "D-95",
+          "date": "2025-10-26",
+          "title": "测试版本号自动更新",
+          "severity": "P1",
+          "trigger": "代码变更时自动识别并递增版本号",
+          "solution": "末位递增（V56.1→V56.2→V56.9→V56.a）",
+          "status": "已确立",
+          "pattern": "版本自动化"
+        },
+        {
+          "id": "D-85",
+          "date": "2025-10-26",
+          "title": "测试版本号管理规则固化",
+          "severity": "P1",
+          "solution": "index.html两处同步更新（L12标题 + L144 console.log）",
+          "status": "已锁定",
+          "pattern": "三层同步"
+        },
+        {
+          "id": "D-66",
+          "date": "2025-10-16",
+          "title": "RCCM - 系统优化效率",
+          "severity": "P0",
+          "root_cause": "文件积累 + Token不优化 + 备份工具问题",
+          "solution": "test_reports减少55.7% + 临时文件清零",
+          "status": "已缓解",
+          "pattern": "RCCM框架"
+        },
+        {
+          "id": "D-72",
+          "date": "2025-10-15",
+          "title": "Exclude备份方式",
+          "severity": "P1",
+          "solution": "排除node_modules/.git等大体积目录",
+          "status": "已采用"
+        },
+        {
+          "id": "D-35",
+          "date": "历史决策",
+          "title": "任务完成自动备份",
+          "severity": "P1",
+          "trigger": "P0/P1任务完成时自动备份",
+          "status": "已集成"
+        },
+        {
+          "id": "D-108",
+          "date": "2025-10-30",
+          "title": "系统维护脚本创建规范",
+          "severity": "P1",
+          "solution": "7个维护脚本（夜间修复/磁盘检查/OneDrive修复等）",
+          "status": "已创建"
+        },
+        {
+          "id": "D-107",
+          "date": "2025-10-30",
+          "title": "D-102批处理规范全局强制执行",
+          "severity": "P0",
+          "solution": "CLAUDE.md Rule 12全局部署",
+          "status": "已完成",
+          "pattern": "灾难→标准"
+        }
+      ]
+    },
+    "工具选型": {
+      "count": 8,
+      "decisions": [
+        {
+          "id": "D-114",
+          "date": "2025-11-01",
+          "title": "Cursor + Playwright + 通义灵码工具组合",
+          "severity": "P1",
+          "benefits": "Cursor响应速度快3倍 + Playwright性能提升20-30%",
+          "cost": "完全免费",
+          "status": "已确立",
+          "pattern": "工具链进化"
+        },
+        {
+          "id": "D-98",
+          "date": "2025-10-31",
+          "title": "Playwright RPA-Agent加速项目开发",
+          "severity": "P1",
+          "migration": "Puppeteer → Playwright（11文件，1,960行代码）",
+          "benefits": "性能提升20-30% + 多浏览器支持",
+          "status": "已完成",
+          "pattern": "工具链进化"
+        },
+        {
+          "id": "D-77",
+          "date": "2025-10-25",
+          "title": "浏览器自动化Gemba-Agent",
+          "severity": "P1",
+          "tool": "Puppeteer（后被D-98替换为Playwright）",
+          "purpose": "自动化测试替代人工Gemba验证",
+          "status": "已实现"
+        },
+        {
+          "id": "D-GEMBA-2.0",
+          "date": "2025-11-02",
+          "title": "Gemba Agent 2.0三层架构",
+          "severity": "P1",
+          "architecture": "感知层/决策层/执行层完全解耦",
+          "code_scale": "11文件，120KB代码，50+自动修复规则",
+          "status": "已实现",
+          "pattern": "架构设计"
+        },
+        {
+          "id": "D-67",
+          "date": "2025-10-16",
+          "title": "轻量级HTTP测试框架",
+          "severity": "P0",
+          "tool": "auto_test.js（无需浏览器）",
+          "benefits": "减少手动测试负担",
+          "status": "已实现"
+        },
+        {
+          "id": "D-79",
+          "date": "2025-10-25",
+          "title": "用户手动管理前后端服务",
+          "severity": "P1",
+          "rule": "Claude Code禁止自动启动服务",
+          "reason": "避免多进程阻塞",
+          "status": "已确立"
+        },
+        {
+          "id": "D-110",
+          "date": "2025-10-31",
+          "title": "项目路径迁移策略",
+          "severity": "P1",
+          "from": "D:\\_100W\\rrxsxyz_next",
+          "to": "D:\\OneDrive_New\\_AIGPT\\_100W_New\\rrxsxyz_next",
+          "files_affected": 122,
+          "status": "已完成"
+        },
+        {
+          "id": "D-111",
+          "date": "2025-10-31",
+          "title": "OneDrive安装缺失实证诊断",
+          "severity": "P0",
+          "method": "Go-Gemba现地验证",
+          "conclusion": "OneDrive未实际安装",
+          "status": "已验证"
+        }
+      ]
+    },
+    "架构设计": {
+      "count": 10,
+      "decisions": [
+        {
+          "id": "D-118",
+          "date": "2025-11-04",
+          "title": "统一启动脚本强制规则",
+          "severity": "P1",
+          "scripts": "start.ps1 + start_frontend.ps1 + start_backend.ps1",
+          "principle": "从项目根目录启动，禁用旧方式",
+          "status": "已部署"
+        },
+        {
+          "id": "D-63",
+          "date": "2025-10-14",
+          "title": "语音与文字流同步机制（Synctxt&voice v1.0）",
+          "severity": "P0",
+          "achievement": "Token节省62% + AI输出空间增加300%",
+          "modes": "语音关闭（固定延迟） + 语音打开（完全同步）",
+          "status": "已实现"
+        },
+        {
+          "id": "D-53",
+          "date": "2025-10-12",
+          "title": "三层决策落实机制",
+          "severity": "P0",
+          "layers": "Layer 1-决策记录 + Layer 2-文档指导 + Layer 3-Agent配置执行",
+          "principle": "一次决策，三层同步",
+          "status": "已确立",
+          "pattern": "三层同步"
+        },
+        {
+          "id": "D-69",
+          "date": "2025-10-16",
+          "title": "多魔汰系统用户测试Phase 1",
+          "severity": "P0",
+          "issues_found": 4,
+          "fixes": "专家语音激活 + 文字对齐 + CSS优化",
+          "status": "已完成"
+        },
+        {
+          "id": "D-68",
+          "date": "2025-10-20",
+          "title": "跨项目端口保护",
+          "severity": "P0",
+          "principle": "仅清理本项目进程，严禁误杀其他项目",
+          "tool": "safe_port_cleanup.ps1",
+          "status": "已部署",
+          "pattern": "Night-Auth自主执行"
+        },
+        {
+          "id": "D-65",
+          "date": "2025-10-18",
+          "title": "端口分配规则",
+          "severity": "P1",
+          "allocation": "rrxsxyz_next: 3000-3999,8000-8999 | AnyRouter: 6000-6999 | mx_kc_gl: 7000-7999",
+          "status": "已确立"
+        },
+        {
+          "id": "D-89",
+          "date": "2025-10-26",
+          "title": "已锁定模块禁止擅自修改",
+          "severity": "P1",
+          "protection": "标记为PROTECTED的代码块，修改前必须用户确认",
+          "status": "已确立"
+        },
+        {
+          "id": "D-87",
+          "date": "2025-10-26",
+          "title": "测试用户核心功能锁定",
+          "severity": "P1",
+          "user": "13917895758",
+          "features": "字数减半 + 最少2个专家 + 默认选中2个角色",
+          "status": "已锁定"
+        },
+        {
+          "id": "D-84",
+          "date": "2025-10-26",
+          "title": "字数减半功能",
+          "severity": "P1",
+          "implementation": "测试用户200字，标准用户400字",
+          "status": "已实现"
+        },
+        {
+          "id": "D-76",
+          "date": "历史决策",
+          "title": "最少2个专家",
+          "severity": "P1",
+          "implementation": "测试用户2个，标准用户8个",
+          "status": "已实现"
+        }
+      ]
+    },
+    "规范制定": {
+      "count": 12,
+      "decisions": [
+        {
+          "id": "D-102-GLOBAL",
+          "date": "2025-10-29",
+          "title": "批处理规范（CLAUDE.md Rule 12）",
+          "severity": "P0",
+          "rule": "禁用 > nul，强制使用 2>CON 或 PowerShell Out-Null",
+          "enforcement": "Git pre-commit hook自动检查",
+          "status": "全局部署",
+          "pattern": "灾难→标准"
+        },
+        {
+          "id": "D-109",
+          "date": "2025-10-31",
+          "title": "LTP系统恢复完成",
+          "severity": "P0",
+          "steps": "NUL文件清除 + OneDrive清理 + Windows Search永久禁用",
+          "status": "已完成"
+        },
+        {
+          "id": "NIGHT-AUTH-PROTOCOL",
+          "date": "2025-10-10",
+          "title": "Night-Auth无间断工作协议",
+          "severity": "P0",
+          "commitments": "仅使用已授权工具 + 禁止Unix命令 + 遇阻跳过记录",
+          "status": "已确立",
+          "pattern": "Night-Auth自主执行"
+        },
+        {
+          "id": "D-NIGHT-AUTH-1104",
+          "date": "2025-11-04",
+          "title": "V57.20-V57.22核心Bug修复",
+          "severity": "P0",
+          "fixes": "导航条显示 + 专家语音切断 + 文字速度UI",
+          "status": "已完成"
+        },
+        {
+          "id": "AUTO-COMPACT",
+          "date": "历史决策",
+          "title": "Auto-Compact最佳实践",
+          "severity": "P1",
+          "rules": "progress.md归档阈值80条 + 保留30条 + Token节省60-80%",
+          "status": "已确立"
+        },
+        {
+          "id": "INCREMENTAL-FUSION",
+          "date": "历史决策",
+          "title": "增量融合原则",
+          "severity": "P0",
+          "principle": "CLAUDE.md与progress.md为核心文件，更新遵循增量融合（不大幅减少行数）",
+          "status": "已确立"
+        },
+        {
+          "id": "D-115",
+          "date": "2025-11-01",
+          "title": "深度分析方法论框架",
+          "severity": "P1",
+          "doc": "Universal_DeepDive_Methodology_Framework_v1.0.md",
+          "content": "8大标准步骤 + 4大分析维度 + 5个标准模板 + 质量评估清单",
+          "status": "已创建"
+        },
+        {
+          "id": "AUTO-CHATLOG",
+          "date": "历史决策",
+          "title": "自动对话记录机制",
+          "severity": "P1",
+          "trigger": "Token阈值触发，防止上下文压缩丢失",
+          "status": "已确立"
+        },
+        {
+          "id": "D-DECISION-3LAYER",
+          "date": "历史决策",
+          "title": "三层决策落实标准模板",
+          "severity": "P0",
+          "template": "DECISION_3LAYER_TEMPLATE.md（完整版） + DECISION_QUICKREF.md（快速参考）",
+          "status": "已创建"
+        },
+        {
+          "id": "D-MODULE-CONTRACTS",
+          "date": "历史决策",
+          "title": "模块契约规范",
+          "severity": "P1",
+          "doc": "MODULE_CONTRACTS.md",
+          "status": "已创建"
+        },
+        {
+          "id": "D-CODE-QUALITY",
+          "date": "历史决策",
+          "title": "代码质量扫描规范",
+          "severity": "P1",
+          "doc": "CODE_QUALITY_SCAN_D66.md",
+          "status": "已创建"
+        },
+        {
+          "id": "D-RCCM-FRAMEWORK",
+          "date": "历史决策",
+          "title": "RCCM根因分析框架",
+          "severity": "P0",
+          "trigger": "` !RCCM` 或 `RCCM!`",
+          "workflow": "问题识别 → 根因分析 → 短期对策 → 长期对策 → 方案选择",
+          "status": "已确立",
+          "pattern": "RCCM框架"
+        }
+      ]
+    }
+  }
+}

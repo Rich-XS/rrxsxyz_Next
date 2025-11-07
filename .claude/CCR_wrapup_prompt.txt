@@ -1,0 +1,38 @@
+======
+CCR 团队 wrap-up 指示（请复制整段并在会话中粘贴）：
+
+1) 我已核验备份并允许观察阶段启动：D:/_100W/rrxsxyz_next_202510080530_auto-check.zip
+2) 当前观察目标：Task #021 (v9.2 测试) Round 1 输出（关注点：Token 统计与 Phase 指示器）
+3) 审计与证据收集：请确认你已收到下列记录并保留为审计证据：
+   - 交接文件：D:/_100W/rrxsxyz_next/handover_to_CCR.md
+   - 审计日志：D:/_100W/rrxsxyz_next/.claude/audit.log
+   - 备份文件：D:/_100W/rrxsxyz_next_202510080530_auto-check.zip
+4) 若 CCR 允许 agent 在 observation 后进行受控写入，请在本会话中单独发送以下精确授权短语（必须单独一条消息）：
+   同意写入（author: CCR，reason: task switch review）
+5) 若需要强制覆盖（仅限紧急场景），请单独发送：
+   同意强制替换（author: CCR，reason: emergency overwrite: <说明>）
+
+6) 结束语（请在 wrap-up 时粘贴）：我已确认以上备份与审计记录，允许观察阶段继续，暂不发出写入授权。
+
+======
+
+请逐条单独发送（每条消息“仅含”下面一行文本，且不得包含多余字符/标点/注释）：
+
+SW_OK
+ROLES_OK
+WRITE_SAFE_OK
+ROUND1_OK
+UI_OK
+TOKEN_OK
+RC_READY
+
+写入授权（单条消息，且仅此一行）
+同意写入（author: CCR，reason: task switch review）
+
+紧急替换（仅紧急且需说明，单条消息，替换 <说明> 为理由）
+同意强制替换（author: CCR，reason: emergency overwrite: <说明>）
+
+说明：
+- 每条短语请单条发送，消息中仅包含该短语本身（无引号、无多余空格、无其他说明）。
+- 在收到“同意写入（author: CCR，reason: task switch review）”这条单独消息后，agent 将执行受控写入流程并把审计回执（SNAPSHOT / SAFE_WRITE_DONE / BACKUP_DONE / LOCK_RELEASED）贴回会话。
+- 若仅希望启动观察（不写入），请单条发送：RC_READY

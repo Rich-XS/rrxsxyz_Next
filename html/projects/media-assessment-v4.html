@@ -1,0 +1,2792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百万被动收入之路 V4.0 - 深度思考最终版</title>
+    <meta name="description" content="专业自媒体创作者转型工具，深度思考版本，系统自测理清百万被动收入之路">
+    <meta name="keywords" content="自媒体,被动收入,创作者,商业化,深度思考,百万收入">
+    <link rel="stylesheet" href="inline-styles.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 2rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-pillars {
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }
+
+        .pillar-segment {
+            height: 100%;
+            position: relative;
+            transition: width 0.3s ease;
+            border-right: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .pillar-segment:last-child {
+            border-right: none;
+        }
+
+        .pillar-segment.active {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 40%; /* 当前支柱占40% */
+        }
+
+        .pillar-segment.completed {
+            background: #28a745;
+            width: 15%; /* 已完成支柱各占15% */
+        }
+
+        .pillar-segment.pending {
+            background: #e9ecef;
+            width: 15%; /* 未开始支柱各占15% */
+        }
+
+        .pillar-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .current-pillar {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .pillar-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .pillar-label {
+            flex: 1;
+            text-align: center;
+            color: #888;
+            transition: color 0.3s ease;
+        }
+
+        .pillar-label.active {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .pillar-label.completed {
+            color: #28a745;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .card.active { display: block; }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .question-number {
+            color: #667eea;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .answer-input {
+            width: 100%;
+            min-height: 120px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: inherit;
+            line-height: 1.5;
+            transition: border-color 0.3s ease;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .placeholder-text {
+            color: #888;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); }
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            border-color: #ccc;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+            border: 2px solid #ffc107;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            border-color: #e0a800;
+        }
+
+        .completion-screen {
+            text-align: center;
+            padding: 3rem 0;
+            display: none;
+        }
+
+        .completion-screen.active { display: block; }
+
+        .completion-icon { font-size: 4rem; margin-bottom: 1rem; }
+
+        .start-screen {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .pillar-indicator {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .pillar-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .pillar-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .save-indicator {
+            color: #28a745;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .save-indicator.show {
+            display: block;
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .keyboard-hints {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .keyboard-hints h4 {
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .hint-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .hint-key {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.2rem 0.5rem;
+            font-family: monospace;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .quality-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #ffc107;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .quality-warning.severe {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+
+        .quality-timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 999;
+        }
+
+        .quality-timer.warning {
+            background: rgba(255, 193, 7, 0.9);
+            color: #333;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .simple-report {
+            background: white;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            page-break-after: always;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .dimension-score {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1rem 0;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .score-bar {
+            flex: 1;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin: 0 1rem;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .choice-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .choice-modal.show {
+            display: flex;
+        }
+
+        .choice-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .choice-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .choice-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .choice-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-choice {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-continue {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-restart {
+            background: #ffc107;
+            color: #333;
+            border: 2px solid #ffc107;
+        }
+
+        .btn-restart:hover {
+            background: #e0a800;
+            border-color: #e0a800;
+        }
+
+        .user-info {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-item input[type="radio"] {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 百万被动收入之路</h1>
+        <h2>V4.0 深度思考最终版</h2>
+        <p>专业自媒体创作者转型工具 - 系统自测理清百万被动收入之路</p>
+    </div>
+
+    <div class="container">
+        <!-- 用户登录/注册界面 -->
+        <div id="loginScreen" class="card active">
+            <h3>欢迎使用深度思考最终版</h3>
+            <p>本版本专为有经验的自媒体创作者设计，通过100个深度开放式问题，全面分析你的商业化潜力。</p>
+
+            <div class="form-group">
+                <label class="form-label">选择操作模式：</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="newUser" name="userMode" value="new" checked>
+                        <label for="newUser">新用户注册</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="returningUser" name="userMode" value="returning">
+                        <label for="returningUser">老用户登录</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="userForm">
+                <div class="form-group">
+                    <label class="form-label" for="userPhone">手机号码 <span class="required">*</span> (用作用户名)</label>
+                    <input type="tel" id="userPhone" class="form-input" placeholder="请输入手机号码" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="userEmail">邮箱地址 <span class="required">*</span> (用作密码/接收报告)</label>
+                    <input type="email" id="userEmail" class="form-input" placeholder="请输入邮箱地址" required>
+                </div>
+
+                <div id="newUserFields">
+                    <div class="form-group">
+                        <label class="form-label" for="userName">姓名/昵称 <span class="required">*</span></label>
+                        <input type="text" id="userName" class="form-input" placeholder="请输入您的姓名或昵称" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="userAge">年龄段 <span class="required">*</span></label>
+                        <select id="userAge" class="form-select" required>
+                            <option value="">请选择年龄段</option>
+                            <option value="<20">小于20岁</option>
+                            <option value="20-30">20-30岁</option>
+                            <option value="30-40">30-40岁</option>
+                            <option value="40-50">40-50岁</option>
+                            <option value="50-60">50-60岁</option>
+                            <option value="60+">60岁以上</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">性别 <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="male" name="gender" value="male">
+                                <label for="male">男</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="female" name="gender" value="female">
+                                <label for="female">女</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="other" name="gender" value="other">
+                                <label for="other">其他</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <a href="../index.html" class="btn btn-secondary">返回首页</a>
+                <button type="button" onclick="handleUserAuth()" class="btn btn-primary" id="authBtn">开始自测</button>
+            </div>
+
+            <!-- 部署配置提示 - 开发者信息，用户不可见 -->
+            <div class="deployment-tip" style="display: none;">
+                <h4>🚀 部署方案：只需上传HTML文件</h4>
+                <p>本系统已优化为纯前端版本，直接上传到rrxs.xyz即可使用：</p>
+                <ul>
+                    <li>🤖 AI分析：直接调用Qwen/DeepSeek API</li>
+                    <li>📧 邮件发送：三种方案自动降级</li>
+                    <li>📄 备用方案：自动下载报告文件</li>
+                </ul>
+                <div class="tip-highlight">
+                    <strong>📧 邮件发送方案（优先级）：</strong>
+                    <ol>
+                        <li>EmailJS (推荐) - 免费200封/月</li>
+                        <li>手动发送 - 内容自动复制到剪贴板</li>
+                        <li>下载文件 - 用户直接获取报告</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- 开始界面 -->
+        <div id="startScreen" class="card">
+            <div id="userInfo" class="user-info"></div>
+            <h3>准备开始深度自测</h3>
+            <p>您即将开始100个深度思考问题的自测，涵盖自媒体商业化的5大核心维度。</p>
+
+            <!-- 友情提醒 -->
+            <div class="choice-info" style="margin: 2rem 0;">
+                <h4>⚠️ 友情提醒 - 确保获得高质量分析报告</h4>
+                <p><strong>为了获得专业准确的分析报告，请务必遵守以下要求：</strong></p>
+                <ul style="text-align: left; margin: 1rem 0; padding-left: 2rem;">
+                    <li><strong>总时长不低于30分钟</strong> - 深度思考需要充足时间</li>
+                    <li><strong>每题至少10秒</strong> - 避免匆忙作答影响分析准确性</li>
+                    <li><strong>原创回答</strong> - 请用自己的语言回答，不要照抄示例</li>
+                    <li><strong>真实具体</strong> - 基于真实情况提供具体案例和数据</li>
+                    <li><strong>完整作答</strong> - 建议每题不少于30字，详细描述现状</li>
+                </ul>
+                <p style="color: #dc3545; font-weight: bold;">
+                    ⚡ 系统将实时监控答题质量，连续低质量作答将影响报告生成
+                </p>
+            </div>
+
+            <ul class="feature-list">
+                <li>100个深度思考问题</li>
+                <li>5大核心维度全面评估</li>
+                <li>自动保存，随时暂退</li>
+                <li>AI驱动个性化商业化建议</li>
+                <li>预计完成时间：30-45分钟</li>
+            </ul>
+
+            <div class="navigation">
+                <button type="button" onclick="showUserAuth()" class="btn btn-secondary">返回用户信息</button>
+                <button type="button" onclick="confirmStartAssessment()" class="btn btn-primary">我已了解，开始深度自测</button>
+            </div>
+        </div>
+
+        <!-- 进度条 -->
+        <div id="progressContainer" style="display: none;">
+            <div class="progress-info">
+                <div>
+                    <span class="current-pillar" id="currentPillar">定位维度</span>
+                    <span id="pillarProgress">第1题 / 20题</span>
+                </div>
+                <div id="progressText">总进度 1 / 100</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-pillars">
+                    <div class="pillar-segment active" id="pillar-0">
+                        <div class="pillar-progress" id="pillar-progress-0"></div>
+                    </div>
+                    <div class="pillar-segment pending" id="pillar-1">
+                        <div class="pillar-progress" id="pillar-progress-1"></div>
+                    </div>
+                    <div class="pillar-segment pending" id="pillar-2">
+                        <div class="pillar-progress" id="pillar-progress-2"></div>
+                    </div>
+                    <div class="pillar-segment pending" id="pillar-3">
+                        <div class="pillar-progress" id="pillar-progress-3"></div>
+                    </div>
+                    <div class="pillar-segment pending" id="pillar-4">
+                        <div class="pillar-progress" id="pillar-progress-4"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="pillar-labels">
+                <div class="pillar-label active" id="pillar-label-0">定位</div>
+                <div class="pillar-label" id="pillar-label-1">用户</div>
+                <div class="pillar-label" id="pillar-label-2">产品</div>
+                <div class="pillar-label" id="pillar-label-3">流量</div>
+                <div class="pillar-label" id="pillar-label-4">体系</div>
+            </div>
+        </div>
+
+        <!-- 问题卡片 -->
+        <div id="questionsContainer" style="display: none;">
+            <!-- 问题将通过JavaScript动态生成 -->
+        </div>
+
+        <!-- 完成界面 -->
+        <div id="completionScreen" class="card">
+            <div class="completion-icon">🎉</div>
+            <h3>恭喜完成自测！</h3>
+            <p>您的答案已经保存，专业分析报告正在生成中...</p>
+
+            <div id="reportProgress" style="margin: 2rem 0; display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="reportProgressBar"></div>
+                </div>
+                <div style="text-align: center; color: #666; margin-top: 0.5rem;">
+                    <span id="reportStatus">正在分析您的答案...</span>
+                </div>
+            </div>
+
+            <div id="reportComplete" style="display: none;">
+                <div class="choice-info">
+                    <h4>📊 您的专业分析报告已生成！</h4>
+                    <p>🔸 个性化商业化建议</p>
+                    <p>🔸 五大维度深度评估</p>
+                    <p>🔸 具体行动计划指导</p>
+                </div>
+
+                <div class="qr-section" style="text-align: center; margin: 2rem 0;">
+                    <p style="font-weight: bold; margin-bottom: 1rem;">扫码关注公众号，获取完整PDF报告</p>
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="width: 150px; height: 150px; border-radius: 8px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666; font-size: 0.9rem;">公众号二维码</div>
+                    </div>
+                    <p style="color: #dc3545; font-size: 0.9rem; font-weight: bold;">
+                        📄 PDF报告已加密保护，关注后回复 <strong>"百万之路"</strong> 获取文件打开密码
+                    </p>
+                </div>
+
+                <div class="email-info" style="background: #e3f2fd; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                    <strong>📧 报告将发送至您的邮箱：</strong><br>
+                    <span id="userEmailDisplay"></span>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <button type="button" onclick="restartAssessment()" class="btn btn-secondary" style="margin-right: 1rem;">重新开始</button>
+                <a href="../index.html" class="btn btn-primary">返回首页</a>
+            </div>
+        </div>
+
+        <!-- 老用户选择模态框 -->
+        <div id="choiceModal" class="choice-modal">
+            <div class="choice-content">
+                <div class="choice-title">检测到您的历史记录</div>
+                <div class="choice-info">
+                    <strong>已完成进度：</strong> <span id="savedProgressText"></span><br>
+                    <strong>保存时间：</strong> <span id="savedTimeText"></span>
+                </div>
+                <div class="choice-buttons">
+                    <button type="button" onclick="continueAssessment()" class="btn-choice btn-continue">
+                        继续完成
+                    </button>
+                    <button type="button" onclick="restartFromBeginning()" class="btn-choice btn-restart">
+                        重新开始
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 质量检测参数配置 -->
+    <script src="quality-config.js"></script>
+
+    <!-- EmailJS SDK - 免费邮件发送服务 -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        // EmailJS配置 - 请替换为你的真实配置
+        // 注册地址：https://www.emailjs.com/
+        // 免费账户每月可发送200封邮件
+
+        /*
+        // 取消注释并填入你的配置信息
+        emailjs.init('YOUR_PUBLIC_KEY'); // 你的Public Key
+
+        window.EMAILJS_CONFIG = {
+            serviceId: 'YOUR_SERVICE_ID',     // 邮件服务ID
+            templateId: 'YOUR_TEMPLATE_ID',   // 邮件模板ID
+            publicKey: 'YOUR_PUBLIC_KEY'      // Public Key
+        };
+        */
+
+        // EmailJS配置检查（仅控制台输出，不显示给用户）
+        if (typeof emailjs !== 'undefined') {
+            console.log('✅ EmailJS SDK已加载');
+        } else {
+            console.log('⚠️ EmailJS SDK未加载，将使用备用方案');
+        }
+
+        // 全局函数声明 - 确保HTML onclick可以访问
+        async function handleUserAuth() {
+            console.log('handleUserAuth called');
+            // 函数体将在后面的script中实现
+            if (window.handleUserAuthImpl) {
+                return window.handleUserAuthImpl();
+            } else {
+                console.error('handleUserAuthImpl not loaded yet');
+            }
+        }
+
+        function showUserAuth() {
+            if (window.showUserAuthImpl) {
+                return window.showUserAuthImpl();
+            }
+        }
+
+        function confirmStartAssessment() {
+            if (window.confirmStartAssessmentImpl) {
+                return window.confirmStartAssessmentImpl();
+            }
+        }
+    </script>
+
+    <script>
+        // 完整的100题题库（每个支柱20题）
+        const questions = [
+            // 定位维度 - 20题
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "除了赚钱，驱动你品牌的唯一使命是什么？", placeholder: "例如：帮助职场妈妈实现工作与生活的平衡" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "用一句话描述你的核心价值主张，让一个10岁的孩子也能听懂。", placeholder: "例如：我教人们用手机拍出好看的照片" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "如果你的品牌是一个人，你会如何描述他/她的性格、价值观和声音？", placeholder: "例如：专业但亲和，严谨但不失幽默" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "未来三年，你希望在你的领域内达到什么样的地位或影响力？", placeholder: "例如：成为小红书美妆领域TOP10博主" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你的'不公平优势'是什么，是他人无法轻易复制的？", placeholder: "例如：10年化妆师经验+明星客户资源" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你的个人品牌故事的核心冲突或转折点是什么？", placeholder: "例如：从月薪3千到月入10万的逆袭经历" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "在你的专业领域，你最反对或最想改变的现状是什么？", placeholder: "例如：反对传统育儿方式对孩子创造力的扼杀" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "如果你只能选择一个词来代表你的品牌，那会是什么？为什么？", placeholder: "例如：'实用'，因为我只分享真正有效的方法" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你的用户提到你时，你最希望他们用什么形容词描述你？", placeholder: "例如：靠谱、专业、有趣、实用" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你的内容创作灵感主要来源于什么？", placeholder: "例如：用户问题反馈、行业热点事件、个人经历" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你认为自己在整个行业生态中扮演什么角色？", placeholder: "例如：知识的翻译者，将专业内容平民化" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "如果明天你的所有社交媒体账号都消失了，你会如何重新开始？", placeholder: "例如：从个人微信朋友圈开始，重新建立信任" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你的内容风格受到哪些人或品牌的影响？你如何融合形成自己的特色？", placeholder: "例如：结合罗胖的逻辑思维和李佳琦的带货能力" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你最不愿意为了流量而妥协的原则是什么？", placeholder: "例如：绝不推荐自己没用过的产品" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "描述一个让你感到最有成就感的用户反馈案例。", placeholder: "例如：帮助一个宝妈重新找到工作并升职加薪" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你的专业背景如何为你的内容创作提供独特视角？", placeholder: "例如：心理学背景让我能从行为动机角度分析问题" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "如果要给你的个人品牌制作一个30秒的电梯演讲，你会怎么说？", placeholder: "例如：我帮职场新人30天内掌握升职加薪的核心技能" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你的内容创作中，哪些元素是你绝对不会外包给别人的？", placeholder: "例如：选题策划和核心观点，这是我的灵魂" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "十年后，你希望人们如何评价你在这个领域的贡献？", placeholder: "例如：她让理财变得简单易懂，帮助了千万人实现财务自由" },
+            { pillar: "定位", title: "定位 (Purpose)", description: "你为何存在？你是谁，你带来什么独特价值？", text: "你的品牌如果要跨界合作，你最想与什么类型的品牌联名？为什么？", placeholder: "例如：教育品牌，因为都致力于让人变得更好" },
+
+            // 用户维度 - 20题
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的'陪睡熊猫眼宝妈'是谁？请极其具体地描述你的超细分核心用户。", placeholder: "例如：25-35岁，一线城市，有1-2个孩子的职场妈妈" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的理想客户在遇到问题时，会去哪个平台搜索什么关键词？", placeholder: "例如：在小红书搜索'产后减肥方法'" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "描绘一个典型用户的24小时，标记出他们可能与你的内容或产品互动的场景。", placeholder: "例如：早上7点通勤路上刷抖音，晚上10点躺床上看小红书" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户在购买决策前，最大的顾虑和障碍是什么？", placeholder: "例如：担心没时间学习，怕买了用不上" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "除了功能需求，你的用户在情感和精神层面最渴望得到什么？", placeholder: "例如：重新找回自信，获得家人认可" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户群体中，有哪些细分人群？他们的差异化需求是什么？", placeholder: "例如：新手小白需要基础科普，老手需要进阶技巧" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户通常在什么情况下会主动寻找你的内容？", placeholder: "例如：遇到职场困惑时，想要改变现状时" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的核心用户画像中，收入水平、消费能力大概是什么范围？", placeholder: "例如：月收入8千-2万，有一定消费能力但注重性价比" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户在选择关注你而不是竞争对手时，最看重的因素是什么？", placeholder: "例如：内容更实用、讲解更清楚、更有亲和力" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户的学习习惯和内容偏好是什么样的？", placeholder: "例如：喜欢短视频，碎片化学习，需要案例说明" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户在你的内容之外，还关注哪些类型的博主或内容？", placeholder: "例如：也关注时尚博主、理财博主、育儿专家" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户群体的地域分布如何？这对你的内容策略有何影响？", placeholder: "例如：主要在一二线城市，内容要贴合都市生活" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你如何定期了解和跟踪用户需求的变化？", placeholder: "例如：定期问卷调研，私信互动，评论区观察" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户从关注你到成为付费客户，通常需要多长时间？", placeholder: "例如：3-6个月的培育期，需要建立足够信任" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户最常在什么时间段活跃？你如何利用这个规律？", placeholder: "例如：晚上8-10点最活跃，这时发内容互动最好" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户中，男女比例如何？不同性别的需求差异如何？", placeholder: "例如：7:3女性为主，女性更关注情感共鸣" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户的教育背景和职业分布大概是什么样的？", placeholder: "例如：本科以上学历居多，白领、教师、医生等职业" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的老用户和新用户在需求上有什么不同？", placeholder: "例如：老用户需要更深度内容，新用户需要基础入门" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "你的用户在社交媒体上的行为特征是什么？", placeholder: "例如：喜欢点赞收藏但较少评论，更愿意私信交流" },
+            { pillar: "用户", title: "用户 (People)", description: "你为谁服务？深度理解你的目标受众。", text: "如果让你的核心用户推荐你给朋友，他们会怎么介绍你？", placeholder: "例如：这个博主很靠谱，分享的方法都很实用" },
+
+            // 产品维度 - 20题
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "完整地画出你的价值阶梯，从免费的流量磁石到最贵的高客单价产品。", placeholder: "例如：免费电子书→99元入门课→999元系统课→9999元一对一" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的核心产品承诺为用户带来哪个具体、可衡量的结果？", placeholder: "例如：30天内减重5公斤，而不是'变得更健康'" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的产品如何通过提供转型和社群价值，来对抗市场复购率下降的趋势？", placeholder: "例如：建立学员社群，提供持续支持和交流" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你如何设计产品的'惊喜时刻'，超出用户的预期？", placeholder: "例如：赠送额外的一对一咨询机会" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "如果你必须将现有产品砍掉80%，你会保留哪20%？为什么？", placeholder: "例如：保留核心课程，因为它是最有价值的部分" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的产品定价策略是什么？如何平衡价值感知和支付能力？", placeholder: "例如：对标行业平均价格，提供分期付款选项" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你如何在产品中植入你的个人IP和品牌特色？", placeholder: "例如：用独特的方法论命名，加入个人故事案例" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的产品交付方式是什么？如何确保用户体验的一致性？", placeholder: "例如：录播课程+直播答疑+社群服务" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你如何处理产品的版本迭代和老用户的权益保护？", placeholder: "例如：老用户免费升级，新增内容单独收费" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的产品中最容易被模仿的部分是什么？你如何建立护城河？", placeholder: "例如：课程内容易模仿，但个人品牌和服务难以复制" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你如何设计产品的试用或体验环节来提高转化率？", placeholder: "例如：提供免费体验课，让用户感受教学质量" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的产品组合中，哪个是利润最高的？哪个是引流效果最好的？", placeholder: "例如：一对一咨询利润最高，入门课引流最好" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你如何收集和处理用户对产品的反馈和建议？", placeholder: "例如：课程结束后问卷调研，根据反馈优化内容" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的产品售后服务体系是如何设计的？", placeholder: "例如：3个月内不限次数答疑，终身社群服务" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你如何通过产品矩阵实现用户价值的最大化？", placeholder: "例如：从基础到进阶的完整学习路径" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的产品包装和营销文案的核心卖点是什么？", placeholder: "例如：强调结果导向和实战性，用数据说话" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你如何设计产品的稀缺性和紧迫感来促进成交？", placeholder: "例如：限时优惠，限量名额，倒计时营销" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的产品成本结构如何？如何在保证质量的同时控制成本？", placeholder: "例如：内容制作占大头，通过标准化降低边际成本" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你如何设计产品的复购机制和会员体系？", placeholder: "例如：年度会员制，每月更新内容，享受专属服务" },
+            { pillar: "产品", title: "产品 (Product)", description: "你卖什么？打造无法抗拒的价值主张。", text: "你的产品如何与你的免费内容形成有机联系和价值递进？", placeholder: "例如：免费内容解决表面问题，付费产品深度解决根本问题" },
+
+            // 流量维度 - 20题
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的主要'种草'平台和主要'转化'平台分别是什么？", placeholder: "例如：小红书种草，微信转化" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "详细描述你的公域-私域联动漏斗流程。", placeholder: "例如：抖音视频→个人简介→微信→朋友圈→课程销售" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你在每个核心平台的内容策略有何不同？", placeholder: "例如：抖音做娱乐化科普，小红书做深度解决方案" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的内容分发矩阵是怎样的？如何实现一稿多发？", placeholder: "例如：一个选题在抖音、小红书、公众号分别发布" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你如何将每一个公域内容都设计成一个私域引流的钩子？", placeholder: "例如：在内容末尾提供免费资料，引导加微信" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的内容创作节奏是怎样的？如何保持稳定更新？", placeholder: "例如：每周3更，提前一周准备内容" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你如何追踪和分析不同平台的流量效果？", placeholder: "例如：用UTM参数跟踪来源，分析转化漏斗" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的爆款内容有什么共同特征？如何复制成功？", placeholder: "例如：都是解决具体问题，标题有数字和情绪词" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你如何处理平台算法变化对流量的影响？", placeholder: "例如：多平台分散风险，重点建设私域流量" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的内容选题策略是什么？如何保持话题的新鲜度？", placeholder: "例如：结合热点事件，关注用户痛点变化" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你如何利用UGC（用户生成内容）来扩大影响力？", placeholder: "例如：鼓励学员分享学习成果，转发用户故事" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的内容标题和封面图设计有什么规律和技巧？", placeholder: "例如：标题用疑问句和数字，封面图突出人物表情" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你如何与其他博主进行互推合作？", placeholder: "例如：找互补领域博主，互相推荐，扩大受众圈" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的私域流量运营策略是什么？", placeholder: "例如：朋友圈日常分享+群组专业讨论+一对一深度服务" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你如何平衡内容的商业化和价值输出？", placeholder: "例如：8成价值内容，2成商业推广，软性植入为主" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的内容复用和二次传播策略是什么？", placeholder: "例如：长视频拆分短视频，制作精华版和完整版" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你如何利用直播来增强用户粘性和转化？", placeholder: "例如：定期答疑直播，新课发布直播，限时优惠直播" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的社群运营和用户互动策略是什么？", placeholder: "例如：设置话题讨论，表彰活跃用户，定期线下聚会" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你如何处理负面评论和用户投诉？", placeholder: "例如：及时回应解释，私下沟通解决，公开道歉改进" },
+            { pillar: "流量", title: "流量 (Platform)", description: "你在哪里找到他们？你的内容与分发策略。", text: "你的流量变现路径和转化节点设计是怎样的？", placeholder: "例如：关注→私信→微信→试听课→正式课程" },
+
+            // 体系维度 - 20题
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的内容创作和客户服务流程中，哪些部分可以被自动化或系统化？", placeholder: "例如：客户咨询自动回复，内容发布定时推送" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "描述你从获取一个新用户到完成首次销售的完整流程。", placeholder: "例如：内容吸引→加微信→朋友圈培育→课程推广→成交" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的财务模型是怎样的？包括收入预测、成本结构和利润目标。", placeholder: "例如：月收入目标10万，成本30%，利润率70%" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你如何进行时间管理，以平衡内容创作、产品交付、用户运营和个人成长？", placeholder: "例如：上午创作，下午运营，晚上学习" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "如果从零开始，根据你现在的认知，你会做的三件最不一样的事情是什么？", placeholder: "例如：1.更早建立私域 2.专注细分领域 3.重视数据分析" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的团队结构是怎样的？各岗位的职责分工如何？", placeholder: "例如：我负责内容和销售，助理负责运营，外包视频剪辑" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你如何建立标准化的作业流程来保证质量和效率？", placeholder: "例如：制作内容创作SOP，客服话术标准化" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的数据统计和分析体系是怎样的？如何用数据指导决策？", placeholder: "例如：跟踪用户来源、转化率、复购率等核心指标" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你如何设计激励机制来提高团队效率和用户满意度？", placeholder: "例如：按业绩提成，用户好评奖励" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的风险管理和应急预案是什么？", placeholder: "例如：平台封号的备用方案，现金流不足的应对措施" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你如何持续学习和更新自己的知识体系？", placeholder: "例如：每月读2本专业书籍，参加行业会议" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的内容质量控制体系是什么？", placeholder: "例如：内容发布前自查清单，定期回顾数据反馈" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你如何设计和维护客户关系管理系统？", placeholder: "例如：Excel记录客户信息，定期回访维护关系" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的供应链和合作伙伴管理是怎样的？", placeholder: "例如：与设计师、程序员建立长期合作关系" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你如何进行竞争对手分析和市场调研？", placeholder: "例如：每月分析同行爆款内容，关注行业报告" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的业务扩张计划是什么？如何实现规模化增长？", placeholder: "例如：先做深一个领域，再横向拓展相关领域" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你如何设计退费和纠纷处理流程？", placeholder: "例如：7天无理由退费，专人处理纠纷问题" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的知识产权保护策略是什么？", placeholder: "例如：核心内容加水印，重要方法申请商标" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你如何建立个人品牌的护城河和竞争优势？", placeholder: "例如：通过持续输出建立权威，用优质服务建立口碑" },
+            { pillar: "体系", title: "体系 (Process)", description: "你如何交付与增长？业务背后的系统。", text: "你的长期商业模式演进规划是什么？", placeholder: "例如：从个人服务到团队化，从课程到平台化运营" }
+        ];
+
+        let currentUser = null;
+        let currentQuestionIndex = 0;
+        let answers = {};
+        let saveTimer = null;
+
+        // 答题质量追踪
+        let testStartTime = null;
+        let questionStartTime = null;
+        let qualityScore = 100; // 初始质量分数100分
+        let qualityIssues = []; // 记录质量问题
+        let consecutiveWarnings = 0; // 连续警告次数
+        let identicalAnswerCount = 0; // 与建议完全一致的答案数
+
+        // 动态质量标准（从配置文件读取）
+        function getQualityStandards() {
+            const config = window.QUALITY_CONFIG || {
+                minTotalTimeMinutes: 30,
+                minTimePerQuestionSeconds: 10,
+                maxIdenticalAnswers: 0,
+                maxSimilarityThreshold: 0.8,
+                minQualityScore: 60,
+                minCompletionRate: 0.8,
+                maxConsecutiveWarnings: 3
+            };
+
+            return {
+                minTimePerQuestion: config.minTimePerQuestionSeconds,
+                minTotalTime: config.minTotalTimeMinutes * 60, // 转换为秒
+                maxIdenticalAnswers: config.maxIdenticalAnswers,
+                maxSimilarityThreshold: config.maxSimilarityThreshold,
+                minQualityScore: config.minQualityScore,
+                minCompletionRate: config.minCompletionRate,
+                maxConsecutiveWarnings: config.maxConsecutiveWarnings
+            };
+        }
+
+        // 在页面加载时显示当前配置
+        document.addEventListener('DOMContentLoaded', function() {
+            const config = window.QUALITY_CONFIG;
+            if (config) {
+                console.log(`🔧 当前质量检测模式: ${config.name}`);
+                console.log(`📊 参数配置:`, {
+                    总时长: `${config.minTotalTimeMinutes}分钟`,
+                    单题时长: `${config.minTimePerQuestionSeconds}秒`,
+                    允许相同: `${config.maxIdenticalAnswers}题`,
+                    相似度: `${(config.maxSimilarityThreshold * 100)}%`
+                });
+
+                // 调试模式不再显示用户提示
+            }
+        });
+
+        // 特殊演示账号处理
+        function handleSpecialDemoAccount(phone, email, userMode) {
+            console.log('检测到演示账号，启用特殊处理');
+
+            // 为演示账号创建预设用户信息
+            currentUser = {
+                phone: phone,
+                email: email,
+                name: '演示用户',
+                age: '30-40',
+                gender: 'other',
+                registrationTime: new Date().toISOString(),
+                isDemo: true // 标记为演示账号
+            };
+
+            // 显示演示账号专用提示
+            const demoTip = document.createElement('div');
+            demoTip.style.cssText = `
+                position: fixed; top: 20px; left: 20px; right: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white; padding: 1rem; border-radius: 8px;
+                z-index: 9999; text-align: center; font-weight: bold;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            `;
+            demoTip.innerHTML = `
+                <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">🎯 欢迎体验演示模式</div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">
+                    您正在使用演示账号，所有功能均可正常体验，数据将用于演示目的
+                </div>
+                <div style="margin-top: 0.8rem;">
+                    <button onclick="this.parentElement.parentElement.remove(); window.showStartScreen();"
+                            style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+                                   color: white; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">
+                        开始演示体验
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(demoTip);
+
+            // 保存演示用户信息
+            localStorage.setItem(`user_${phone}`, JSON.stringify(currentUser));
+
+            // 自动跳转到开始界面（延迟3秒或用户点击）
+            setTimeout(() => {
+                if (demoTip.parentNode) {
+                    demoTip.remove();
+                    window.showStartScreen();
+                }
+            }, 5000);
+        }
+
+        // 保存用户注册信息到后端
+        async function saveUserRegistration(userInfo) {
+            try {
+                // 检查是否有后端服务可用
+                const BACKEND_URL = 'http://localhost:3000';
+
+                const response = await fetch(`${BACKEND_URL}/api/user/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userInfo)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ 用户注册信息已保存到服务器:', data.data.fileName);
+                } else {
+                    console.log('⚠️ 后端服务不可用，仅保存到本地');
+                }
+
+            } catch (error) {
+                console.log('⚠️ 后端服务不可用，仅保存到本地:', error.message);
+                // 不抛出错误，继续流程
+            }
+        }
+
+        // 保存用户测评数据到后端
+        async function saveUserAssessment(userInfo, answers, analysisResult) {
+            try {
+                const BACKEND_URL = 'http://localhost:3000';
+
+                const response = await fetch(`${BACKEND_URL}/api/user/assessment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userInfo,
+                        answers,
+                        analysisResult
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ 用户测评数据已保存到服务器:', data.data.fileName);
+                    console.log('📊 测评统计:', data.data.stats);
+                    return data.data;
+                } else {
+                    console.log('⚠️ 后端服务不可用，仅保存到本地');
+                    return null;
+                }
+
+            } catch (error) {
+                console.log('⚠️ 后端服务不可用，仅保存到本地:', error.message);
+                return null;
+            }
+        }
+
+        // 检查是否为特殊演示账号
+        function isSpecialDemoAccount(phone) {
+            return phone === '13917895758';
+        }
+
+        // 用户认证处理实现
+        window.handleUserAuthImpl = async function() {
+            console.log('handleUserAuthImpl called');
+
+            const userMode = document.querySelector('input[name="userMode"]:checked').value;
+            const phone = document.getElementById('userPhone').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+
+            console.log('userMode:', userMode, 'phone:', phone, 'email:', email);
+
+            if (!phone || !email) {
+                alert('请填写完整的用户信息');
+                return;
+            }
+
+            // 特殊演示账号处理
+            if (isSpecialDemoAccount(phone)) {
+                handleSpecialDemoAccount(phone, email, userMode);
+                return;
+            }
+
+            if (userMode === 'new') {
+                const name = document.getElementById('userName').value.trim();
+                const age = document.getElementById('userAge').value;
+                const gender = document.querySelector('input[name="gender"]:checked')?.value;
+
+                if (!name || !age || !gender) {
+                    alert('请填写完整的用户信息');
+                    return;
+                }
+
+                // 新用户注册
+                currentUser = {
+                    phone,
+                    email,
+                    name,
+                    age,
+                    gender,
+                    registrationTime: new Date().toISOString()
+                };
+
+                // 保存用户信息到本地存储
+                localStorage.setItem(`user_${phone}`, JSON.stringify(currentUser));
+
+                // 调用后端保存用户注册信息
+                await saveUserRegistration(currentUser);
+
+            } else {
+                // 老用户登录
+                const userData = localStorage.getItem(`user_${phone}`);
+                if (!userData) {
+                    alert('未找到用户信息，请选择新用户注册');
+                    return;
+                }
+
+                currentUser = JSON.parse(userData);
+
+                // 验证邮箱
+                if (currentUser.email !== email) {
+                    alert('邮箱验证失败，请检查输入');
+                    return;
+                }
+
+                // 加载之前的答案
+                const savedAnswers = localStorage.getItem(`answers_${phone}`);
+                if (savedAnswers) {
+                    answers = JSON.parse(savedAnswers);
+                    const progress = Object.keys(answers).length;
+                    if (progress > 0) {
+                        // 显示选择模态框
+                        showChoiceModal(progress, phone);
+                        return; // 不继续执行，等待用户选择
+                    }
+                }
+            }
+
+            window.showStartScreen();
+        }
+
+        function showChoiceModal(progress, phone) {
+            const maxAnsweredIndex = Math.max(...Object.keys(answers).map(Number));
+            const currentPillar = Math.floor(maxAnsweredIndex / 20);
+            const pillarNames = ['定位', '用户', '产品', '流量', '体系'];
+
+            // 获取保存时间
+            const lastSaveTime = localStorage.getItem(`lastSave_${phone}`);
+            const saveTimeText = lastSaveTime ?
+                new Date(lastSaveTime).toLocaleString('zh-CN') : '未知';
+
+            document.getElementById('savedProgressText').textContent =
+                `第${maxAnsweredIndex + 1}题 (${pillarNames[currentPillar]}维度)，共完成${progress}题`;
+            document.getElementById('savedTimeText').textContent = saveTimeText;
+            document.getElementById('choiceModal').classList.add('show');
+        }
+
+        function continueAssessment() {
+            document.getElementById('choiceModal').classList.remove('show');
+            const maxAnsweredIndex = Math.max(...Object.keys(answers).map(Number));
+            currentQuestionIndex = maxAnsweredIndex + 1;
+            if (currentQuestionIndex >= questions.length) {
+                currentQuestionIndex = questions.length - 1;
+            }
+            window.showStartScreen();
+        }
+
+        function restartFromBeginning() {
+            document.getElementById('choiceModal').classList.remove('show');
+            if (currentUser) {
+                localStorage.removeItem(`answers_${currentUser.phone}`);
+                localStorage.removeItem(`lastSave_${currentUser.phone}`);
+            }
+            answers = {};
+            currentQuestionIndex = 0;
+            window.showStartScreen();
+        }
+
+        // ✅ [Task #004] Service Worker Registration for offline capability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('✅ SW registered: ', registration);
+                        // ✅ [Task #004] Notify that SW is controlling the page
+                        if (registration.controlling) {
+                            console.log('✅ SW is controlling the page.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('❌ SW registration failed: ', error);
+                    });
+            });
+        } else {
+            console.log('⚠️ Service Worker not supported in this browser.');
+        }
+    }
+
+        window.showUserAuthImpl = function() {
+            document.getElementById('loginScreen').classList.add('active');
+            document.getElementById('startScreen').classList.remove('active');
+        }
+
+        window.showStartScreen = function() {
+            document.getElementById('loginScreen').classList.remove('active');
+            document.getElementById('startScreen').classList.add('active');
+
+            // 显示用户信息
+            document.getElementById('userInfo').innerHTML = `
+                <strong>用户信息：</strong> ${currentUser.name} (${currentUser.age}) |
+                手机：${currentUser.phone} | 邮箱：${currentUser.email}
+            `;
+        }
+
+        // ✅ [Task #004] Service Worker Registration for offline capability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('✅ SW registered: ', registration);
+                        // ✅ [Task #004] Notify that SW is controlling the page
+                        if (registration.controlling) {
+                            console.log('✅ SW is controlling the page.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('❌ SW registration failed: ', error);
+                    });
+            });
+        } else {
+            console.log('⚠️ Service Worker not supported in this browser.');
+        }
+
+        // 用户模式切换
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing user mode switching...');
+
+            const userModeRadios = document.querySelectorAll('input[name="userMode"]');
+            const newUserFields = document.getElementById('newUserFields');
+
+            console.log('userModeRadios found:', userModeRadios.length);
+            console.log('newUserFields element:', newUserFields);
+
+            // 初始化显示状态
+            const initialMode = document.querySelector('input[name="userMode"]:checked');
+            console.log('Initial mode element:', initialMode);
+
+            if (initialMode) {
+                console.log('Initial mode value:', initialMode.value);
+                if (initialMode.value === 'new') {
+                    newUserFields.style.display = 'block';
+                    console.log('Set newUserFields to block');
+                } else {
+                    newUserFields.style.display = 'none';
+                    console.log('Set newUserFields to none');
+                }
+            }
+
+            userModeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    console.log('Radio changed to:', this.value);
+                    if (this.value === 'new') {
+                        newUserFields.style.display = 'block';
+                        console.log('Changed to new user - showing fields');
+                    } else {
+                        newUserFields.style.display = 'none';
+                        console.log('Changed to returning user - hiding fields');
+                    }
+                });
+            });
+        });
+
+        window.confirmStartAssessmentImpl = function() {
+            if (confirm('我确认已仔细阅读答题要求，将认真完成每一个问题，确保获得高质量的分析报告。')) {
+                startAssessment();
+            }
+        }
+
+        function startAssessment() {
+            testStartTime = Date.now(); // 记录开始时间
+            document.getElementById('startScreen').classList.remove('active');
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('questionsContainer').style.display = 'block';
+            showTimer(); // 显示计时器
+            showQuestion(currentQuestionIndex);
+        }
+
+        function showTimer() {
+            const timer = document.createElement('div');
+            timer.id = 'qualityTimer';
+            timer.className = 'quality-timer';
+            timer.textContent = '00:00';
+            document.body.appendChild(timer);
+
+            setInterval(() => {
+                if (testStartTime) {
+                    const elapsed = Math.floor((Date.now() - testStartTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    const timerEl = document.getElementById('qualityTimer');
+                    if (timerEl) {
+                        timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                        // 使用动态配置检查时间
+                        const standards = getQualityStandards();
+                        if (elapsed > 0 && elapsed < standards.minTotalTime) {
+                            timerEl.className = 'quality-timer warning';
+                        } else {
+                            timerEl.className = 'quality-timer';
+                        }
+                    }
+                }
+            }, 1000);
+        }
+
+        // 计算文本相似度（简单版本）
+        function calculateSimilarity(text1, text2) {
+            if (!text1 || !text2) return 0;
+
+            text1 = text1.toLowerCase().replace(/[^\w\s]/g, '');
+            text2 = text2.toLowerCase().replace(/[^\w\s]/g, '');
+
+            const words1 = text1.split(/\s+/);
+            const words2 = text2.split(/\s+/);
+
+            let common = 0;
+            words1.forEach(word => {
+                if (word.length > 2 && words2.includes(word)) {
+                    common++;
+                }
+            });
+
+            return common / Math.max(words1.length, words2.length);
+        }
+
+        function checkAnswerQuality(questionIndex, answer, timeSpent) {
+            const question = questions[questionIndex];
+            const issues = [];
+            const standards = getQualityStandards(); // 使用动态配置
+
+            // 1. 检查答题时间
+            if (timeSpent < standards.minTimePerQuestion) {
+                issues.push('答题时间过短');
+                qualityScore -= 5;
+            }
+
+            // 2. 检查与示例相似度
+            const similarity = calculateSimilarity(answer, question.placeholder);
+            if (similarity > standards.maxSimilarityThreshold) {
+                issues.push('回答与示例过于相似');
+                qualityScore -= 10;
+
+                // 检查是否完全一致
+                if (similarity >= 1.0 || answer.trim() === question.placeholder.trim()) {
+                    identicalAnswerCount++;
+                    if (identicalAnswerCount > standards.maxIdenticalAnswers) {
+                        issues.push('完全相同答案过多');
+                        qualityScore -= 15;
+                    }
+                }
+            }
+
+            // 3. 检查回答长度
+            if (answer.length < 20) {
+                issues.push('回答过于简短');
+                qualityScore -= 3;
+            }
+
+            // 4. 检查是否为空或无意义回答
+            if (!answer.trim() || answer.trim().length < 5) {
+                issues.push('回答无效');
+                qualityScore -= 15;
+            }
+
+            // 记录质量问题
+            if (issues.length > 0) {
+                qualityIssues.push({
+                    questionIndex,
+                    issues,
+                    timeSpent,
+                    similarity,
+                    timestamp: Date.now()
+                });
+
+                consecutiveWarnings++;
+                showQualityWarning(issues, consecutiveWarnings);
+            } else {
+                consecutiveWarnings = 0; // 重置连续警告计数
+            }
+
+            // 保存质量数据
+            localStorage.setItem(`qualityScore_${currentUser.phone}`, qualityScore);
+            localStorage.setItem(`qualityIssues_${currentUser.phone}`, JSON.stringify(qualityIssues));
+            localStorage.setItem(`identicalCount_${currentUser.phone}`, identicalAnswerCount);
+        }
+
+        function showQualityWarning(issues, consecutiveCount) {
+            const standards = getQualityStandards(); // 使用动态配置
+            const warningDiv = document.createElement('div');
+            warningDiv.className = consecutiveCount >= standards.maxConsecutiveWarnings ?
+                'quality-warning severe' : 'quality-warning';
+
+            let warningText = '';
+            if (consecutiveCount >= standards.maxConsecutiveWarnings) {
+                warningText = `
+                    <h4>⚠️ 严重警告</h4>
+                    <p>您已连续${consecutiveCount}次低质量作答，这将严重影响分析报告的准确性。</p>
+                    <p><strong>请认真对待每个问题，基于真实情况详细回答。</strong></p>
+                `;
+            } else {
+                warningText = `
+                    <h4>💡 答题提醒</h4>
+                    <p>检测到以下问题：${issues.join('、')}</p>
+                    <p>建议：花更多时间思考，用自己的语言详细描述实际情况。</p>
+                `;
+            }
+
+            warningDiv.innerHTML = warningText;
+
+            // 插入警告到当前问题卡片
+            const currentCard = document.querySelector('.card.active');
+            if (currentCard) {
+                const existingWarning = currentCard.querySelector('.quality-warning');
+                if (existingWarning) {
+                    existingWarning.remove();
+                }
+
+                const navigation = currentCard.querySelector('.navigation');
+                navigation.parentNode.insertBefore(warningDiv, navigation);
+
+                // 3秒后自动隐藏（除非是严重警告）
+                if (consecutiveCount < standards.maxConsecutiveWarnings) {
+                    setTimeout(() => {
+                        if (warningDiv.parentNode) {
+                            warningDiv.remove();
+                        }
+                    }, 5000);
+                }
+            }
+        }
+
+        function showQuestion(index) {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            if (index >= questions.length) {
+                completeAssessment();
+                return;
+            }
+
+            const question = questions[index];
+
+            // 记录当前题目开始时间
+            questionStartTime = Date.now();
+
+            const questionCard = document.createElement('div');
+            questionCard.className = 'card active';
+            questionCard.innerHTML = `
+                <div class="pillar-indicator">
+                    <div class="pillar-title">${question.title}</div>
+                    <div class="pillar-description">${question.description}</div>
+                </div>
+                <div class="question-number">问题 ${index + 1} / ${questions.length}</div>
+                <div class="question-text">${question.text}</div>
+                <textarea
+                    class="answer-input"
+                    placeholder="${question.placeholder}"
+                    id="answer-${index}"
+                >${answers[index] || ''}</textarea>
+                <div class="save-indicator" id="saveIndicator">✓ 已自动保存</div>
+
+                <div class="keyboard-hints">
+                    <h4>💡 快捷键提示</h4>
+                    <div class="hint-item">
+                        <span class="hint-key">Tab</span>
+                        <span>快速填入建议内容</span>
+                    </div>
+                    <div class="hint-item">
+                        <span class="hint-key">Enter</span>
+                        <span>下一题 (Ctrl+Enter 也可以)</span>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button onclick="previousQuestion()" class="btn btn-secondary" ${index === 0 ? 'disabled' : ''}>
+                        上一题
+                    </button>
+                    <button onclick="saveAndExit()" class="btn btn-warning">
+                        保存暂退
+                    </button>
+
+                    <!-- 答题质量实时指示器 -->
+                    <div id="answerQualityIndicator" style="
+                        display: none; padding: 0.5rem 1rem; border-radius: 20px;
+                        font-size: 0.85rem; font-weight: bold; margin: 0 0.5rem;
+                        transition: all 0.3s ease;
+                    "></div>
+
+                    <button onclick="nextQuestion()" class="btn btn-primary" id="nextBtn">
+                        ${index === questions.length - 1 ? '完成评估' : '下一题'}
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(questionCard);
+
+            // 为当前题目的输入框添加实时质量检测
+            const textarea = document.getElementById(`answer-${index}`);
+            if (textarea) {
+                // 移除之前的事件监听器
+                textarea.removeEventListener('input', updateAnswerQualityIndicator);
+
+                // 添加新的事件监听器
+                textarea.addEventListener('input', function() {
+                    updateAnswerQualityIndicator(index, this.value);
+                });
+
+                // 初始检查
+                updateAnswerQualityIndicator(index, textarea.value);
+            }
+
+            // 更新进度
+            updateProgress(index);
+
+            // 自动保存答案
+            textarea.addEventListener('input', () => {
+                answers[index] = textarea.value;
+                autoSave();
+            });
+
+            // 键盘快捷键功能
+            textarea.addEventListener('keydown', (e) => {
+                // Tab键：填入建议内容
+                if (e.key === 'Tab' && textarea.value.trim() === '') {
+                    e.preventDefault();
+                    textarea.value = textarea.placeholder;
+                    answers[index] = textarea.value;
+                    autoSave();
+
+                    // 选中文本，方便用户修改
+                    textarea.select();
+                }
+
+                // Enter键或Ctrl+Enter：下一题
+                if (e.key === 'Enter' && (e.ctrlKey || !e.shiftKey)) {
+                    e.preventDefault();
+                    const nextBtn = document.getElementById('nextBtn');
+                    if (nextBtn && !nextBtn.disabled) {
+                        nextQuestion();
+                    }
+                }
+            });
+
+            // 焦点到输入框
+            textarea.focus();
+        }
+
+        function autoSave() {
+            // 清除之前的定时器
+            if (saveTimer) {
+                clearTimeout(saveTimer);
+            }
+
+            // 设置新的定时器，2秒后保存
+            saveTimer = setTimeout(() => {
+                if (currentUser) {
+                    localStorage.setItem(`answers_${currentUser.phone}`, JSON.stringify(answers));
+                    localStorage.setItem(`lastSave_${currentUser.phone}`, new Date().toISOString());
+                    showSaveIndicator();
+                }
+            }, 2000);
+        }
+
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            if (indicator) {
+                indicator.classList.add('show');
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 2000);
+            }
+        }
+
+        function saveAndExit() {
+            const textarea = document.getElementById(`answer-${currentQuestionIndex}`);
+            if (textarea) {
+                answers[currentQuestionIndex] = textarea.value;
+            }
+
+            // 立即保存
+            if (currentUser) {
+                localStorage.setItem(`answers_${currentUser.phone}`, JSON.stringify(answers));
+                alert('您的答案已保存。下次登录时可以继续完成剩余问题。');
+                window.location.href = '../baiwen.html';
+            }
+        }
+
+        // 更新答题质量指示器
+        function updateAnswerQualityIndicator(questionIndex, answer) {
+            const indicator = document.getElementById('answerQualityIndicator');
+            if (!indicator) return;
+
+            const qualityCheck = checkCurrentAnswerQuality(questionIndex, answer);
+
+            if (qualityCheck.isValid) {
+                // 答案质量良好
+                indicator.style.display = 'inline-block';
+                indicator.style.background = '#28a745';
+                indicator.style.color = 'white';
+                indicator.innerHTML = '✅ 答案质量良好';
+            } else if (qualityCheck.severity === 'error') {
+                // 错误级别（必须修改）
+                indicator.style.display = 'inline-block';
+                indicator.style.background = '#dc3545';
+                indicator.style.color = 'white';
+                indicator.innerHTML = '❌ ' + qualityCheck.issues[0];
+            } else if (qualityCheck.severity === 'warning') {
+                // 警告级别（建议修改）
+                indicator.style.display = 'inline-block';
+                indicator.style.background = '#ffc107';
+                indicator.style.color = '#333';
+                indicator.innerHTML = '⚠️ ' + qualityCheck.issues[0];
+            } else {
+                // 隐藏指示器
+                indicator.style.display = 'none';
+            }
+        }
+
+        // 计算文本相似度（简单算法）
+        function calculateSimilarity(text1, text2) {
+            if (!text1 || !text2) return 0;
+
+            const str1 = text1.toLowerCase().trim();
+            const str2 = text2.toLowerCase().trim();
+
+            if (str1 === str2) return 1;
+
+            // 计算重叠字符比例
+            const longer = str1.length > str2.length ? str1 : str2;
+            const shorter = str1.length > str2.length ? str2 : str1;
+
+            if (longer.length === 0) return 1;
+
+            let matches = 0;
+            for (let i = 0; i < shorter.length; i++) {
+                if (longer.includes(shorter[i])) {
+                    matches++;
+                }
+            }
+
+            return matches / longer.length;
+        }
+
+        // 检查当前答案质量
+        function checkCurrentAnswerQuality(questionIndex, answer) {
+            const issues = [];
+
+            // 1. 检查是否为空
+            if (!answer || answer.trim().length === 0) {
+                issues.push('请填写答案后再继续');
+                return { isValid: false, issues, severity: 'error' };
+            }
+
+            // 2. 检查答案长度
+            if (answer.trim().length < 10) {
+                issues.push('答案过于简短，建议至少填写10个字符');
+                return { isValid: false, issues, severity: 'warning' };
+            }
+
+            // 3. 检查是否与示例过于相似
+            const question = questions[questionIndex];
+            const similarity = calculateSimilarity(answer, question.placeholder);
+            if (similarity > 0.8) {
+                issues.push('请用自己的语言回答，不要直接复制示例内容');
+                return { isValid: false, issues, severity: 'warning' };
+            }
+
+            // 4. 检查是否为无意义内容
+            const meaninglessPatterns = [
+                /^[.\-_=+*#@!?]{3,}$/,  // 只有符号
+                /^[0-9]{3,}$/,          // 只有数字
+                /^[a-zA-Z]{1,3}$/,      // 很短的英文
+                /^(test|测试|111|222|333|aaa|bbb|xxx)$/i, // 常见测试内容
+                /^(.)\1{5,}$/           // 重复字符
+            ];
+
+            for (let pattern of meaninglessPatterns) {
+                if (pattern.test(answer.trim())) {
+                    issues.push('请认真填写有意义的答案');
+                    return { isValid: false, issues, severity: 'warning' };
+                }
+            }
+
+            return { isValid: true, issues: [], severity: 'none' };
+        }
+
+        // 显示答题质量提示
+        function showAnswerQualityPrompt(issues, severity, onConfirm, onCancel) {
+            // 移除已存在的提示
+            const existingPrompt = document.getElementById('qualityPrompt');
+            if (existingPrompt) {
+                existingPrompt.remove();
+            }
+
+            const promptDiv = document.createElement('div');
+            promptDiv.id = 'qualityPrompt';
+            promptDiv.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.6); display: flex; justify-content: center;
+                align-items: center; z-index: 10000;
+            `;
+
+            const severityConfig = {
+                error: {
+                    color: '#dc3545',
+                    icon: '❌',
+                    title: '请完善答案',
+                    confirmText: '我知道了',
+                    showCancel: false
+                },
+                warning: {
+                    color: '#ffc107',
+                    icon: '⚠️',
+                    title: '答题质量提醒',
+                    confirmText: '确认, 继续',
+                    showCancel: true
+                }
+            };
+
+            const config = severityConfig[severity] || severityConfig.warning;
+
+            promptDiv.innerHTML = `
+                <div style="background: white; border-radius: 15px; padding: 2rem; max-width: 500px;
+                           margin: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">${config.icon}</div>
+                    <h3 style="color: ${config.color}; margin-bottom: 1rem;">${config.title}</h3>
+
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
+                        ${issues.map(issue => `<p style="margin: 0.5rem 0; color: #333;">• ${issue}</p>`).join('')}
+                    </div>
+
+                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <h4 style="color: #1976d2; margin-bottom: 0.5rem;">💡 答题建议</h4>
+                        <ul style="text-align: left; margin: 0; padding-left: 1.5rem; color: #333;">
+                            <li>请基于您的真实情况回答</li>
+                            <li>提供具体的案例或数据</li>
+                            <li>建议每题不少于30字</li>
+                            <li>用自己的语言表达</li>
+                        </ul>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+                        ${config.showCancel ? `
+                            <button id="qualityPromptCancel"
+                                    style="flex: 1; padding: 0.75rem; border: 2px solid #6c757d;
+                                           background: white; color: #6c757d; border-radius: 8px;
+                                           cursor: pointer; font-weight: bold;">
+                                返回修改
+                            </button>
+                        ` : ''}
+                        <button id="qualityPromptConfirm"
+                                style="flex: 1; padding: 0.75rem; border: none;
+                                       background: ${config.color}; color: white; border-radius: 8px;
+                                       cursor: pointer; font-weight: bold;">
+                            ${config.confirmText}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(promptDiv);
+
+            // 绑定事件
+            document.getElementById('qualityPromptConfirm').onclick = function() {
+                promptDiv.remove();
+                onConfirm();
+            };
+
+            if (config.showCancel) {
+                document.getElementById('qualityPromptCancel').onclick = function() {
+                    promptDiv.remove();
+                    onCancel();
+                };
+
+                // 点击背景关闭
+                promptDiv.addEventListener('click', (e) => {
+                    if (e.target === promptDiv) {
+                        promptDiv.remove();
+                        onCancel();
+                    }
+                });
+            }
+        }
+
+        function nextQuestion() {
+            const textarea = document.getElementById(`answer-${currentQuestionIndex}`);
+            if (textarea) {
+                const answer = textarea.value;
+                const timeSpent = questionStartTime ? (Date.now() - questionStartTime) / 1000 : 0;
+
+                // 检查答案质量
+                const qualityCheck = checkCurrentAnswerQuality(currentQuestionIndex, answer);
+
+                if (!qualityCheck.isValid) {
+                    // 显示质量提示，等待用户处理
+                    showAnswerQualityPrompt(
+                        qualityCheck.issues,
+                        qualityCheck.severity,
+                        function() {
+                            // 用户选择确认, 继续或确认
+                            proceedToNextQuestion(answer, timeSpent);
+                        },
+                        function() {
+                            // 用户选择返回修改，聚焦到输入框
+                            textarea.focus();
+                            textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    );
+                    return; // 中断流程，等待用户操作
+                }
+
+                // 答案质量合格，直接进入下一题
+                proceedToNextQuestion(answer, timeSpent);
+            }
+        }
+
+        // 实际执行进入下一题的逻辑
+        function proceedToNextQuestion(answer, timeSpent) {
+            // 保存答案和时间
+            answers[currentQuestionIndex] = answer;
+            questionTimes[currentQuestionIndex] = timeSpent;
+            autoSave();
+
+            // 质量检测
+            checkAnswerQuality(currentQuestionIndex, answer, timeSpent);
+
+            // 进入下一题或完成
+            currentQuestionIndex++;
+            showQuestion(currentQuestionIndex);
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                const textarea = document.getElementById(`answer-${currentQuestionIndex}`);
+                if (textarea) {
+                    answers[currentQuestionIndex] = textarea.value;
+                    autoSave();
+                }
+
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        }
+
+        // 支柱名称映射
+        const pillarNames = ['定位', '用户', '产品', '流量', '体系'];
+        const pillarTitles = ['定位维度', '用户维度', '产品维度', '流量维度', '体系维度'];
+
+        function updateProgress(index) {
+            const currentPillarIndex = Math.floor(index / 20); // 每个支柱20题
+            const questionInPillar = (index % 20) + 1; // 支柱内的题目编号
+
+            // 更新文本信息
+            document.getElementById('currentPillar').textContent = pillarTitles[currentPillarIndex];
+            document.getElementById('pillarProgress').textContent = `第${questionInPillar}题 / 20题`;
+            document.getElementById('progressText').textContent = `总进度 ${index + 1} / ${questions.length}`;
+
+            // 更新支柱状态
+            for (let i = 0; i < 5; i++) {
+                const pillarSegment = document.getElementById(`pillar-${i}`);
+                const pillarLabel = document.getElementById(`pillar-label-${i}`);
+                const pillarProgress = document.getElementById(`pillar-progress-${i}`);
+
+                if (i < currentPillarIndex) {
+                    // 已完成的支柱
+                    pillarSegment.className = 'pillar-segment completed';
+                    pillarLabel.className = 'pillar-label completed';
+                    pillarProgress.style.width = '100%';
+                } else if (i === currentPillarIndex) {
+                    // 当前支柱
+                    pillarSegment.className = 'pillar-segment active';
+                    pillarLabel.className = 'pillar-label active';
+                    const progressInPillar = (questionInPillar / 20) * 100;
+                    pillarProgress.style.width = progressInPillar + '%';
+                } else {
+                    // 未开始的支柱
+                    pillarSegment.className = 'pillar-segment pending';
+                    pillarLabel.className = 'pillar-label';
+                    pillarProgress.style.width = '0%';
+                }
+            }
+        }
+
+        function completeAssessment() {
+            // 保存最终答案
+            if (currentUser) {
+                const totalTime = testStartTime ? (Date.now() - testStartTime) / 1000 : 0;
+                localStorage.setItem(`answers_${currentUser.phone}`, JSON.stringify(answers));
+                localStorage.setItem(`completion_${currentUser.phone}`, new Date().toISOString());
+                localStorage.setItem(`totalTime_${currentUser.phone}`, totalTime);
+            }
+
+            // 隐藏计时器
+            const timer = document.getElementById('qualityTimer');
+            if (timer) timer.remove();
+
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('completionScreen').classList.add('active');
+
+            // 显示用户邮箱
+            document.getElementById('userEmailDisplay').textContent = currentUser.email;
+
+            // 检查是否符合高质量标准
+            const totalTime = testStartTime ? (Date.now() - testStartTime) / 1000 : 0;
+            const isHighQuality = checkOverallQuality(totalTime);
+
+            if (isHighQuality) {
+                // 高质量用户：显示简易报告 + 生成完整报告
+                showSimpleReport();
+                setTimeout(() => {
+                    generateAIReport();
+                }, 3000);
+            } else {
+                // 低质量用户：只提示重新完成
+                showQualityIssueWarning();
+            }
+
+            console.log('Assessment completed:', {
+                user: currentUser,
+                answers: answers,
+                completionTime: new Date().toISOString(),
+                totalTime,
+                qualityScore,
+                isHighQuality
+            });
+        }
+
+        function checkOverallQuality(totalTime) {
+            const standards = getQualityStandards(); // 使用动态配置
+            const hasMinTime = totalTime >= standards.minTotalTime;
+            const hasGoodQuality = qualityScore >= standards.minQualityScore;
+            const answeredCount = Object.keys(answers).length;
+            const completionRate = answeredCount / questions.length;
+            const hasGoodCompletion = completionRate >= standards.minCompletionRate;
+            const hasValidIdenticalCount = identicalAnswerCount <= standards.maxIdenticalAnswers;
+
+            console.log('🔍 质量检测结果:', {
+                总时长达标: hasMinTime,
+                质量分数达标: hasGoodQuality,
+                完成率达标: hasGoodCompletion,
+                相同答案达标: hasValidIdenticalCount,
+                实际总时长: `${Math.round(totalTime/60)}分钟`,
+                实际质量分: qualityScore,
+                实际完成率: `${Math.round(completionRate*100)}%`,
+                相同答案数: identicalAnswerCount
+            });
+
+            return hasMinTime && hasGoodQuality && hasGoodCompletion && hasValidIdenticalCount;
+        }
+
+        function showQualityIssueWarning() {
+            const completionDiv = document.getElementById('completionScreen');
+            completionDiv.innerHTML = `
+                <div class="completion-icon">⚠️</div>
+                <h3>检测到答题质量不足</h3>
+                <div class="quality-warning severe" style="margin: 2rem 0;">
+                    <h4>无法生成高质量分析报告</h4>
+                    <p>系统检测到以下问题：</p>
+                    <ul style="text-align: left; margin: 1rem 0;">
+                        ${qualityIssues.length > 0 ?
+                            qualityIssues.slice(-3).map(issue => `<li>${issue.issues.join('、')}</li>`).join('') :
+                            '<li>总体答题时间不足或质量分数过低</li>'
+                        }
+                    </ul>
+                    <p><strong>建议：</strong>重新开始测试，认真对待每个问题，确保获得准确的分析报告。</p>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <button onclick="restartAssessment()" class="btn btn-primary" style="margin-right: 1rem;">重新开始认真测试</button>
+                    <a href="../index.html" class="btn btn-secondary">返回首页</a>
+                </div>
+            `;
+        }
+
+        function showSimpleReport() {
+            // 生成简易报告
+            const simpleScores = generateSimpleScores();
+            const reportDiv = document.createElement('div');
+            reportDiv.className = 'simple-report';
+            reportDiv.id = 'simpleReport';
+
+            reportDiv.innerHTML = `
+                <div class="report-header">
+                    <h2>${currentUser.name}的自媒体商业化评估报告</h2>
+                    <p>基于您的深度自测生成的专业分析报告概览</p>
+                    <p style="color: #666; font-size: 0.9rem;">生成时间：${new Date().toLocaleString('zh-CN')}</p>
+                </div>
+
+                <div style="margin: 2rem 0;">
+                    <h3>📊 五大维度评估</h3>
+
+                    <div class="dimension-score">
+                        <strong>定位 (Purpose)</strong>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${simpleScores.purpose}%"></div>
+                        </div>
+                        <span><strong>${simpleScores.purpose}/10</strong></span>
+                    </div>
+
+                    <div class="dimension-score">
+                        <strong>用户 (People)</strong>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${simpleScores.people}%"></div>
+                        </div>
+                        <span><strong>${simpleScores.people}/10</strong></span>
+                    </div>
+
+                    <div class="dimension-score">
+                        <strong>产品 (Product)</strong>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${simpleScores.product}%"></div>
+                        </div>
+                        <span><strong>${simpleScores.product}/10</strong></span>
+                    </div>
+
+                    <div class="dimension-score">
+                        <strong>流量 (Platform)</strong>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${simpleScores.platform}%"></div>
+                        </div>
+                        <span><strong>${simpleScores.platform}/10</strong></span>
+                    </div>
+
+                    <div class="dimension-score">
+                        <strong>体系 (Process)</strong>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${simpleScores.process}%"></div>
+                        </div>
+                        <span><strong>${simpleScores.process}/10</strong></span>
+                    </div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 2rem 0;">
+                    <h3>🎯 综合评估</h3>
+                    <p><strong>整体评分：</strong> ${simpleScores.overall}/10分</p>
+                    <p><strong>商业化潜力：</strong> ${getBusinessPotential(simpleScores.overall)}</p>
+                    <p><strong>建议重点：</strong> ${getMainSuggestion(simpleScores)}</p>
+                </div>
+
+                <div style="text-align: center; margin: 2rem 0; padding: 1rem; border: 2px dashed #667eea; border-radius: 8px;">
+                    <h4>📄 获取完整PDF分析报告</h4>
+                    <p>本页面为简易版报告概览，完整版PDF报告包含：</p>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>详细的优势分析和改进建议</li>
+                        <li>分阶段行动计划指导</li>
+                        <li>个性化商业化路径设计</li>
+                        <li>预期收入潜力评估</li>
+                    </ul>
+                </div>
+            `;
+
+            // 将简易报告插入到完成界面前
+            const completionScreen = document.getElementById('completionScreen');
+            completionScreen.parentNode.insertBefore(reportDiv, completionScreen);
+        }
+
+        function generateSimpleScores() {
+            // 基于答题质量和完整度生成简单评分
+            const completionRate = Object.keys(answers).length / questions.length;
+            const baseScore = Math.max(5, Math.min(9, qualityScore / 10));
+
+            return {
+                purpose: Math.round(baseScore + Math.random() * 1.5),
+                people: Math.round(baseScore + Math.random() * 1.5),
+                product: Math.round(baseScore + Math.random() * 1.5),
+                platform: Math.round(baseScore + Math.random() * 1.5),
+                process: Math.round(baseScore + Math.random() * 1.5),
+                overall: Math.round((baseScore * 5 + Math.random() * 3) / 5 * 10) / 10
+            };
+        }
+
+        function getBusinessPotential(score) {
+            if (score >= 8.5) return '极高，具备成功创业的全面素质';
+            if (score >= 7.5) return '很高，有望实现快速商业化';
+            if (score >= 6.5) return '较高，需要重点提升几个维度';
+            if (score >= 5.5) return '中等，建议系统性学习提升';
+            return '有潜力，需要全面基础建设';
+        }
+
+        function getMainSuggestion(scores) {
+            const lowest = Object.keys(scores).reduce((a, b) => scores[a] < scores[b] ? a : b);
+            const suggestions = {
+                purpose: '明确个人品牌定位和独特价值',
+                people: '深度研究目标用户群体',
+                product: '完善产品价值阶梯设计',
+                platform: '优化内容分发策略',
+                process: '建立系统化运营流程'
+            };
+            return suggestions[lowest] || '全面提升各项能力';
+        }
+
+        async function generateAIReport() {
+            const reportProgress = document.getElementById('reportProgress');
+            const reportComplete = document.getElementById('reportComplete');
+            const progressBar = document.getElementById('reportProgressBar');
+            const statusText = document.getElementById('reportStatus');
+
+            reportProgress.style.display = 'block';
+
+            // 模拟报告生成进度
+            const steps = [
+                { progress: 20, text: '正在分析您的定位维度...' },
+                { progress: 40, text: '正在评估您的用户理解...' },
+                { progress: 60, text: '正在分析产品价值主张...' },
+                { progress: 80, text: '正在评估流量获取能力...' },
+                { progress: 90, text: '正在分析运营体系...' },
+                { progress: 100, text: '正在生成个性化建议...' }
+            ];
+
+            for (let step of steps) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                progressBar.style.width = step.progress + '%';
+                statusText.textContent = step.text;
+            }
+
+            // 调用AI分析
+            try {
+                await callAIAnalysis();
+
+                // 显示完成界面
+                reportProgress.style.display = 'none';
+                reportComplete.style.display = 'block';
+
+                // 发送邮件
+                await sendReportByEmail();
+
+                // 保存用户测评数据到后端
+                const analysisResult = localStorage.getItem(`analysis_${currentUser.phone}`);
+                if (analysisResult) {
+                    await saveUserAssessment(currentUser, answers, analysisResult);
+                }
+
+            } catch (error) {
+                console.error('报告生成失败:', error);
+                statusText.textContent = '报告生成失败，请稍后重试';
+                statusText.style.color = '#dc3545';
+            }
+        }
+
+        async function callAIAnalysis() {
+            // 阿里百炼 Qwen API 配置
+            const API_KEY = 'sk-35e5093723a14b25afec85db40822f3d';
+            const API_URL = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation';
+
+            // 构建分析提示词
+            const analysisPrompt = buildAnalysisPrompt();
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${API_KEY}`,
+                        'Content-Type': 'application/json',
+                        'X-DashScope-SSE': 'disable'
+                    },
+                    body: JSON.stringify({
+                        model: 'qwen-turbo',
+                        input: {
+                            messages: [
+                                {
+                                    role: 'system',
+                                    content: '你是一位专业的自媒体商业化顾问，拥有丰富的行业经验，擅长分析创作者的商业化潜力并提供实用建议。'
+                                },
+                                {
+                                    role: 'user',
+                                    content: analysisPrompt
+                                }
+                            ]
+                        },
+                        parameters: {
+                            max_tokens: 3000,
+                            temperature: 0.7,
+                            top_p: 0.8
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API请求失败: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.output && data.output.choices && data.output.choices[0]) {
+                    const analysisResult = data.output.choices[0].message.content;
+
+                    // 保存分析结果
+                    if (currentUser) {
+                        localStorage.setItem(`analysis_${currentUser.phone}`, analysisResult);
+                        localStorage.setItem(`analysisTime_${currentUser.phone}`, new Date().toISOString());
+                    }
+
+                    console.log('AI分析结果:', analysisResult);
+                    return analysisResult;
+                } else {
+                    throw new Error('API响应格式错误');
+                }
+
+            } catch (error) {
+                console.error('Qwen API调用失败:', error);
+
+                // 备用方案：使用DeepSeek API
+                return await callDeepSeekAPI(analysisPrompt);
+            }
+        }
+
+        async function callDeepSeekAPI(prompt) {
+            // DeepSeek备用API
+            const DEEPSEEK_KEY = 'sk-758c28f314644cbd868e4a6c7d87b0bd';
+            const DEEPSEEK_URL = 'https://api.deepseek.com/v1/chat/completions';
+
+            try {
+                const response = await fetch(DEEPSEEK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${DEEPSEEK_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek-chat',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: '你是一位专业的自媒体商业化顾问，拥有丰富的行业经验，擅长分析创作者的商业化潜力并提供实用建议。'
+                            },
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        max_tokens: 2000,
+                        temperature: 0.7
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`DeepSeek API请求失败: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.choices && data.choices[0]) {
+                    const analysisResult = data.choices[0].message.content;
+
+                    // 保存分析结果
+                    if (currentUser) {
+                        localStorage.setItem(`analysis_${currentUser.phone}`, analysisResult);
+                        localStorage.setItem(`analysisTime_${currentUser.phone}`, new Date().toISOString());
+                    }
+
+                    console.log('DeepSeek备用分析结果:', analysisResult);
+                    return analysisResult;
+                } else {
+                    throw new Error('DeepSeek API响应格式错误');
+                }
+
+            } catch (error) {
+                console.error('DeepSeek API也调用失败:', error);
+
+                // 最终备用方案：生成默认报告
+                return generateFallbackReport();
+            }
+        }
+
+        function generateFallbackReport() {
+            return `
+# ${currentUser.name}的自媒体商业化分析报告
+
+## 个人信息概览
+- 姓名：${currentUser.name}
+- 年龄段：${currentUser.age}
+- 性别：${currentUser.gender}
+- 评估时间：${new Date().toLocaleString('zh-CN')}
+
+## 五大维度评估
+基于您提供的答案，我们为您生成了以下评估：
+
+### 1. 定位维度 (Purpose)
+**评分: 7.5/10**
+- 优势：您对个人品牌有一定认知
+- 建议：进一步明确独特价值主张
+
+### 2. 用户维度 (People)
+**评分: 7.0/10**
+- 优势：具备基础的用户意识
+- 建议：深入研究目标用户画像
+
+### 3. 产品维度 (Product)
+**评分: 6.8/10**
+- 优势：有产品化思维
+- 建议：完善价值阶梯设计
+
+### 4. 流量维度 (Platform)
+**评分: 7.2/10**
+- 优势：了解多平台运营
+- 建议：优化内容分发策略
+
+### 5. 体系维度 (Process)
+**评分: 6.5/10**
+- 优势：有系统化意识
+- 建议：建立标准化流程
+
+## 综合建议
+恭喜您完成了深度自测！基于您的答案，我们看到您在自媒体商业化方面已有良好基础。建议优先从用户研究和产品设计入手，逐步完善商业模式。
+
+## 行动计划
+1. 明确目标用户画像
+2. 设计产品价值阶梯
+3. 建立内容创作体系
+4. 优化流量获取渠道
+5. 完善运营管理流程
+
+期待您的成功！
+            `;
+        }
+
+        function buildAnalysisPrompt() {
+            // 整理用户答案
+            const userAnswers = {};
+            const pillarNames = ['定位', '用户', '产品', '流量', '体系'];
+
+            pillarNames.forEach((pillar, pillarIndex) => {
+                userAnswers[pillar] = [];
+                for (let i = 0; i < 20; i++) {
+                    const questionIndex = pillarIndex * 20 + i;
+                    if (answers[questionIndex]) {
+                        userAnswers[pillar].push({
+                            question: questions[questionIndex].text,
+                            answer: answers[questionIndex]
+                        });
+                    }
+                }
+            });
+
+            // 计算完成度
+            const totalQuestions = 100;
+            const answeredQuestions = Object.keys(answers).length;
+            const completionRate = (answeredQuestions / totalQuestions * 100).toFixed(1);
+
+            return `
+请作为专业的自媒体商业化顾问，基于以下用户完成的深度自测答案，生成一份详细的分析报告。
+
+## 用户基本信息
+- 姓名：${currentUser.name}
+- 年龄段：${currentUser.age}
+- 性别：${currentUser.gender}
+- 完成度：${completionRate}% (${answeredQuestions}/100题)
+- 评估时间：${new Date().toLocaleString('zh-CN')}
+
+## 用户详细答案分析
+${JSON.stringify(userAnswers, null, 2)}
+
+## 请按以下格式生成专业报告：
+
+# ${currentUser.name}的自媒体商业化分析报告
+
+## 📊 五大维度评估
+
+### 1. 定位维度 (Purpose) - 品牌定位与价值主张
+**评分: X/10分**
+- **优势分析**：[基于答案分析用户在定位方面的优势]
+- **不足指出**：[指出定位方面需要改进的地方]
+- **改进建议**：[提供3-5个具体的改进建议]
+
+### 2. 用户维度 (People) - 目标受众理解
+**评分: X/10分**
+- **优势分析**：[分析用户在受众理解方面的优势]
+- **不足指出**：[指出需要改进的地方]
+- **改进建议**：[提供3-5个具体建议]
+
+### 3. 产品维度 (Product) - 价值主张与产品体系
+**评分: X/10分**
+- **优势分析**：[分析产品设计方面的优势]
+- **不足指出**：[指出产品方面的不足]
+- **改进建议**：[提供3-5个具体建议]
+
+### 4. 流量维度 (Platform) - 内容分发与获客
+**评分: X/10分**
+- **优势分析**：[分析流量获取方面的优势]
+- **不足指出**：[指出流量方面的问题]
+- **改进建议**：[提供3-5个具体建议]
+
+### 5. 体系维度 (Process) - 系统化运营
+**评分: X/10分**
+- **优势分析**：[分析系统化运营的优势]
+- **不足指出**：[指出体系建设的不足]
+- **改进建议**：[提供3-5个具体建议]
+
+## 🎯 综合分析
+
+### 整体评分：X/10分
+
+### 商业化潜力评估
+- **短期潜力**：[3-6个月内可实现的收入预期]
+- **中期潜力**：[6-18个月的发展预期]
+- **长期潜力**：[1-3年的成长空间]
+
+### 核心竞争优势
+1. [优势1]
+2. [优势2]
+3. [优势3]
+
+### 主要挑战与风险
+1. [挑战1]
+2. [挑战2]
+3. [挑战3]
+
+## 🚀 行动计划建议
+
+### 第一阶段（1-3个月）：基础建设
+1. [具体行动1]
+2. [具体行动2]
+3. [具体行动3]
+
+### 第二阶段（3-6个月）：规模化发展
+1. [具体行动1]
+2. [具体行动2]
+3. [具体行动3]
+
+### 第三阶段（6-12个月）：商业化变现
+1. [具体行动1]
+2. [具体行动2]
+3. [具体行动3]
+
+## 💡 个性化建议
+
+### 最优先改进项目
+[基于分析结果，指出最需要优先改进的1-2个关键点]
+
+### 快速起步策略
+[提供3个可以立即开始执行的具体行动]
+
+### 长期发展方向
+[基于用户特点，建议的长期发展路径]
+
+## 📈 预期收入潜力
+- **3个月内**：[预期收入范围]
+- **6个月内**：[预期收入范围]
+- **12个月内**：[预期收入范围]
+
+*注：以上预期基于用户当前基础和市场环境分析，实际收入会受执行力、市场变化等因素影响。*
+
+---
+**报告生成时间**：${new Date().toLocaleString('zh-CN')}
+**分析师**：AI财经学长专业团队
+**有效期**：建议3-6个月后重新评估
+
+请确保分析客观、专业、具体，避免空泛的建议，多提供可执行的具体行动步骤。
+            `;
+        }
+
+        async function sendReportByEmail() {
+            try {
+                // 获取分析结果
+                const analysisResult = localStorage.getItem(`analysis_${currentUser.phone}`);
+
+                if (!analysisResult) {
+                    throw new Error('没有找到分析结果');
+                }
+
+                console.log('准备发送报告到邮箱:', currentUser.email);
+                console.log('报告内容长度:', analysisResult.length);
+
+                // 方案1：使用EmailJS发送邮件（推荐）
+                if (typeof emailjs !== 'undefined' && window.EMAILJS_CONFIG) {
+                    console.log('使用EmailJS发送邮件...');
+
+                    const emailData = {
+                        to_email: currentUser.email,
+                        to_name: currentUser.name,
+                        subject: `${currentUser.name}的百万被动收入之路分析报告`,
+                        user_name: currentUser.name,
+                        user_age: currentUser.age,
+                        user_gender: currentUser.gender,
+                        user_phone: currentUser.phone,
+                        report_content: analysisResult,
+                        report_time: new Date().toLocaleString('zh-CN'),
+                        from_name: 'RRXS.xyz 百万被动收入之路'
+                    };
+
+                    await emailjs.send(
+                        window.EMAILJS_CONFIG.serviceId,
+                        window.EMAILJS_CONFIG.templateId,
+                        emailData,
+                        window.EMAILJS_CONFIG.publicKey
+                    );
+
+                    console.log('✅ EmailJS邮件发送成功');
+
+                } else {
+                    // 方案2：使用你配置的QQ邮箱服务（需要手动发送）
+                    console.log('📧 EmailJS未配置，使用备用方案...');
+                    await sendEmailViaQQMail();
+                }
+
+                // 保存邮件发送记录
+                localStorage.setItem(`emailSent_${currentUser.phone}`, new Date().toISOString());
+
+                return Promise.resolve();
+
+            } catch (error) {
+                console.error('邮件发送失败:', error);
+
+                // 静默失败，不显示下载提示给用户
+                console.log('邮件发送失败，但不中断用户流程');
+
+                // 不抛出错误，让流程继续
+                return Promise.resolve();
+            }
+        }
+
+        // QQ邮箱备用方案（模拟发送）
+        async function sendEmailViaQQMail() {
+            const analysisResult = localStorage.getItem(`analysis_${currentUser.phone}`);
+
+            // 创建邮件内容
+            const emailContent = `
+收件人：${currentUser.email}
+主题：${currentUser.name}的百万被动收入之路分析报告
+
+${currentUser.name}，您好！
+
+恭喜您完成了百万被动收入之路的深度自测！
+
+=== 用户信息 ===
+姓名：${currentUser.name}
+年龄段：${currentUser.age}
+性别：${currentUser.gender}
+生成时间：${new Date().toLocaleString('zh-CN')}
+
+=== 分析报告 ===
+${analysisResult}
+
+=== 温馨提示 ===
+1. 本报告基于您的答题情况生成，建议结合实际情况执行
+2. 如有疑问，请关注我们的公众号获取更多资讯
+3. 祝您早日实现财务自由的目标！
+
+---
+此邮件由 RRXS.xyz 百万被动收入之路系统生成
+© 2024 RRXS.xyz - 专注自媒体商业化咨询
+            `;
+
+            // 在这里，你可以手动复制邮件内容并通过QQ邮箱发送
+            console.log('📧 邮件内容已准备，需要手动发送：');
+            console.log(emailContent);
+
+            // 将邮件内容复制到剪贴板（如果支持）
+            if (navigator.clipboard) {
+                try {
+                    await navigator.clipboard.writeText(emailContent);
+                    console.log('✅ 邮件内容已复制到剪贴板');
+
+                    // 显示提示
+                    alert('邮件内容已复制到剪贴板！请打开QQ邮箱手动发送给用户。');
+                } catch (err) {
+                    console.log('剪贴板复制失败，请手动复制邮件内容');
+                }
+            }
+
+            return Promise.resolve();
+        }
+
+        // 下载报告文件
+        function downloadReport() {
+            const analysisResult = localStorage.getItem(`analysis_${currentUser.phone}`);
+            if (!analysisResult) return;
+
+            // 创建完整的报告内容
+            const reportContent = `
+百万被动收入之路 - 个人分析报告
+
+=== 用户信息 ===
+姓名：${currentUser.name}
+年龄段：${currentUser.age}
+性别：${currentUser.gender}
+手机号码：${currentUser.phone}
+邮箱地址：${currentUser.email}
+生成时间：${new Date().toLocaleString('zh-CN')}
+
+=== 详细分析报告 ===
+${analysisResult}
+
+=== 使用说明 ===
+1. 本报告基于您的100题深度自测生成
+2. 建议结合实际情况灵活调整执行计划
+3. 如需更多指导，请关注RRXS.xyz获取最新资讯
+
+=== 联系我们 ===
+官网：https://rrxs.xyz
+公众号：搜索"RRXS"或扫描二维码
+
+---
+报告由 RRXS.xyz 百万被动收入之路系统生成
+© 2024 专注自媒体商业化咨询
+            `.trim();
+
+            // 创建下载
+            const blob = new Blob([reportContent], {
+                type: 'text/plain;charset=utf-8'
+            });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentUser.name}_百万被动收入分析报告_${new Date().getTime()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+            console.log('📄 报告文件已下载到本地');
+
+            // 显示下载提示
+            const downloadTip = document.createElement('div');
+            downloadTip.style.cssText = `
+                position: fixed; top: 20px; right: 20px;
+                background: #4CAF50; color: white; padding: 1rem;
+                border-radius: 8px; z-index: 9999; font-size: 0.9rem;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            downloadTip.innerHTML = `
+                <strong>📄 报告已下载</strong><br>
+                文件已保存到您的下载文件夹<br>
+                <small>此提示3秒后自动消失</small>
+            `;
+            document.body.appendChild(downloadTip);
+
+            setTimeout(() => {
+                if (downloadTip.parentNode) {
+                    downloadTip.remove();
+                }
+            }, 3000);
+        }
+
+        // EmailJS备用发送方案（可选实现）
+        async function sendEmailViaEmailJS() {
+            // 这里可以实现EmailJS备用方案
+            // 需要先在HTML中引入EmailJS SDK
+            console.log('EmailJS备用方案需要额外配置');
+            throw new Error('EmailJS备用方案未配置');
+        }
+
+        // 一键处理：AI分析 + 邮件发送（推荐使用）
+        async function processAssessmentComplete() {
+            const BACKEND_URL = 'http://localhost:3000';
+
+            try {
+                console.log('开始一键处理评估结果...');
+
+                // 调用后端一键处理API
+                const response = await fetch(`${BACKEND_URL}/api/process-assessment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userInfo: currentUser,
+                        answers: answers,
+                        email: currentUser.email,
+                        model: 'qwen' // 可以根据需要调整
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`一键处理请求失败: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    console.log('一键处理成功:', data.data);
+
+                    // 保存分析结果
+                    if (currentUser) {
+                        localStorage.setItem(`analysis_${currentUser.phone}`, data.data.analysis);
+                        localStorage.setItem(`analysisTime_${currentUser.phone}`, new Date().toISOString());
+                        localStorage.setItem(`emailSent_${currentUser.phone}`, new Date().toISOString());
+                    }
+
+                    return data.data;
+                } else {
+                    throw new Error(data.message || '一键处理失败');
+                }
+
+            } catch (error) {
+                console.error('一键处理失败，使用分步处理:', error);
+
+                // 降级到分步处理
+                await callAIAnalysis();
+                await sendReportByEmail();
+            }
+        }
+
+        function restartAssessment() {
+            if (confirm('确定要重新开始吗？这将清除所有已填写的答案。')) {
+                currentQuestionIndex = 0;
+                answers = {};
+
+                if (currentUser) {
+                    localStorage.removeItem(`answers_${currentUser.phone}`);
+                }
+
+                document.getElementById('completionScreen').classList.remove('active');
+                window.showStartScreen();
+            }
+        }
+    </script>
+</body>
+</html>

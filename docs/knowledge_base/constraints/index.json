@@ -1,0 +1,193 @@
+{
+  "version": "1.0",
+  "total_constraints": 15,
+  "last_updated": "2025-11-06T03:15:00+08:00",
+  "categories": {
+    "OS级约束": {
+      "constraints": [
+        {
+          "id": "CONSTRAINT-OS-001",
+          "name": "NTFS MFT Cache内核内存限制",
+          "description": "用户态程序无法访问内核内存空间",
+          "impact": "Phantom文件无法通过PowerShell/CMD删除",
+          "solution": "系统重启清空内核内存",
+          "related_decisions": ["D-106"],
+          "severity": "CRITICAL",
+          "workaround": "无（需系统级解决方案）"
+        },
+        {
+          "id": "CONSTRAINT-OS-002",
+          "name": "Windows Search索引锁定",
+          "description": "Windows Search索引文件被系统锁定，无法清理",
+          "impact": "索引膨胀、文件检测异常",
+          "solution": "永久禁用Windows Search服务",
+          "related_decisions": ["D-106"],
+          "severity": "HIGH",
+          "workaround": "定期重启Windows Search服务"
+        },
+        {
+          "id": "CONSTRAINT-OS-003",
+          "name": "批处理 > nul 在复杂环境失效",
+          "description": "OneDrive监控+nodemon循环触发时，> nul创建实体文件",
+          "impact": "文件系统污染（2,619→66,953个NUL文件）",
+          "solution": "全局禁用 > nul，使用 2>CON",
+          "related_decisions": ["D-102", "D-107"],
+          "severity": "CRITICAL",
+          "workaround": "无（必须更换重定向方式）"
+        }
+      ]
+    },
+    "工具限制": {
+      "constraints": [
+        {
+          "id": "CONSTRAINT-TOOL-001",
+          "name": "OneDrive同步文件数上限（350,000）",
+          "description": "超过350,000个文件时sync verification超时",
+          "impact": "OneDrive无法同步，SYNC_VERIFICATION_ABORT错误",
+          "solution": ".excludefiles配置（排除node_modules/.git等）",
+          "related_decisions": ["D-ONEDRIVE-DIAG-002"],
+          "severity": "HIGH",
+          "workaround": "手动排除大量小文件目录"
+        },
+        {
+          "id": "CONSTRAINT-TOOL-002",
+          "name": "Claude CLI扩展检查循环",
+          "description": "CLI扩展检查触发code命令，形成3分钟周期循环",
+          "impact": "无限创建Code.exe进程，系统资源耗尽",
+          "solution": "禁用--dangerously-skip-permissions，使用VSCode内置扩展",
+          "related_decisions": ["D-103", "D-105"],
+          "severity": "CRITICAL",
+          "workaround": "手动kill进程，避免CLI命令"
+        },
+        {
+          "id": "CONSTRAINT-TOOL-003",
+          "name": "npm/winget假阳性",
+          "description": "包管理器显示已安装但文件实际缺失",
+          "impact": "误判问题已解决，浪费诊断时间",
+          "solution": "实证验证（tasklist/Test-Path/用户截图）",
+          "related_decisions": ["D-111", "D-112"],
+          "severity": "MEDIUM",
+          "workaround": "始终用多种方法交叉验证"
+        },
+        {
+          "id": "CONSTRAINT-TOOL-004",
+          "name": "Claude配置膨胀（>500MB触发性能问题）",
+          "description": "配置目录积累导致VSCode卡顿",
+          "impact": "IDE响应慢、Compacting频繁",
+          "solution": "每周归档7天前数据到.claude.archive",
+          "related_decisions": ["D-104"],
+          "severity": "MEDIUM",
+          "workaround": "手动清理或压缩旧数据"
+        },
+        {
+          "id": "CONSTRAINT-TOOL-005",
+          "name": "浏览器缓存混淆",
+          "description": "强刷不彻底导致测试无效",
+          "impact": "以为测试新版本，实际仍用旧缓存",
+          "solution": "版本号双位置同步（标题+Console）",
+          "related_decisions": ["D-85", "D-95"],
+          "severity": "MEDIUM",
+          "workaround": "隐私模式测试或手动清缓存"
+        }
+      ]
+    },
+    "网络限制": {
+      "constraints": [
+        {
+          "id": "CONSTRAINT-NET-001",
+          "name": "OneDrive文件句柄竞争",
+          "description": "批处理创建nul时OneDrive同时访问",
+          "impact": "文件创建异常、同步失败",
+          "solution": "禁用 > nul + .excludefiles排除",
+          "related_decisions": ["D-102", "D-ONEDRIVE-DIAG-002"],
+          "severity": "HIGH",
+          "workaround": "暂停OneDrive同步期间操作"
+        },
+        {
+          "id": "CONSTRAINT-NET-002",
+          "name": "AI API降级链可用性",
+          "description": "DeepSeek主服务不稳定，需多级降级",
+          "impact": "单点故障导致系统不可用",
+          "solution": "DeepSeek→Qwen→GLM→Gemini-Balance降级链",
+          "related_decisions": ["Architecture Guide"],
+          "severity": "MEDIUM",
+          "workaround": "预先配置多个备用API key"
+        }
+      ]
+    },
+    "权限限制": {
+      "constraints": [
+        {
+          "id": "CONSTRAINT-PERM-001",
+          "name": "用户态vs内核态边界",
+          "description": "用户态程序无法修改内核内存",
+          "impact": "某些系统级问题只能通过重启解决",
+          "solution": "识别Kernel约束，快速升级解决方案",
+          "related_decisions": ["D-106"],
+          "severity": "CRITICAL",
+          "workaround": "无（需系统重启或专业工具）"
+        },
+        {
+          "id": "CONSTRAINT-PERM-002",
+          "name": "Git hooks执行权限",
+          "description": "Unix风格hooks在Windows需要Git Bash",
+          "impact": "pre-commit hook可能不执行",
+          "solution": "使用#!/bin/bash shebang + Git Bash环境",
+          "related_decisions": ["D-102", "D-107"],
+          "severity": "MEDIUM",
+          "workaround": "手动运行PowerShell版本脚本"
+        },
+        {
+          "id": "CONSTRAINT-PERM-003",
+          "name": "PowerShell ExecutionPolicy",
+          "description": "默认策略阻止脚本执行",
+          "impact": "启动脚本失败",
+          "solution": "-ExecutionPolicy Bypass参数",
+          "related_decisions": ["D-118"],
+          "severity": "LOW",
+          "workaround": "管理员模式修改全局策略"
+        }
+      ]
+    },
+    "认知限制": {
+      "constraints": [
+        {
+          "id": "CONSTRAINT-COG-001",
+          "name": "假设驱动vs实证驱动",
+          "description": "基于假设诊断容易误判",
+          "impact": "浪费时间在错误方向",
+          "solution": "迭代诊断V1.0→V1.3（证据驱动）",
+          "related_decisions": ["D-ONEDRIVE-DIAG-002", "D-111"],
+          "severity": "HIGH",
+          "workaround": "用户原则：不要应该，要实证！"
+        },
+        {
+          "id": "CONSTRAINT-COG-002",
+          "name": "表面症状vs根本原因",
+          "description": "仅处理表面症状导致问题反复",
+          "impact": "同类问题重复发生",
+          "solution": "RCCM框架（10WHY深度分析）",
+          "related_decisions": ["D-102", "D-66"],
+          "severity": "HIGH",
+          "workaround": "强制使用 !RCCM 触发词"
+        },
+        {
+          "id": "CONSTRAINT-COG-003",
+          "name": "知识传递瓶颈",
+          "description": "118+决策散落在3787行progress.md",
+          "impact": "重复犯错、效率低下",
+          "solution": "结构化知识库（decisions/patterns/solutions）",
+          "related_decisions": ["当前任务"],
+          "severity": "CRITICAL",
+          "workaround": "线性搜索progress.md"
+        }
+      ]
+    }
+  },
+  "constraint_matrix": {
+    "可绕过": ["CONSTRAINT-TOOL-004", "CONSTRAINT-TOOL-005", "CONSTRAINT-NET-002"],
+    "需系统级解决": ["CONSTRAINT-OS-001", "CONSTRAINT-OS-002", "CONSTRAINT-PERM-001"],
+    "需规范强制": ["CONSTRAINT-OS-003", "CONSTRAINT-TOOL-002"],
+    "需证据驱动": ["CONSTRAINT-COG-001", "CONSTRAINT-COG-002"]
+  }
+}

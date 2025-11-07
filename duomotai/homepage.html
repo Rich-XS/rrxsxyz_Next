@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多魔汰系统 - AI 智囊团</title>
+    <!-- Tailwind CSS CDN (苹果简洁响应式) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome 图标 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 苹果风格自定义: 更暖背景、米白卡片、渐变、动画 */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', sans-serif; 
+            background: linear-gradient(to bottom, #FDFDFD, #F8F8FA); /* 更暖米白渐变，舒适不刺眼 */
+        }
+        .banner-bg { background: linear-gradient(to bottom, #007AFF, #F5F5F7); /* 柔和蓝到暖灰 */ }
+        .banner-main { text-shadow: 0 2px 4px rgba(0,0,0,0.3); } /* 主标题白阴影 */
+        .banner-sub { 
+            font-weight: bold; /* 粗体 */
+            color: #4A90E2; /* 浅蓝，柔和不深 */
+            /* 使用 WebKit 专有属性实现文字描边；移除非标准 text-stroke 避免编辑器警告 */
+            -webkit-text-stroke: 1px #4A90E2; /* 浅蓝边框 (主要用于 WebKit 内核浏览器) */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2); /* 辅助阴影 */
+        }
+        .card { 
+            background-color: #FFFAF0; /* 浅暖米白，取代纯白，暖调突出 */
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08); /* 苹果柔阴影 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+            min-height: 28rem; /* 放大高度，匹配内容 */
+            border-radius: 16px; /* 苹果圆角 */
+        }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+        .rocket-icon { 
+            background: linear-gradient(45deg, #FFD700, #FFA500); /* 金橙渐变，光效 */
+            /* 背景裁剪到文字：先写 vendor 前缀，再写标准属性以提高兼容性 */
+            -webkit-background-clip: text;
+            background-clip: text;
+            /* 文字填充：WebKit 专有属性 + 标准 color 透明回退 */
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            animation: float 3s ease-in-out infinite; /* 轻浮动画 */
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { 
+            background: #FFFAF0; /* 模态也暖米白 */
+            margin: 15% auto; 
+            padding: 24px; /* 放大padding */
+            border-radius: 16px; /* 苹果圆角 */
+            width: 80%; 
+            max-width: 400px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .show { display: block; }
+        /* 字体放大全局 */
+        h1 { font-size: 2.5rem; } /* Banner 主 */
+        h2 { font-size: 1.875rem; } /* 卡片标题 3xl */
+        p, li { font-size: 1.1rem; line-height: 1.7; } /* 内容 medium/base */
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Banner 区 - 火箭图标 + 副标题浅蓝粗体边框 + ! + 换行 -->
+    <header class="banner-bg text-center py-24 px-4 flex flex-col items-center justify-center"> <!-- py-24 放大留白 -->
+        <i class="fas fa-rocket text-7xl mb-6 rocket-icon"></i> <!-- 火箭图标，渐变 + 浮动画，美观现代 -->
+        <h1 class="text-4xl md:text-6xl font-bold mb-4 banner-main text-white">十六位专家智囊团，多轮风暴，一个真想，一篇新天地！</h1>
+        <p class="text-2xl md:text-3xl banner-sub max-w-3xl mx-auto px-4">
+            AI 角色对战式创新引擎，与你携手，从本质洞察到执行落地！<br> <!-- 第一行 + ! + <br> 换行 -->
+            打造商业与内容的巅峰之作。
+        </p>
+    </header>
+
+    <!-- 介绍区: 竖直布局，更暖背景，字体放大 -->
+    <main class="container mx-auto px-6 py-16 flex-grow"> <!-- py-16 放大，px-6 响应 -->
+        <div class="grid grid-cols-1 gap-12 max-w-5xl mx-auto"> <!-- gap-12 放大间距 -->
+            <!-- 卡片1: 关于多魔汰 -->
+            <div class="card p-8"> <!-- p-8 放大 -->
+                <i class="fas fa-brain text-4xl text-blue-500 mb-6"></i> <!-- 图标放大 -->
+                <h2 class="text-3xl font-semibold text-blue-500 mb-6">关于多魔汰</h2> <!-- 字体放大 -->
+                <p class="mb-6 leading-relaxed">多魔汰系统是由 16 位精心设计的魔法提示词专家角色组成的 AI 智囊团。这些角色模拟真实头脑风暴与辩论过程，通过多轮认证与优胜劣汰机制，和你（用户）一起共同打造高质量输出。</p>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-base"> <!-- 列表字体base -->
+                    <li><strong>全景覆盖</strong>：从波特五力分析到价值挖掘，确保商业深度与创新广度。</li>
+                    <li><strong>动态进化</strong>：基于 DeepSeek AI 主驱动，每轮辩论迭代优化，产出经典内容。</li>
+                    <li><strong>你的专属伙伴</strong>：不止是工具，更是协作引擎，帮助你突破思维盲点。</li>
+                </ul>
+                <p class="text-base italic leading-relaxed">加入多魔汰，解锁 AI 与人类智慧的完美融合，让每一个想法都绽放新天地！</p>
+            </div>
+
+            <!-- 卡片2: 操作方式 - 可以/不能 左右布局 -->
+            <div class="card p-8">
+                <i class="fas fa-cogs text-4xl text-green-500 mb-6"></i>
+                <h2 class="text-3xl font-semibold text-green-500 mb-6">操作方式</h2>
+                <p class="mb-6 leading-relaxed">在多魔汰中，你作为<strong>委托人</strong>（核心决策者），将具体问题交给<strong>领袖（代理人）</strong>——系统内置的组织者。它将召集智囊团的相应专家（从 16 位角色中选 8+ 个），进行多轮多维度的头脑风暴辩论，最终实现深度优化与可执行输出。</p>
+                <div class="mb-6">
+                    <h3 class="font-semibold text-xl mb-4 text-base">简单 5 步流程：</h3> <!-- 字体调整 -->
+                    <ol class="list-decimal list-inside space-y-2 text-base leading-relaxed">
+                        <li><strong>输入问题</strong>：描述你的需求、背景（如“生成一篇 AI 成长计划文章”）。</li>
+                        <li><strong>选择角色与轮次</strong>：默认必选 8 位专家，10 轮辩论（可扩展）。</li>
+                        <li><strong>领袖主持</strong>：每轮开场、专家辩论，你可实时补充/中断点评。</li>
+                        <li><strong>交付报告</strong>：聚焦执行方案 + 感谢反馈，生成总结与行动计划。</li>
+                        <li><strong>模型优化</strong>：系统基于你的点评自动迭代 AI 参数。</li>
+                    </ol>
+                </div>
+                <div class="mb-6">
+                    <h3 class="font-semibold text-xl mb-4 text-base">示例说明</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> <!-- 左右布局：桌面横排 -->
+                        <!-- 可以做的 - 左 -->
+                        <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-400"> <!-- 绿框 -->
+                            <h4 class="font-bold text-xl text-green-600 mb-3">可以做的（我们擅长的内容生成与优化）：</h4>
+                            <ul class="list-disc list-inside space-y-2 text-base leading-relaxed">
+                                <li><strong>生成高质量文章</strong>：如“5 步 AI 成长计划”公众号文，融入钩子 + CTA。</li>
+                                <li><strong>商业策略规划</strong>：如“人生下半场规划”，覆盖用户痛点与 MVP 路径。</li>
+                                <li><strong>产品/工具设计</strong>：如“自媒体内容生成工具优化”，提供低成本执行步骤。</li>
+                            </ul>
+                        </div>
+                        <!-- 不能做的 - 右 -->
+                        <div class="bg-red-50 p-6 rounded-lg border-l-4 border-red-400"> <!-- 红框 -->
+                            <h4 class="font-bold text-xl text-red-600 mb-3">不能做的（遵守伦理与技术边界）：</h4>
+                            <ul class="list-disc list-inside space-y-2 text-base leading-relaxed">
+                                <li><strong>非法或有害内容</strong>：如生成虚假信息或鼓励违法活动。</li>
+                                <li><strong>实时数据查询</strong>：如股票预测（AI 非实时数据库）。</li>
+                                <li><strong>超出 AI 能力</strong>：如医疗诊断或复杂物理模拟。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片3: 开始你的旅程 - 移除测试细节，通用说明 -->
+            <div class="card p-8">
+                <i class="fas fa-lock text-4xl text-gray-500 mb-6"></i>
+                <h2 class="text-3xl font-semibold text-gray-700 mb-6">开始你的旅程</h2>
+                <p class="mb-6 leading-relaxed">多魔汰支持手机号验证，确保你的数据隐私与个性化体验。输入手机号，系统发送 6 位验证码。验证成功后，自动进入角色选择与策划页。</p>
+                <p class="mb-6 text-base leading-relaxed"><strong>为什么验证？</strong> 保存你的历史辩论、偏好设置。无账号？首次输入即创建。</p>
+                <button onclick="openModal()" class="w-full bg-blue-500 hover:bg-green-500 text-white py-4 rounded-lg font-semibold text-base transition">立即开始</button> <!-- 按钮在内，py-4 放大 -->
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部 Footer - 只版权，无按钮 -->
+    <footer class="bg-[#FFFAF0] py-8 text-center border-t border-gray-200 px-6"> <!-- Footer 也暖米白 -->
+        <p class="text-base text-gray-500">&copy; 2025 RRXS.XYZ | <a href="#" class="underline hover:text-blue-500">隐私政策</a> | <a href="#" class="underline hover:text-blue-500">帮助中心</a> | <a href="mailto:support@rrxs.xyz" class="underline hover:text-blue-500">联系我们</a></p>
+    </footer>
+
+    <!-- 登录模态框 - 移除测试细节，通用 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-semibold mb-6">用户登录验证</h3> <!-- 放大标题 -->
+            <div class="relative">
+                <input
+                    id="phoneInput"
+                    type="tel"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    placeholder="输入手机号"
+                    class="w-full p-4 pr-12 border border-gray-300 rounded-lg mb-4 text-base"
+                    maxlength="11"
+                    pattern="1[3-9]\d{9}"
+                    title="请输入11位中国大陆手机号"
+                >
+                <button
+                    id="clearPhoneBtn"
+                    onclick="clearPhoneInput()"
+                    class="absolute right-3 top-4 text-gray-400 hover:text-gray-600"
+                    style="display: none;"
+                    type="button"
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                </button>
+            </div>
+            <button
+                id="sendCodeButton"
+                onclick="sendVerificationCode()"
+                class="w-full bg-blue-500 hover:bg-green-500 text-white py-3 rounded-lg text-base"
+                disabled
+            >发送验证码</button>
+            <p class="text-sm text-gray-500 mt-3">验证码将发送至您的手机号。</p>
+
+            <div id="verificationSection" style="display:none;" class="mt-4">
+                <input
+                    id="verificationCodeInput"
+                    type="text"
+                    placeholder="输入6位验证码"
+                    maxlength="6"
+                    class="w-full p-4 border border-gray-300 rounded-lg mb-4 text-base"
+                >
+                <button
+                    onclick="verifyCode()"
+                    class="w-full bg-green-500 hover:bg-blue-500 text-white py-3 rounded-lg text-base"
+                >验证并登录</button>
+            </div>
+
+            <button onclick="closeModal()" class="text-sm text-gray-500 mt-3 underline">关闭</button>
+        </div>
+    </div>
+
+    <!-- JS for 模态 (测试逻辑移到 VSC_CC 集成) -->
+    <script>
+        function openModal() {
+            document.getElementById('loginModal').classList.add('show');
+            resetVerificationProcess();
+
+            // 自动聚焦到手机号输入框
+            setTimeout(() => {
+                document.getElementById('phoneInput').focus();
+            }, 100);
+        }
+
+        function closeModal() {
+            document.getElementById('loginModal').classList.remove('show');
+            resetVerificationProcess();
+        }
+
+        function resetVerificationProcess() {
+            const phoneInput = document.getElementById('phoneInput');
+            const sendCodeButton = document.getElementById('sendCodeButton');
+            const verificationSection = document.getElementById('verificationSection');
+            const clearPhoneBtn = document.getElementById('clearPhoneBtn');
+
+            phoneInput.value = '';
+            phoneInput.classList.remove('border-red-500', 'border-green-500');
+            sendCodeButton.disabled = true;
+            if (verificationSection) verificationSection.style.display = 'none';
+            if (clearPhoneBtn) clearPhoneBtn.style.display = 'none';
+        }
+
+        function clearPhoneInput() {
+            const phoneInput = document.getElementById('phoneInput');
+            const sendCodeButton = document.getElementById('sendCodeButton');
+            const clearPhoneBtn = document.getElementById('clearPhoneBtn');
+
+            phoneInput.value = '';
+            phoneInput.classList.remove('border-red-500', 'border-green-500');
+            sendCodeButton.disabled = true;
+            clearPhoneBtn.style.display = 'none';
+            phoneInput.focus();
+        }
+
+        function validatePhoneNumber() {
+            const phoneInput = document.getElementById('phoneInput');
+            const sendCodeButton = document.getElementById('sendCodeButton');
+            const clearPhoneBtn = document.getElementById('clearPhoneBtn');
+            const phoneNumber = phoneInput.value.trim();
+
+            // 显示/隐藏清除按钮
+            if (phoneNumber.length > 0) {
+                clearPhoneBtn.style.display = 'block';
+            } else {
+                clearPhoneBtn.style.display = 'none';
+            }
+
+            // 中国大陆手机号验证：11位数字，以1开头
+            const phoneRegex = /^1[3-9]\d{9}$/;
+
+            if (phoneRegex.test(phoneNumber)) {
+                phoneInput.classList.remove('border-red-500');
+                phoneInput.classList.add('border-green-500');
+                sendCodeButton.disabled = false;
+            } else {
+                phoneInput.classList.remove('border-green-500');
+                phoneInput.classList.add('border-red-500');
+                sendCodeButton.disabled = true;
+            }
+        }
+
+        function sendVerificationCode() {
+            const phoneInput = document.getElementById('phoneInput');
+            const verificationSection = document.getElementById('verificationSection');
+            const phoneNumber = phoneInput.value.trim();
+
+            // TODO: Implement actual verification code generation/sending
+            if (phoneNumber === '13917895758') {
+                // Test account with fixed code
+                document.getElementById('verificationCodeInput').value = '888888';
+            } else {
+                // Generate random 6-digit code
+                const verificationCode = Math.floor(100000 + Math.random() * 900000);
+                console.log(`Verification code for ${phoneNumber}: ${verificationCode}`);
+                // TODO: Actually send SMS/backend verification
+            }
+
+            verificationSection.style.display = 'block';
+        }
+
+        function verifyCode() {
+            const phoneInput = document.getElementById('phoneInput');
+            const verificationCodeInput = document.getElementById('verificationCodeInput');
+            const phoneNumber = phoneInput.value.trim();
+            const verificationCode = verificationCodeInput.value.trim();
+
+            // Test account hardcoded verification
+            if (phoneNumber === '13917895758' && verificationCode === '888888') {
+                alert('登录成功！即将跳转...');
+                localStorage.setItem('userPhone', phoneNumber);
+                window.location.href = `index.html?phone=${phoneNumber}`;
+                return;
+            }
+
+            // TODO: Implement actual backend verification
+            alert('验证失败，请重试');
+        }
+
+        // Initialize event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const phoneInput = document.getElementById('phoneInput');
+            const sendCodeButton = document.getElementById('sendCodeButton');
+
+            phoneInput.addEventListener('input', validatePhoneNumber);
+            sendCodeButton.disabled = true;
+        });
+    </script>
+</body>
+</html>

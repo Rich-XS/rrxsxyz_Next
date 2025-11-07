@@ -1,0 +1,202 @@
+{
+  "version": "1.1",
+  "last_updated": "2025-11-06T05:45:00+08:00",
+  "new_decisions_batch": {
+    "additional_extractions": [
+      {
+        "id": "D-65",
+        "date": "2025-10-14",
+        "title": "Super8Agents交付范围确定为精简版",
+        "severity": "P0",
+        "type": "项目范围决策",
+        "category": "项目交付",
+        "root_cause": "时间+成本约束，需要聚焦核心价值",
+        "solution": "精简版辩论（方案A）",
+        "status": "已完成"
+      },
+      {
+        "id": "D-66",
+        "date": "2025-10-16",
+        "title": "RCCM - 系统总结优化效率，彻底解决Compacting性能问题",
+        "severity": "P0",
+        "type": "性能优化",
+        "category": "系统优化",
+        "root_cause": "文件积累+Token不优化+备份工具问题",
+        "short_term": "清理归档历史文件（节省~200KB）",
+        "long_term": "改进备份工具，建立文件管理最佳实践",
+        "optimization_result": {
+          "test_reports": "263KB → 116.62KB（-55.7%）",
+          "temp_files": "14个 → 0个",
+          "snapshots": "9个 → 3个"
+        },
+        "status": "已完成"
+      },
+      {
+        "id": "D-67",
+        "date": "2025-10-16",
+        "title": "自测系统建立完成 - 轻量级HTTP测试框架",
+        "severity": "P0",
+        "type": "测试工具",
+        "category": "工具选型",
+        "solution": "轻量级HTTP请求方案（无需浏览器）",
+        "implementation": "scripts/auto_test.js，TestCase类可扩展",
+        "features": ["终端彩色输出", "JSON格式报告", "无需额外依赖"],
+        "status": "已实现"
+      },
+      {
+        "id": "D-68",
+        "date": "2025-10-16",
+        "title": "Super8Agents与主多魔汰项目文件对齐决策",
+        "severity": "P1",
+        "type": "项目整合",
+        "category": "项目交付",
+        "solution": "创建ROADMAP.md整合8周计划+三层架构+投入产出分析",
+        "content": {
+          "execution_plan": "8周P0/P1/P2分级",
+          "architecture": "前端/后端/基础设施三层",
+          "investment_analysis": "已投入15.5万，计划投入11万",
+          "cost_optimization": "3000元→760元月运营成本"
+        },
+        "status": "已完成"
+      },
+      {
+        "id": "D-69",
+        "date": "2025-10-16",
+        "title": "多魔汰系统用户测试及问题修复（Phase 1 User Testing）",
+        "severity": "P0",
+        "type": "测试与修复",
+        "category": "项目交付",
+        "test_account": "13917895758",
+        "fixes_completed": [
+          "修复专家发言语音输出",
+          "修复文字对齐显示",
+          "CSS优化（padding/overflow）"
+        ],
+        "new_p0_issues_found": [
+          "导航条未显示（阻塞用户测试）",
+          "专家语音被下一个发言切断",
+          "文字速度UI显示错误"
+        ],
+        "status": "部分完成"
+      },
+      {
+        "id": "D-63",
+        "date": "2025-10-14",
+        "title": "语音同步策略最终确定",
+        "severity": "P0",
+        "type": "功能设计",
+        "category": "架构设计",
+        "root_cause": "需要平衡语音体验和Token成本",
+        "solution": "提供语音同步开关，聚焦发言文字和提示词优化",
+        "modes": {
+          "voice_off": "固定延迟模式",
+          "voice_on": "完全同步模式"
+        },
+        "status": "已确立"
+      },
+      {
+        "id": "D-64",
+        "date": "2025-10-14",
+        "title": "Super8Agents项目启动 - 8位专家PDCA辩论系统",
+        "severity": "P0",
+        "type": "项目启动",
+        "category": "项目交付",
+        "experts": ["林峰", "王静", "张伟", "李明", "陈丽", "赵强", "孙涛", "钱敏"],
+        "scope": "精简版完成",
+        "status": "已交付"
+      },
+      {
+        "id": "D-55",
+        "date": "2025-10-13",
+        "title": "紧急Rescope - 砍掉50%功能聚焦核心",
+        "severity": "P0",
+        "type": "范围管理",
+        "category": "项目决策",
+        "principle": "高效完成 > 追求完美",
+        "status": "已执行"
+      },
+      {
+        "id": "D-56",
+        "date": "2025-10-13",
+        "title": "文件瘦身策略 - 全部减半",
+        "severity": "P0",
+        "type": "优化",
+        "category": "系统优化",
+        "strategy": "压缩所有代码文件体积",
+        "status": "已执行"
+      },
+      {
+        "id": "D-57",
+        "date": "2025-10-13",
+        "title": "Haiku容错机制 - 3次失败自动切换Sonnet",
+        "severity": "P1",
+        "type": "容错机制",
+        "category": "系统设计",
+        "trigger": "API调用3次失败",
+        "action": "自动升级到Sonnet模型",
+        "status": "已确立"
+      },
+      {
+        "id": "D-58",
+        "date": "2025-10-13",
+        "title": "测试计划",
+        "severity": "P0",
+        "type": "测试规划",
+        "category": "项目交付",
+        "schedule": {
+          "10-16": "完整测试",
+          "10-17": "Bug修复",
+          "10-18": "最终交付"
+        },
+        "status": "已执行"
+      },
+      {
+        "id": "D-59",
+        "date": "2025-10-13",
+        "title": "index.html分块执行计划",
+        "severity": "P1",
+        "type": "代码优化",
+        "category": "性能优化",
+        "solution": "分块加载index.html以降低内存占用",
+        "status": "已规划"
+      },
+      {
+        "id": "D-60",
+        "date": "2025-10-13",
+        "title": "RCCM - 彻底解决500/502错误问题",
+        "severity": "P0",
+        "type": "问题诊断",
+        "category": "灾难恢复",
+        "root_cause": "Compacting + 内存溢出 + Token泄漏",
+        "solutions": ["清理历史文件", "优化备份工具", "建立监控"],
+        "status": "已解决"
+      },
+      {
+        "id": "D-61",
+        "date": "2025-10-13",
+        "title": "Lesson Learned - 备份脚本排除规则保护机制",
+        "severity": "P1",
+        "type": "最佳实践",
+        "category": "规范制定",
+        "lesson": "备份脚本需要强保护，防止误删除关键文件",
+        "implementation": "exclude规则验证机制",
+        "status": "已确立"
+      }
+    ],
+    "pattern_analysis": {
+      "项目交付模式": ["D-55", "D-56", "D-57", "D-58", "D-59", "D-60", "D-61", "D-64", "D-65", "D-68", "D-69"],
+      "性能优化模式": ["D-56", "D-59", "D-66"],
+      "RCCM根因分析": ["D-60", "D-66"],
+      "测试与验证": ["D-67", "D-69"],
+      "工具选型与集成": ["D-67"],
+      "架构设计": ["D-63", "D-68"]
+    },
+    "lessons_learned": [
+      "高效完成 > 追求完美（D-55），需要及时Rescope",
+      "文件管理和备份工具是系统稳定性基础（D-66, D-61）",
+      "性能问题需要多维度诊断（D-60: Compacting + 内存 + Token）",
+      "用户测试早期发现P0问题是避免延期的关键（D-69）",
+      "语音+文字协同需要权衡体验和成本（D-63）"
+    ]
+  }
+}

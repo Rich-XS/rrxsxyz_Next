@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "created": "2025-10-12T07:41:27.709Z",
+    "totalUsers": 2,
+    "totalRegistrations": 0,
+    "totalAssessments": 0,
+    "lastUpdated": "2025-10-18T07:43:28.936Z"
+  },
+  "users": {
+    "13917895758": {
+      "phone": "13917895758",
+      "registrationTime": "2025-10-12T07:41:27.709Z",
+      "hasRegistered": false,
+      "hasCompletedAssessment": false,
+      "lastActivity": "2025-10-18T07:43:28.936Z",
+      "email": "rrxs@outlook.com",
+      "nickname": "Rich",
+      "ageGroup": "46-55",
+      "gender": "male",
+      "hasProfile": true,
+      "profileUpdatedAt": "2025-10-18T07:41:26.301Z"
+    },
+    "13900000001": {
+      "phone": "13900000001",
+      "registrationTime": "2025-10-17T12:50:54.526Z",
+      "hasRegistered": false,
+      "hasCompletedAssessment": false,
+      "lastActivity": "2025-10-17T12:50:54.526Z",
+      "email": "test@example.com",
+      "nickname": "API�����û�",
+      "ageGroup": "26-35",
+      "gender": "male",
+      "hasProfile": true,
+      "profileUpdatedAt": "2025-10-17T12:50:54.526Z"
+    }
+  }
+}

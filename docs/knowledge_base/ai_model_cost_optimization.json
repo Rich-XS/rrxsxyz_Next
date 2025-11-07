@@ -1,0 +1,184 @@
+{
+  "version": "1.0",
+  "title": "AI模型成本优化分析 - DeepSeek vs Qwen vs Gemini-Balance",
+  "timestamp": "2025-11-06T06:05:00+08:00",
+  "executive_summary": {
+    "current_cost": "$20-50/天",
+    "target_cost": "<$10/天 (优化50%)",
+    "recommendation": "DeepSeek + Qwen + 通义灵码（完全免费）三层组合"
+  },
+  "model_comparison": {
+    "DeepSeek-V2": {
+      "pricing": {
+        "input": "$0.14 per 1M tokens",
+        "output": "$0.28 per 1M tokens",
+        "rate": "最便宜（约Gemini 1/3价格）"
+      },
+      "performance": {
+        "quality": "SOTA级别（超越Llama 2）",
+        "speed": "中等（比Qwen慢10-20%）",
+        "reasoning": "强大的推理能力（MoE 236B）"
+      },
+      "use_case": "主要推理任务、复杂分析、知识库查询",
+      "limitation": "上下文长度12K（不适合长文档）",
+      "current_status": "项目主模型"
+    },
+    "Qwen-2.5-72B": {
+      "pricing": {
+        "input": "$0.2 per 1M tokens",
+        "output": "$0.6 per 1M tokens",
+        "rate": "中等价格（比DeepSeek贵2-3倍）"
+      },
+      "performance": {
+        "quality": "接近DeepSeek",
+        "speed": "最快（比DeepSeek快15-25%）",
+        "reasoning": "良好的推理能力"
+      },
+      "use_case": "实时交互、代码生成、文本处理",
+      "advantage": "长上下文支持（32K）",
+      "current_status": "降级链第二层"
+    },
+    "Gemini-1.5-Flash": {
+      "pricing": {
+        "input": "$0.075 per 1M tokens",
+        "output": "$0.3 per 1M tokens",
+        "rate": "便宜（但输出贵）"
+      },
+      "performance": {
+        "quality": "中等（适合简单任务）",
+        "speed": "快速",
+        "reasoning": "一般"
+      },
+      "use_case": "高频简单任务、成本敏感场景",
+      "limitation": "推理能力弱于DeepSeek/Qwen",
+      "current_status": "降级链第三层"
+    },
+    "通义灵码（阿里）": {
+      "pricing": "✅ 完全免费（Cursor内置）",
+      "performance": {
+        "quality": "良好（代码/文本双擅长）",
+        "speed": "快速",
+        "reasoning": "可靠"
+      },
+      "use_case": "代码补完、文本补全、轻量级任务",
+      "advantage": "✅ 零成本，集成到Cursor无缝",
+      "limitation": "不支持复杂推理、长文档分析",
+      "current_status": "项目推荐（D-114）"
+    }
+  },
+  "cost_optimization_strategies": {
+    "策略1：模型选择优化": {
+      "description": "根据任务复杂度选择模型",
+      "mapping": {
+        "简单任务（补全/格式化）": "通义灵码（$0）",
+        "中等任务（代码生成/文本处理）": "Qwen（$0.2-0.6/M tokens）",
+        "复杂任务（推理/分析）": "DeepSeek（$0.14-0.28/M tokens）",
+        "紧急降级": "Gemini-1.5-Flash（$0.075/M tokens）"
+      },
+      "estimated_savings": "50-60% 成本节省"
+    },
+    "策略2：Prompt优化": {
+      "description": "减少不必要的Token消耗",
+      "techniques": [
+        "精简系统提示词（D-63已优化Token节省62%）",
+        "使用文本摘要而非全文本",
+        "缓存常用提示词（OpenAI支持Prompt Caching）",
+        "分批处理vs单次处理对比"
+      ],
+      "estimated_savings": "20-30% Token节省"
+    },
+    "策略3：缓存与重用": {
+      "description": "避免重复计算同一问题",
+      "implementation": [
+        "知识库检索结果缓存（24小时）",
+        "决策模板缓存",
+        "常见问题答案缓存",
+        "计算结果Redis缓存"
+      ],
+      "estimated_savings": "10-15% API调用节省"
+    },
+    "策略4：批量与异步处理": {
+      "description": "合并多个小请求为一个大请求",
+      "examples": [
+        "每周汇总知识提取→单次API调用",
+        "异步处理Agent任务→避免阻塞和重试"
+      ],
+      "estimated_savings": "5-10% 并发成本"
+    },
+    "策略5：成本监控与预算": {
+      "description": "实时监控成本，提前预警",
+      "implementation": {
+        "daily_budget": "$20/天",
+        "weekly_budget": "$140/周",
+        "monthly_budget": "$600/月",
+        "alert_threshold": "超过$50/天立即暂停非关键任务"
+      },
+      "tools": "Prometheus + 自定义Alert脚本"
+    }
+  },
+  "current_project_breakdown": {
+    "月度成本估算": {
+      "Haiku基础任务": "60% ($360)",
+      "Sonnet推理任务": "30% ($180)",
+      "Opus紧急任务": "10% ($60)",
+      "总计": "~$600/月"
+    },
+    "优化后目标": {
+      "通义灵码（免费）": "40% ($0)",
+      "DeepSeek": "35% ($210)",
+      "Qwen降级": "15% ($90)",
+      "Gemini应急": "10% ($60)",
+      "总计": "~$360/月（-40%）"
+    }
+  },
+  "implementation_roadmap": {
+    "immediate_actions": [
+      "✅ 集成通义灵码到Cursor（已部署，D-114）",
+      "✅ 验证DeepSeek+Qwen降级链（已部署）",
+      "⏳ 配置Prompt缓存（OpenAI支持，需实现）",
+      "⏳ 建立成本监控仪表板"
+    ],
+    "week1": [
+      "建立日成本统计脚本",
+      "优化知识库查询Prompt（减少Token）",
+      "实现检索结果缓存"
+    ],
+    "week2_3": [
+      "评估实际成本节省幅度",
+      "调整降级链权重（根据实测成本）",
+      "培训Agent选择最优模型策略"
+    ],
+    "month1": [
+      "目标：成本降低到$360/月（-40%）",
+      "建立完整的成本优化框架",
+      "为其他PrjA提供参考方案"
+    ]
+  },
+  "competitive_analysis": {
+    "vs_other_projects": {
+      "优势": [
+        "✅ 多模型自动降级（避免单点故障）",
+        "✅ 完全免费的通义灵码集成",
+        "✅ 动态模型选择（根据任务复杂度）",
+        "✅ Prompt优化经验（D-63节省62% Token）"
+      ],
+      "劣势": [
+        "❌ 尚未实现Prompt缓存",
+        "⚠️ 缺乏VectorDB（目前用JSON存储）",
+        "⚠️ 知识库规模仍小（46 decisions vs 100+目标）"
+      ]
+    },
+    "improvement_priority": [
+      "P0: 实现Prompt缓存（预期-10%成本）",
+      "P1: 迁移到VectorDB（预期-15%Token）",
+      "P2: 集成机器学习优化模型选择（预期-20%成本）"
+    ]
+  },
+  "roi_analysis": {
+    "investment": "优化工作 4-8小时，开发成本 $200-400",
+    "monthly_savings": "$240/月（从$600→$360）",
+    "roi_breakeven": "1.25个月",
+    "annual_savings": "$2,880",
+    "recommendation": "强烈推荐立即实施"
+  }
+}

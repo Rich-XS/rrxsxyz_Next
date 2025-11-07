@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "created": "2025-11-06T02:55:00+08:00",
+  "description": "rrxsxyz_next项目知识库架构",
+  "structure": {
+    "decisions": {
+      "description": "所有重大决策记录（118+ decisions）",
+      "index_file": "decisions/index.json",
+      "categories": ["灾难恢复", "系统优化", "工具选型", "架构设计", "规范制定"]
+    },
+    "patterns": {
+      "description": "重复出现的问题模式库（8 core patterns）",
+      "index_file": "patterns/index.json",
+      "patterns": [
+        "RCCM框架（Root-Cause & Counter-Measure）",
+        "迭代诊断（V1.0→V1.3证据驱动）",
+        "三层同步（Records→Docs→Code）",
+        "Night-Auth自主执行",
+        "灾难→标准（提升为全局规则）",
+        "Kernel约束识别（OS级限制）",
+        "版本自动化（递增+备份联动）",
+        "工具链进化（评估→迁移→优化）"
+      ]
+    },
+    "solutions": {
+      "description": "已验证的解决方案库（40+ solutions）",
+      "index_file": "solutions/index.json",
+      "categories": ["文件系统", "进程管理", "配置优化", "网络同步", "代码质量"]
+    },
+    "constraints": {
+      "description": "系统级约束清单（OS/环境/工具限制）",
+      "index_file": "constraints/index.json",
+      "types": ["OS级约束", "工具限制", "网络限制", "权限限制"]
+    },
+    "agents": {
+      "description": "Agent能力矩阵与任务分类",
+      "index_file": "agents/capabilities.json",
+      "classification": ["A类-完全自主", "B类-记录并继续", "C类-等待用户"]
+    }
+  },
+  "retrieval": {
+    "keyword_search": "基于关键词快速检索",
+    "pattern_match": "基于模式匹配推荐解决方案",
+    "similarity_search": "基于历史案例推荐",
+    "decision_inference": "基于决策树推理最优方案"
+  }
+}

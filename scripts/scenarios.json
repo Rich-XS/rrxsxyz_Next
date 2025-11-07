@@ -1,0 +1,93 @@
+{
+  "scenarios": [
+    {
+      "id": "full-suite",
+      "name": "完整测试套件",
+      "description": "运行所有测试场景（登录、角色选择、辩论、字数减半）",
+      "enabled": true,
+      "tests": [
+        {
+          "id": "test-user-login",
+          "name": "测试用户登录",
+          "phone": "13917895758",
+          "expected": {
+            "roleCount": 2,
+            "defaultRoles": ["第一性原理", "行业专家"]
+          }
+        },
+        {
+          "id": "role-selection",
+          "name": "角色选择验证",
+          "expected": {
+            "minRoles": 2,
+            "maxRoles": 2
+          }
+        },
+        {
+          "id": "start-debate",
+          "name": "启动辩论",
+          "topic": "AI编程助手是否会取代程序员",
+          "background": "2025年AI技术快速发展，编程助手日益强大",
+          "expected": {
+            "debateStarted": true,
+            "phasesCompleted": ["planning", "debate", "delivery"]
+          }
+        },
+        {
+          "id": "word-count-limit",
+          "name": "字数减半验证",
+          "expected": {
+            "expertWordLimit": 200,
+            "standardWordLimit": 400
+          }
+        }
+      ]
+    },
+    {
+      "id": "quick-test",
+      "name": "快速测试",
+      "description": "仅测试登录和角色选择（3分钟）",
+      "enabled": true,
+      "tests": [
+        {
+          "id": "test-user-login",
+          "name": "测试用户登录"
+        },
+        {
+          "id": "role-selection",
+          "name": "角色选择验证"
+        }
+      ]
+    },
+    {
+      "id": "performance-test",
+      "name": "性能测试",
+      "description": "测试响应速度和资源消耗",
+      "enabled": false,
+      "tests": [
+        {
+          "id": "page-load-time",
+          "name": "页面加载时间",
+          "expected": {
+            "maxLoadTime": 2000
+          }
+        },
+        {
+          "id": "api-response-time",
+          "name": "API响应时间",
+          "expected": {
+            "maxResponseTime": 500
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "testUserPhone": "13917895758",
+    "verifyCode": "888888",
+    "homeUrl": "http://localhost:8080/",
+    "duomotaiUrl": "http://localhost:8080/duomotai/",
+    "timeout": 60000,
+    "retries": 1
+  }
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RRXS 电商小铺</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .cart {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cart">
+        <h3>购物车</h3>
+        <ul id="cart-items"></ul>
+        <p>总计：￥<span id="total">0</span></p>
+    </div>
+
+    <h1>RRXS 电商小铺</h1>
+    <div class="products">
+        <div class="product">
+            <h3>商品1</h3>
+            <p>价格：￥100</p>
+            <button onclick="addToCart('商品1', 100)">加入购物车</button>
+        </div>
+        <div class="product">
+            <h3>商品2</h3>
+            <p>价格：￥200</p>
+            <button onclick="addToCart('商品2', 200)">加入购物车</button>
+        </div>
+        <div class="product">
+            <h3>商品3</h3>
+            <p>价格：￥300</p>
+            <button onclick="addToCart('商品3', 300)">加入购物车</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            total += price;
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const totalElement = document.getElementById('total');
+            
+            cartItems.innerHTML = cart.map(item => 
+                `<li>${item.name} - ￥${item.price}</li>`
+            ).join('');
+            
+            totalElement.textContent = total;
+        }
+    </script>
+</body>
+</html>

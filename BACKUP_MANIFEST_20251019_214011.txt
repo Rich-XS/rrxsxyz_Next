@@ -1,0 +1,100 @@
+=== BACKUP MANIFEST ===
+Backup Time: 2025-10-19 21:41:11
+Keyword: Next2LiteTst_OptZip
+Source: D:\_100W\rrxsxyz_next
+Destination: D:\_100W\rrxsxyz_next_202510192141_Next2LiteTst_OptZip.zip
+Purpose: 测试优化后的备份规则（预期3-5MB）
+
+=== BACKUP RESULT ===
+✅ BACKUP_DONE: 202510192141
+📦 SIZE: 3,537,516 bytes (3.37 MB)
+📁 PATH: D:\_100W\rrxsxyz_next_202510192141_Next2LiteTst_OptZip.zip
+
+=== OPTIMIZATION VALIDATION ===
+✅ 优化成功！从之前的 13 MB 降至 3.37 MB
+✅ 体积减少: 74% (9.63 MB 节省)
+✅ 符合预期目标: 3-5 MB 范围内
+
+=== EXCLUDED DIRECTORIES (按 agent_config.md L36-45) ===
+依赖目录:
+- node_modules
+- server\node_modules
+- .venv
+- .pnpm-store
+
+Git 仓库:
+- .git
+
+构建输出:
+- dist
+- build
+- out
+- .cache
+- coverage
+
+日志和数据:
+- logs
+- server\data
+- server\UserInfo
+
+备份目录:
+- Backup
+- ZIP_BACKUP_OLD
+- .claude\backups
+- .claude\snapshots
+
+测试和文档:
+- test_reports
+- test-screenshots
+- duomotai\screenshots
+- chatlogs
+- temp
+
+IDE 配置:
+- .idea
+- .obsidian
+- .vscode
+
+=== EXCLUDED FILE PATTERNS ===
+- *.log
+- *.tmp
+- *.bak
+- *_backup_*
+- *.zip
+- package-lock.json
+- progress.archive_*.md
+
+=== INCLUDED CORE FILES ===
+配置文件:
+- CLAUDE.md
+- progress.md
+- package.json
+- server\package.json
+- .claude\*.md
+
+核心代码:
+- server\server.js
+- duomotai\index.html
+- duomotai\init.js
+- duomotai\src\*.js
+- index.html
+- baiwen.html
+
+脚本文件:
+- scripts\*.ps1
+- scripts\*.js
+
+文档:
+- docs\*.md
+- README*.md
+
+=== BACKUP METHOD ===
+方式: Exclude（完整排除规则）
+工具: TaskDone_BackUp_Exclude.ps1
+压缩级别: Optimal
+
+=== NOTES ===
+- 这是首次使用优化后的排除规则的备份
+- 验证了排除规则的有效性（体积从 13 MB 降至 3.37 MB）
+- 排除规则与 .claude/agent_config.md L36-45 保持一致
+- 备份速度显著提升（排除大型依赖目录）

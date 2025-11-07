@@ -1,0 +1,14 @@
+Priority Quadrant (重要 / 紧急)
+
+           紧急 ↑
+                |  A: 重要且紧急        |  C: 不重要但紧急
+                |  - atomicWrite (T-V1)  |  - pre-commit hook (T-V8)
+                |  - Lockfile (T-V2)     |  - Backup integration confirm (T-V5)
+  重要 ---------+------------------------+------------------------→ 不重要
+                |  B: 重要但不紧急       |  D: 不重要且不紧急
+                |  - ContextDB (T-V6)    |  - Visual prototype (T-V9)
+                |  - summaryEngine (T-V7)|  - optional UI polish
+                |
+                ↓ 时间
+
+建议优先级：A (先做) → B (随后) → C (短处理) → D (后置)

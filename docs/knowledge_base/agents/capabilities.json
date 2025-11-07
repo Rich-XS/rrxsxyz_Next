@@ -1,0 +1,246 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-11-06T03:20:00+08:00",
+  "description": "Agent执行能力矩阵与任务分类",
+  "task_classification": {
+    "A类-完全自主": {
+      "authorization": "Queen授权P1及以下任务完全自主（Night-Auth期间）",
+      "tasks": [
+        "文档更新（progress.md/CLAUDE.md/chatlogs）",
+        "监控脚本执行（NUL文件/配置大小/端口检查）",
+        "日志分析（Console日志/错误日志/系统日志）",
+        "测试执行（Gemba-Agent/Playwright/自动化测试）",
+        "备份创建（Exclude方式/压缩/归档）",
+        "代码修复（P1 Bug修复，不涉及锁定模块）",
+        "配置清理（.claude.archive归档）",
+        "文件归档（progress.archive/test_reports）",
+        "知识库更新（decisions/patterns/solutions）",
+        "Git操作（add/commit，非push/force）"
+      ],
+      "tools_allowed": [
+        "Read, Write, Edit, Glob, Grep, Task",
+        "Bash: Get-Date, Get-ChildItem, Compress-Archive, dir, tasklist, netstat",
+        "Git: add, commit -m",
+        "Node/Python: node, npm run, python -m http.server"
+      ],
+      "constraints": [
+        "不得修改已锁定模块（D-89 PROTECTED标记）",
+        "不得执行系统重启",
+        "不得修改管理员权限配置",
+        "禁止Unix命令（date/ls/cat/cp/mv/rm/grep）"
+      ]
+    },
+    "B类-记录并继续": {
+      "authorization": "记录建议，继续工作，用户后续决策",
+      "tasks": [
+        "重大架构调整建议（如三层架构重构）",
+        "工具选型建议（如Playwright迁移）",
+        "成本优化建议（AI模型切换、Token优化）",
+        "性能优化建议（超出常规范围）",
+        "安全策略建议（涉及系统级配置）",
+        "跨项目影响评估（端口分配、资源共享）"
+      ],
+      "behavior": [
+        "记录建议到progress.md Recommendations区块",
+        "标记优先级（P0/P1/P2）和影响范围",
+        "继续执行其他A类任务",
+        "等待用户有空时确认"
+      ],
+      "example": "D-98 Playwright迁移：先记录方案对比，用户确认后执行"
+    },
+    "C类-等待用户": {
+      "authorization": "必须等待用户明确指令",
+      "tasks": [
+        "系统重启（如Phantom文件清理）",
+        "管理员权限操作（注册表修改、系统服务）",
+        "锁定模块修改（D-89 PROTECTED代码）",
+        "Git push到远程仓库",
+        "删除大量文件（>1000个）",
+        "系统级修复工具运行（DISM/sfc）",
+        "OneDrive完全重装",
+        "跨项目进程清理（非本项目进程）"
+      ],
+      "behavior": [
+        "记录任务到progress.md C类待办区块",
+        "说明需要用户操作的原因和步骤",
+        "提供详细操作指南（如需要）",
+        "标记为BLOCKED，停止相关任务链"
+      ],
+      "example": "D-106 Phantom文件：需系统重启→记录+等待"
+    }
+  },
+  "agent_capabilities": {
+    "progress-recorder": {
+      "can_do": [
+        "✅ 增量更新progress.md（>>record）",
+        "✅ 归档历史记录（>>archive，阈值80条）",
+        "✅ 创建备份（>>zip，Exclude方式）",
+        "✅ 同步ideas.md任务（>>ideas&tasks）",
+        "✅ 生成chatlog（>>chatlog）",
+        "✅ 会话收尾总结（>>wrap-up）"
+      ],
+      "cannot_do": [
+        "❌ 修改CLAUDE.md规则（需Layer 2同步）",
+        "❌ 删除已确认决策",
+        "❌ 修改已归档文件（.archive不可逆）"
+      ],
+      "partial": [
+        "⚠️ 需求变更：需同时更新CLAUDE.md（三层同步）",
+        "⚠️ 重大决策：需用户确认后记录"
+      ]
+    },
+    "disaster-prevention": {
+      "can_do": [
+        "✅ 检测NUL文件（阈值>10）",
+        "✅ 监控配置大小（>500MB警告）",
+        "✅ 检查OneDrive文件数（>300k）",
+        "✅ 自动清理（-AutoFix参数）",
+        "✅ 生成报警日志"
+      ],
+      "cannot_do": [
+        "❌ 删除Phantom文件（需系统重启）",
+        "❌ 修改OneDrive核心配置",
+        "❌ 禁用系统服务"
+      ],
+      "partial": [
+        "⚠️ 清理>1000个NUL文件：需用户确认",
+        "⚠️ 配置>800MB：建议立即清理但需确认"
+      ]
+    },
+    "gemba-agent": {
+      "can_do": [
+        "✅ 浏览器自动化测试（Playwright）",
+        "✅ Console日志捕获",
+        "✅ 截图生成",
+        "✅ 字数/UI/流程验证",
+        "✅ HTML报告生成"
+      ],
+      "cannot_do": [
+        "❌ 修复检测到的代码Bug（仅报告）",
+        "❌ 直接操作生产环境",
+        "❌ 修改测试用户数据"
+      ],
+      "partial": [
+        "⚠️ P1 Bug修复建议：需用户确认后修复"
+      ]
+    },
+    "safe-port-cleanup": {
+      "can_do": [
+        "✅ 识别本项目进程（3000-3999/8000-8999）",
+        "✅ 安全清理本项目旧进程",
+        "✅ 保护其他项目进程",
+        "✅ 生成详细清理报告"
+      ],
+      "cannot_do": [
+        "❌ 清理其他项目进程（6000-6999/7000-7999）",
+        "❌ 强制kill系统关键进程",
+        "❌ 使用taskkill /IM（无差别清理）"
+      ],
+      "partial": [
+        "⚠️ 发现未知进程（端口段不匹配）：报告但不清理"
+      ]
+    },
+    "weekly-config-cleanup": {
+      "can_do": [
+        "✅ 归档7天前数据到.claude.archive",
+        "✅ 保留最近7天数据",
+        "✅ 自动记录到progress.md",
+        "✅ 生成归档清单"
+      ],
+      "cannot_do": [
+        "❌ 删除归档数据（仅移动）",
+        "❌ 修改归档阈值（固定7天）",
+        "❌ 清理正在使用的配置"
+      ],
+      "partial": [
+        "⚠️ 配置>800MB：建议立即执行（-Force）"
+      ]
+    }
+  },
+  "tool_authorization_matrix": {
+    "文件操作工具": {
+      "Read": "✅ 无限制（优先使用）",
+      "Write": "✅ 允许（新文件创建）",
+      "Edit": "✅ 允许（已有文件修改，需先Read）",
+      "Glob": "✅ 无限制",
+      "Grep": "✅ 无限制"
+    },
+    "Bash命令": {
+      "PowerShell": {
+        "Get-Date": "✅ 时间戳（唯一授权方式）",
+        "Get-ChildItem": "✅ 文件列表",
+        "Compress-Archive": "✅ 压缩备份",
+        "Measure-Object": "✅ 统计分析",
+        "Test-Path": "✅ 文件检查",
+        "Move-Item": "✅ 文件移动（归档）"
+      },
+      "Windows命令": {
+        "dir": "✅ 文件列表",
+        "echo": "✅ 输出（仅用于脚本）",
+        "tasklist": "✅ 进程检查",
+        "taskkill": "⚠️ 仅/PID模式，禁止/IM",
+        "netstat": "✅ 端口检查",
+        "findstr": "✅ 文本搜索",
+        "cmd.exe": "✅ 批处理执行"
+      },
+      "Unix命令（全部禁止）": {
+        "date/ls/cat/cp/mv/rm/grep": "❌ 禁止（Windows环境）"
+      }
+    },
+    "Git操作": {
+      "git add": "✅ 暂存文件",
+      "git commit -m": "✅ 提交（需Co-Authored-By）",
+      "git status": "✅ 状态查看",
+      "git diff": "✅ 变更查看",
+      "git log": "✅ 历史查看",
+      "git push": "❌ 禁止（需用户确认）",
+      "git reset --hard": "❌ 禁止（破坏性操作）"
+    },
+    "Node/Python": {
+      "node": "✅ 脚本执行",
+      "npm run dev": "⚠️ 仅测试，禁止后台启动（D-79）",
+      "python -m http.server": "⚠️ 仅测试，禁止后台启动"
+    }
+  },
+  "execution_patterns": {
+    "Night-Auth模式": {
+      "duration": "4-6小时无间断",
+      "authorization": "P1及以下完全自主",
+      "forbidden": [
+        "系统重启",
+        "管理员操作",
+        "跨项目影响",
+        "锁定模块修改"
+      ],
+      "success_cases": [
+        "D-104: Claude配置862MB→1.64MB（4.5h零干预）",
+        "D-GEMBA-2.0: 三层架构实现（11文件120KB，4.5h）"
+      ]
+    },
+    "日间协作模式": {
+      "duration": "间歇性交互",
+      "authorization": "A类自主 + B类建议 + C类等待",
+      "user_trigger_points": [
+        "重大架构调整确认",
+        "工具选型决策",
+        "系统级操作授权",
+        "预算超支警告"
+      ]
+    }
+  },
+  "self_assessment_questions": {
+    "执行前检查": [
+      "❓ 此任务是A/B/C类？",
+      "❓ 涉及锁定模块（PROTECTED）吗？",
+      "❓ 需要管理员权限吗？",
+      "❓ 影响其他项目吗？",
+      "❓ 使用授权工具吗？"
+    ],
+    "遇阻判断": [
+      "❓ 可以用其他方式绕过吗？",
+      "❓ 是Kernel约束（需系统级解决）吗？",
+      "❓ 需要用户提供信息吗？",
+      "❓ 应该触发 !RCCM 分析吗？"
+    ]
+  }
+}

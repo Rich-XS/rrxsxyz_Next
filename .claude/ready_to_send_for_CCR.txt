@@ -1,0 +1,22 @@
+CCR 团队您好，
+
+此为可直接粘贴到会话里的确认与核查提示（已修正路径格式为 Windows 绝对路径）。
+
+1) 备份核查（请确认并回复）：
+已确认备份并允许观察阶段启动：D:\_100W\rrxsxyz_next_202510080530_auto-check.zip
+
+2) 观察阶段说明（我将继续收集 Round 1 的运行证据）：
+- 我会收集 debateEngine.js 的 startDebate()/runRound() 日志片段，Token 统计更新，以及 UI 阶段指示器状态（可在浏览器控制台或服务器 stdout 中看到）。
+
+3) 写入授权（仅当 CCR 要求写入时单独发送，必须精确匹配）：
+同意写入（author: CCR，reason: task switch review）
+
+4) 紧急强制替换（仅在极端紧急情况下使用，需说明理由并单独发送）：
+同意强制替换（author: CCR，reason: emergency overwrite: <说明>）
+
+说明：请务必使用上面第一行的备份文件绝对路径（注意反斜杠）：
+D:\_100W\rrxsxyz_next_202510080530_auto-check.zip
+
+我已在交接文件 `D:\_100W\rrxsxyz_next\handover_to_CCR.md` 中记录 CCR 的确认与我对仓库的核查结果，并摘录了 debateEngine 中可用于观察的日志行示例（Token 更新 / Round start / Leader opening）。
+
+如需我现在开始收集 Round 1 的日志证据，请回复“开始收集 Round1 证据”，我将开始抓取并把证据追加到交接文件中。

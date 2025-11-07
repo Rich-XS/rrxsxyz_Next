@@ -1,0 +1,9 @@
+## 2025-10-08T12:45:00+08:00 - Role Assignment & Long-Term Memory Confirmation (CCR)
+- ROLE_ASSIGNED: Doer = CCR
+- NOTE: This block is prepared for appending to `CLAUDE.md` and `progress.md` to record the user's decision assigning "CCR" as the Doer role.
+- ACTION: Do not append to core files without explicit CCR single-line authorization and explicit user permission to run the write command.
+
+Audit:
+- PreparedBy: assistant (session)
+- PreparedAt: 2025-10-08T12:45:00+08:00
+- PreparedPath: .claude/role_update_CCR.txt
